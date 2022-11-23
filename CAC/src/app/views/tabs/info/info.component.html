@@ -1,0 +1,52 @@
+<div class="row">
+    <div class="col-md-12">
+        <h3 class="tab-title">Encuentre aquí los códigos</h3>
+    </div>
+    <div class="col-md-12">
+        <form [formGroup]="this.filter">
+
+            <form [formGroup]="this.filter">
+                <div class="input-group ">            
+                    <input (keyup)='this.getData()' type="text" class="form-control" formControlName="word" placeholder="Palabra clave" a>
+                    <mat-icon (click)='this.getData()' class="input-icon">search</mat-icon>
+                  </div>
+            </form>  
+
+            
+        </form>       
+    </div>
+    <!-- <div class="col-md-12" style="margin-top: 10px;">
+        <div class="input-group mb-3">
+            <select class="form-select" id="inputGroupSelect01">
+              <option selected>Relacionar registro asignado</option>
+              <option value="1">One</option>
+              <option value="2">Two</option>
+              <option value="3">Three</option>
+            </select>
+          </div>
+    </div> -->
+
+    <div class="col-md-12">
+        <h3 class="tab-title">Resultados de la búsqueda</h3>
+    </div>
+    <div class="col-md-12">
+        <table class="table table-striped table-hover">
+            <tbody>
+                <tr>
+                    <td class="th-table">Nombre</td>
+                    <td class="th-table css_tipo">Tipo</td>
+                    <td class="th-table css_tipo">Código</td>
+                </tr>
+                <tr  *ngFor="let item of this.objData">
+                    <td><p>{{item.nombre}}</p></td>
+                    <td><p>{{item.nombreTipo}}</p></td>
+                    <td><p>{{item.codigo}}</p></td>
+                </tr>                
+            </tbody>
+        </table>
+    </div>
+    
+    
+</div>
+
+

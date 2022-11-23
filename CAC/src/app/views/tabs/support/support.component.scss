@@ -1,0 +1,36 @@
+
+.td-a{    
+    width: 100px;
+    color: #434343;
+    font-weight: 500;
+}
+.td-b{
+    width: 250px;
+    
+}
+.fondo{   
+    height: 30px;
+    padding: 5px;
+}
+.row-margin{
+    margin-top: 30px;
+    margin-bottom: 20px;
+}
+
+.input-bold::placeholder {
+    color: #A03781;    
+    font-weight: 500;
+}
+.alto-tabla{
+    height: 400px;
+    overflow-x: auto;
+}
+
+
+
+ .table-bar div tr:nth-child(even) td {
+    background: #F7F8FC;
+  }
+ .table-bar div tr:nth-child(odd) td {
+    background: #fff;
+  }

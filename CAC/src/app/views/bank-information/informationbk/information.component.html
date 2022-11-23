@@ -1,0 +1,203 @@
+<app-card-percent
+    [title]='"ID Registro " + this.objAuditar.id'
+    [page]="'audit-management'"
+    [subtitle]='this.objAuditar.nombreMedicion'
+    [progresoDia]='this.progresoDia'
+    [totales]='this.diasTotales'
+></app-card-percent>
+
+<mat-card class="card-box">
+    <div class="row title">
+        <div class="col-md-3">
+            <p class="text-title p-subtitle">Paciente </p>
+            <p class="text-title">{{this.objAuditar.primerNombre}} {{this.objAuditar.primerApellido}} {{this.objAuditar.segundoApellido}}</p>
+        </div>
+        <div class="col-md-2" >
+            <p class="text-title p-subtitle">ID</p>
+            <p class="text-title">{{this.objAuditar.tipoIdentificacion}} {{this.objAuditar.identificacion}}</p>
+        </div>
+        <div class="col-md-3">
+            <p class="text-title p-subtitle">Entidad </p>
+            <p class="text-title">{{this.objAuditar.nombreEPS}}</p>
+        </div>
+        <div class="col-md-2" >
+            <p class="text-title p-subtitle">Lider </p>
+             <p class="text-title">{{this.objAuditar.primerNombre}}</p><!--falta que digan cual es el item que va aqui -->
+        </div>
+        <div class="col-md-1">
+            <p class="text-title p-subtitle">Estado </p>
+            <p class="text-title">{{this.objAuditar.estadoCodigo}}</p>
+        </div>
+        <div class="col-md-1">
+          <p class="text-title p-subtitle">IPS </p>
+          <p class="text-title">{{this.objAuditar.encuesta ? 'SI' : 'NO'}}</p>
+        </div>
+    </div>
+
+
+    <div class="row btns">
+        <div class="col-md-2">
+            <button [hidden]='!this.showCAdministrativo' (click)='this.comites(1)' mat-button class="btn-new btn-general" >C. ADMINISTRATIVO</button>
+        </div>
+        <div class="col-md-1">
+            <button [hidden]='!this.showCExperto'  (click)='this.comites(2)' mat-button class="btn-new btn-general" >C. EXPERTO</button>
+        </div>
+        <div class="col-md-3" style="text-align: center;"  [hidden]='!this.showMantCalifi'>
+            <button (click)='this.accionCalificacion(2)' mat-button  class="btn-new btn-general" >MANTENER CALIFICACIÓN</button>
+        </div>
+        <div class="col-md-2" [hidden]='!this.showLevantarGlosa'>
+          <button mat-button (click)='this.levantarGlosa()' class="btn-new btn-general" >LEVANTAR GLOSA</button>
+      </div>
+        <div class="col-md-1">
+
+            <button [hidden]='!this.showEditCalifi' (click)='this.accionCalificacion(1)' mat-raised-button class="btn-basic btn2 btn-general" >EDITAR</button>
+
+        </div>
+        <div class="col-md-3  btn-final"  [hidden]='!this.showGuardar'>
+            <button [disabled]='this.enableButtonSave' (click)='this.closeAuditoria()' mat-raised-button class="btn-basic btn-general" >GUARDAR</button>
+        </div>
+
+
+    </div>
+
+    <div class="row" style="margin-top: 10px;">
+        <div class="col-md-12 centrar-tabla" >
+            <table mat-table
+            [dataSource]="dataSource" multiTemplateDataRows
+            class="mat-elevation-z8">
+           
+       <ng-container matColumnDef="name" >
+         <th mat-header-cell *matHeaderCellDef class="cell25 th-principal"></th>
+         <td [class.rowdisabled]='this.glosacalificada && element.name !="Glosas"'  mat-cell *matCellDef="let element" class="th-title" [ngClass]="{'th-oculta' : element.name =='Variables ocultas'}">
+             {{element.name}}
+            </td>
+       </ng-container>
+       <ng-container matColumnDef="DatoReportado" >
+        <th mat-header-cell *matHeaderCellDef class="cell2 th-principal"> Dato reportado </th>
+        <td  [class.rowdisabled]='this.glosacalificada && element.name !="Glosas"' mat-cell *matCellDef="let element" class="th-title" [ngClass]="{'th-oculta' : element.name =='Variables ocultas'}"></td>
+      </ng-container>
+    
+      <ng-container matColumnDef="BOT" >
+        <th mat-header-cell *matHeaderCellDef  class="cell00 th-principal th-general-center" > BOT </th>
+        <td mat-cell *matCellDef="let element" class="th-title" [ngClass]="{'th-oculta' : element.name =='Variables ocultas'}"></td>
+      </ng-container>
+      <ng-container matColumnDef="H" >
+        <th mat-header-cell *matHeaderCellDef  class="cell00 th-principal th-general-center" > H </th>
+        <td mat-cell *matCellDef="let element" class="th-title" [ngClass]="{'th-oculta' : element.name =='Variables ocultas'}"></td>
+      </ng-container>
+      <ng-container matColumnDef="E" >
+        <th mat-header-cell *matHeaderCellDef  class="cell00 th-principal th-general-center" > E </th>
+        <td mat-cell *matCellDef="let element" class="th-title error th-general-center" [ngClass]="{'th-oculta' : element.name =='Variables ocultas'}">{{element.error}}</td>
+      </ng-container>
+      <ng-container matColumnDef="select">
+        <th mat-header-cell *matHeaderCellDef class="cell08 th-principal centrar" > <p class="select-th">DC</p> <p class="select-th">NC</p> <p class="select-th">ND</p></th>
+        <td mat-cell *matCellDef="let element" class="th-title" [ngClass]="{'th-oculta' : element.name =='Variables ocultas'}"></td>
+      </ng-container>
+      
+      <ng-container matColumnDef="Motivo" >
+        <th mat-header-cell *matHeaderCellDef class="cell23 th-principal"> Motivo </th>
+        <td mat-cell *matCellDef="let element" class="th-title derecha" [ngClass]="{'th-oculta' : element.name =='Variables ocultas'}">
+           <mat-icon *ngIf="!verifyExpand(element.name)" class="up-down">keyboard_arrow_down</mat-icon>
+          <mat-icon *ngIf="verifyExpand(element.name)" class="up-down">keyboard_arrow_up</mat-icon></td>
+      </ng-container>
+
+       <!-- Expanded Content Column - The detail row is made up of this one column that spans across all columns -->
+       <ng-container matColumnDef="expandedDetail">
+         <td mat-cell *matCellDef="let element" [attr.colspan]="columnsToDisplay.length">
+           <div  class="example-element-detail" [@detailExpand]="verifyExpand(element.name) ? 'expanded' : 'collapsed'">
+
+                <table [ngClass]="{'table-expanded' : element.name =='Variables ocultas'}" *ngFor="let e of element.variables; index as i">
+                    <tr class="fila" (click)="onUpdate(element.name)" >
+                      <td  [class.variableSinMotivo]='(e.dato_DC_NC_ND == this.DatoNoConforme || e.dato_DC_NC_ND == this.DatoNoDisponible) && (e.motivo == null || e.motivo == 0 )' (click)='this.click()' class="cell0 variable size-font">{{e.reducido}}</td>
+                      <td (click)='this.click()' class="cell3 text-general detalle desborde"> {{e.detalle}} </td>
+                      <td (click)='this.click()' class="cell2 text-general detalle">{{e.dato_reportado}} {{e.nombre}}</td>
+                     
+                      <td class="cell0 text-general th-general-center">
+                        <mat-icon *ngIf='e.bot == false' class="info icono-padding">info</mat-icon>
+                        <mat-icon *ngIf='e.bot == true' class="check icono-padding">check_circle_outline</mat-icon>
+                      </td>
+                      <td class="cell0 text-general th-general-center"> {{e.hallazgo}} </td>
+                      <td class="cell0 text-general th-general-center"><mat-icon class="error" *ngIf="e.error != null">report_problem</mat-icon> </td>
+                      <td class="cell1 text-general" (click)="$event.stopPropagation()"  [class.rowdisabled]='(this.glosacalificada && element.name !="Glosas" && element.name !="General")'>
+                          <mat-radio-group [value]='e.dato_DC_NC_ND' aria-label="Select an option" class="select" [class.checkdisabled]='this.enableRadioButtonCalifications' >
+                            <mat-radio-button (click)="e.dato_DC_NC_ND == this.DatoConforme; this.click();  this.changeStatus(e)" (change)="e.dato_DC_NC_ND == this.DatoConforme; this.click();  this.changeStatus(e)" [checked]='e.dato_DC_NC_ND == this.DatoConforme' value="1"></mat-radio-button>
+                            <mat-radio-button (click)='e.dato_DC_NC_ND == this.DatoNoConforme; this.click();  this.changeStatus(e)' (change)="e.dato_DC_NC_ND == this.DatoNoConforme; this.click();  this.changeStatus(e)" [checked]='e.dato_DC_NC_ND == this.DatoNoConforme' value="2"></mat-radio-button>
+                            <mat-radio-button (click)='e.dato_DC_NC_ND == this.DatoNoDisponible; this.click();  this.changeStatus(e)' (change)="e.dato_DC_NC_ND == this.DatoNoDisponible; this.click();  this.changeStatus(e)" [checked]='e.dato_DC_NC_ND == this.DatoNoDisponible' value="3"></mat-radio-button>
+                        </mat-radio-group>
+                      </td>
+
+                      <td class="cell2 text-general detalle" (click)="$event.stopPropagation()"  [class.rowdisabled]='(this.glosacalificada && element.name !="Glosas") || this.enableRadioButtonCalifications'>
+                        <mat-form-field  appearance="fill" class="select_centrar medium-input" [ngClass]="{'color-disabled-form' : getDisabledValue(element.name,e.dato_DC_NC_ND)}" >
+                            <mat-label  class="input-bold" [ngClass]="{'color-disabled' : getDisabledValue(element.name,e.dato_DC_NC_ND )}">Seleccione un elemento</mat-label>
+                            <mat-select (selectionChange)="e.motivo = $event.value; this.click(); this.changeStatus(e)"  [disabled]= "getDisabledValue(element.name ,e.dato_DC_NC_ND ) " [value]="e.motivo">
+                       <!-- <mat-select (selectionChange)="e.motivo = $event.value; this.click(); this.changeStatus(e)"  [disabled]= "getDisabledValue(element.name ,e.dato_DC_NC_ND ) " [value]="getDisabledValue(element.name ,e.dato_DC_NC_ND)?'':e.motivo"> -->
+                              <mat-option value="">
+                                Seleccione un motivo
+                              </mat-option>
+                              <mat-option *ngFor="let lista of e.listaMotivos" [value]="lista">
+                                {{lista}}
+                              </mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                        <!-- AQUI ESTAN LOS CAMPOS DEL MOTIVO SELECT INPUT DATE Y TEXT -->
+                        <mat-form-field appearance="fill"  class="medium-input" *ngIf="element.name =='23'" >
+                          <mat-label class="input-bold"></mat-label>
+                          <input matInput type="text" [disabled]= "getDisabledValue(element.name,e.dato_DC_NC_ND)">
+                      </mat-form-field>
+                        <mat-form-field appearance="fill"  class="medium-input" *ngIf="element.name =='23'" >
+                            <mat-label class="input-bold"></mat-label>
+                            <input matInput type="date" [disabled]= "getDisabledValue(element.name,e.dato_DC_NC_ND)">
+                        </mat-form-field>
+                    </td>
+                   </tr>
+
+
+
+                 <tr  class="fila" *ngFor="let e of e.error" >
+                    <td class="cell0 variable">
+                        <mat-icon class="error ico-error">brightness_1</mat-icon>
+                       </td>
+                    <td class="cell3 text-general detalle error"> {{e}} </td>
+                    <td class="cell2 text-general detalle"></td>
+                    <td class="cell2 text-general detalle">
+                      </td>
+                    <td class="cell0 text-general"> </td>
+                    <td class="cell0 text-general">  </td>
+                    <td class="cell1 text-general">
+                 </tr>
+                </table>
+           </div>
+         </td>
+       </ng-container>
+
+       <tr mat-header-row *matHeaderRowDef="columnsToDisplay"></tr>
+       <tr mat-row *matRowDef="let element; columns: columnsToDisplay;"
+           class="example-element-row"
+           [class.example-expanded-row]="verifyExpand(element.name)"
+           (click)="expand(element.name)">
+       </tr>
+       <tr mat-row *matRowDef="let row; columns: ['expandedDetail']" class="example-detail-row"></tr>
+     </table>
+        </div>
+    </div>
+
+    <mat-card style="margin-top: 10px; ">
+
+
+        <br><br><br>
+
+    </mat-card>
+</mat-card>
+<mat-card>
+    <div class="row footer">
+        <div class="col-md-12">
+            <button mat-raised-button (click)='this.openDialog(1)' class="btn-basic btn-new-inbox btn-general" [ngClass]="{'btn-display' : display_btn_footer}">Observaciones
+                <mat-icon class="ico-observacion">expand_less</mat-icon>
+            </button>
+        </div>
+    </div>
+</mat-card>
+
+<app-tab-warning [Autorizacion]='2'></app-tab-warning>
+
+

@@ -1,0 +1,137 @@
+
+<div *ngIf="loading" class="centrar-loading">
+  <mat-spinner diameter="50"></mat-spinner>
+</div>
+
+<div  *ngIf="!loading">
+
+  <section *ngIf="this.seleccion==0" >
+    <h2 mat-dialog-title class="swal2-title margen-espacio" > ¿Desea mover todos o solo algunos registros de la bolsa ?</h2>
+    <div mat-dialog-content>
+      <div class="row" >
+        <div class="col-6 textcenter">
+          <button mat-raised-button class="btn-basic  btn-general btn-invertido" (click)="btnTodos()">Todos</button>
+        </div>
+        <div class="col-6 textcenter">
+          <button mat-raised-button class="btn-basic  btn-general" (click)="btnDescargarPlantilla()" >Algunos</button>
+          <a style="display:none;" [href]="'data:application/octet-stream;base64,' + base64Plantilla | safe" download="Plantilla.csv" #plantilla>Plantilla</a>
+          
+        </div>
+      </div>
+    </div>
+    </section>
+    
+    
+    <section *ngIf="this.seleccion==1">
+      <h2 mat-dialog-title class="swal2-title margen-espacio" >Seleccione la bolsa de destino de los registros</h2>
+      <div mat-dialog-content>
+        <div class="row" [formGroup]="form">
+          <div class="col-12 textcenter">
+            <div class="textcenter margen">
+             Recuerde que la medición mantendrá el nombre de la bolsa de destino 
+            </div>   
+            <mat-form-field appearance="fill" style="margin: auto;">
+              <mat-label class="fuente ancho">Seleccione la medición de destino</mat-label>
+              <mat-select formControlName='bolsa' name="medicion" >
+                <mat-option  *ngFor="let bolsa of this.selectlistaMedicionxMadre" [value]="bolsa.id"><span class="ancho">{{bolsa.id}}</span> - {{bolsa.nombre}}</mat-option>
+              </mat-select>         
+            </mat-form-field>   
+          <div class="row">
+          <div class="col-6">
+            <button mat-raised-button class="btn-basic  btn-general" (click)="btnEnviarTodos()" >Continuar</button>
+          </div>
+          <div class="col-6">
+              <button mat-raised-button class="btn-basic  btn-general btn-invertido" [mat-dialog-close]="true">Cancelar</button>
+            </div>
+         </div>
+          </div>     
+        </div>
+      </div>
+      </section>
+    
+      <section *ngIf="this.seleccion==2">
+        <h2 mat-dialog-title class="swal2-title margen-espacio" *ngIf="todos" >Cargue el archivo con las nuevas fechas de asignación y se desea el código de nuevos auditores</h2>
+        <h2 mat-dialog-title class="swal2-title margen-espacio" *ngIf="!todos" >Ahora puede subir el archivo con el detalle para la transferencia de los registros</h2>
+        
+        <div mat-dialog-content>
+          <div class="col-12 textcenter" *ngIf="!todos">
+            <div class="textcenter margen">
+             Reuerde que puede modificar, los códigos de autores, las fechas de asignación y debe marcar la bolsa de destino
+            </div> 
+          </div>
+          <div class="row" [formGroup]="form">
+            <div class="col-12 textcenter margen">
+              <div class="form-group">
+                <Input type="file" accept=".csv" class="form-control-file"  (change)="fileSelected($event)">
+             </div>        
+            </div>         
+            <div class="col-6 textcenter">       
+              <button mat-raised-button class="btn-basic  btn-general margen-btn" (click)="btnMoverRegistros()" [disabled]="!allowLoadFile"  [ngClass]="{'buttonfile-dis': allowLoadFile}" >Mover registros</button>
+            </div>
+            <div class="col-6 textcenter">         
+              <button mat-raised-button class="btn-basic  btn-general btn-invertido margen-btn" [mat-dialog-close]="true">Cancelar</button>
+            </div>
+          </div>
+        </div>
+        </section>
+    
+    
+    
+    
+    
+      <section *ngIf="this.seleccion==4">
+        <h2 mat-dialog-title class="swal2-title margen-espacio" >Los registros fueron transferidos exitosamente</h2>
+        <div mat-dialog-content>
+          <div class="row" >
+            <div class="col-12 textcenter" style="margin-bottom: 20px;" >  
+              <a class="btn-abrir btn-general undeline" [href]="'data:application/octet-stream;base64,' + base64Respuesta | safe" download="Reporte.csv" #total>Descargar detalle</a>          
+              </div>
+            <div class="col-12 textcenter">            
+              <button mat-raised-button class="btn-basic  btn-general" [mat-dialog-close]="true" >ENTENDIDO</button>
+            </div>     
+          </div>
+        </div>
+        </section>
+    
+        
+      <section *ngIf="this.seleccion==5">
+        <h2 mat-dialog-title class="swal2-title margen-espacio" >La fecha de asignación registros que desea mover no coincide con las fechas de ejecución de la auditoría</h2>
+        <div mat-dialog-content>
+          <div class="row">
+            <div class="col-12 textcenter">
+            <div class="textcenter margen">
+             Debe descargar el archivo y ajustar las fechas de asignación de auditoria
+             </div> 
+             </div>  
+            <div class="col-6 textcenter">  
+                <a style="display: none;" [href]="'data:application/octet-stream;base64,' + base64Respuesta | safe" download="Reporte.csv" #subir >Descargar</a>          
+                <button mat-raised-button style="margin-top: 20px;" class="btn-basic  btn-general margen-btn" (click)="btnSubirArchivo()">Descargar</button>
+       
+              </div>  
+            <div class="col-6 textcenter">         
+              <button mat-raised-button class="btn-basic  btn-general btn-invertido margen-btn" [mat-dialog-close]="true">Cancelar</button>
+            </div>   
+          </div>
+        </div>
+        </section>
+        <section *ngIf="this.seleccion==6">
+          <h2 mat-dialog-title class="swal2-title margen-espacio" >Algunos registros no pudieron ser transferidos a la bolsa destino</h2>
+          <div mat-dialog-content>
+            <div class="row" >
+              <div class="col-12 textcenter">  
+                <!-- <button mat-button class="btn-abrir btn-general undeline" (click)="DescargarIntentar()" >Descargar detalle</button> -->
+    
+                <button mat-button class="btn-abrir btn-general undeline"(click)="downloadMyFile(base64Respuesta)" >Descargar detalle</button>
+                </div>              
+              <div class="col-6">
+                <button mat-raised-button class="btn-basic  btn-general" (click)="seccionSubirArchivo()" [disabled]="!allowBtnIntentar"  [ngClass]="{'buttonfile-dis': allowBtnIntentar}" >Intentar de nuevo</button>
+              </div>
+              <div class="col-6">
+                  <button mat-raised-button class="btn-basic  btn-general btn-invertido" [mat-dialog-close]="true">Cancelar</button>
+                </div>
+            </div>
+          </div>
+          </section>
+    
+
+</div>

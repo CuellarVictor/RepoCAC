@@ -1,0 +1,245 @@
+<app-card-percent
+    [title]='"Administrador"'
+    [page]="'audit-management'"
+></app-card-percent>
+
+<mat-card class="card-body">
+    <div class="row title">
+        <div class="col-md-12 text-title">
+           <a  (click)="goPlaces(1)" style="color: white; text-decoration: none; cursor: pointer;font-weight: 100;">< Gestor de mediciones</a> 
+           <a (click)="goPlaces(2)" style="color: white; text-decoration: none; cursor: pointer;font-weight: 100;" > < Asignación bolsa </a>
+           <a  style="color: white; text-decoration: none; cursor: pointer;"> < {{ tipo=='total'? "Asignacion total ":""}} {{ this.codigoAuditor?.nombres}} {{ this.codigoAuditor?.apellidos}}</a>
+
+      </div>
+    </div>
+    <div class="contenedor">
+
+      <div class="row subtitle" *ngIf="tipo=='bolsa'">       
+        <div class="col-md-3 text-subtitle">
+          <p class="text-subtitle-a">Bolsa de medicíon</p>
+          <p class="text-subtitle-b">{{ objMedicion.nombre }}</p>
+        </div>
+        <div class="col-md-2 text-subtitle">
+            <p class="text-subtitle-a">Resolución</p>
+            <p class="text-subtitle-b">{{ objMedicion.resolucion }}</p>
+          </div>
+          <div class="col-md-1 text-subtitle" >
+            <p class="text-subtitle-a">Estado</p>
+            <p class="text-subtitle-b">{{ objMedicion.estado }}</p>
+          </div>
+          <div class="col-md-2 text-subtitle">
+            <p class="text-subtitle-a">Fecha inicio</p>
+            <p class="text-subtitle-b">{{ objMedicion.fechaInicioAuditoria==null?'-':objMedicion.fechaInicioAuditoria | date:'yyyy-MM-dd'}}</p>
+          </div>
+          <div class="col-md-2 text-subtitle">
+            <p class="text-subtitle-a">Fecha fin</p>
+            <p class="text-subtitle-b">{{ objMedicion.fechaFinAuditoria==null?'-':objMedicion.fechaFinAuditoria | date:'yyyy-MM-dd'}}</p>
+          </div>
+          <div class="col-md-2 text-subtitle">
+            <p class="text-subtitle-a">Fecha corte</p>
+            <p class="text-subtitle-b">{{ objMedicion.fechaCorteAuditoria==null?'-':objMedicion.fechaCorteAuditoria | date:'yyyy-MM-dd'}}</p>
+          </div>
+      </div>
+      <div class="row subtitle" *ngIf="tipo=='total'">       
+        <div class="col-md-2 text-subtitle">
+          <p class="text-subtitle-a">Estado del usuario</p>
+          <p class="text-subtitle-b">Activo</p>
+        </div>
+        <div class="col-md-2 text-subtitle">
+            <p class="text-subtitle-a">Código de auditor</p>
+            <p class="text-subtitle-b">{{ codigoAuditor.codigo}}</p>
+          </div>
+          <div class="col-md-2 text-subtitle" >
+            <p class="text-subtitle-a">Registros asignados</p>
+            <p class="text-subtitle-b">502</p>
+          </div>
+          <div class="col-md-2 text-subtitle">
+            <p class="text-subtitle-a">Registros auditados</p>
+            <p class="text-subtitle-b">127</p>
+          </div>         
+      </div>
+    </div>
+
+    <form [formGroup]="form">
+          <div class="row">              
+
+            <div class="col-md-3" >
+              <mat-form-field appearance="fill">
+                <mat-label style="font-weight: 500;">Fecha de asignación</mat-label>
+                <mat-date-range-input [rangePicker]="picker">
+                  <input matStartDate (dateInput)='this.getFilters()' formControlName='Startdate' placeholder="Inicio" (disabled)=true>
+                  <input matEndDate (dateInput)='this.getFilters()' formControlName='Enddate' placeholder="Fin" (disabled)=true>
+                </mat-date-range-input>
+  
+                <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                <mat-date-range-picker #picker></mat-date-range-picker>
+              </mat-form-field>
+            </div>
+            <div class="col-md-2">  
+              <mat-form-field appearance="fill">
+                <mat-label class="fuente">Estado</mat-label>
+                <mat-select (closed)='this.getFilters()' formControlName='estado' name="estado" multiple>
+                  <mat-option  *ngFor="let ele of this.getSelect('Estado de registro')" [value]="ele.id">{{ele.valor}}</mat-option>
+                </mat-select>
+              </mat-form-field> 
+            </div>
+
+              <div class="col-md-3">  
+                <mat-form-field appearance="fill">
+                  <mat-label class="fuente">Entidad</mat-label>
+                  <mat-select (closed)='this.getFilters()' formControlName='codigoEps' name="codigoEps" multiple>
+                    <mat-option   *ngFor="let ele of this.getSelect('Entidad')" [value]="ele.id">{{ele.valor}}</mat-option>
+                  </mat-select>
+                </mat-form-field> 
+              </div>
+              <div class="col-md-2"  *ngIf="tipo=='total'">  
+                <mat-form-field appearance="fill">
+                  <mat-label class="fuente">Bolsa de medición</mat-label>
+                  <mat-select (closed)='this.getFilters()' formControlName='bolsamedicion' name="bolsamedicion" multiple>
+                    <mat-option   *ngFor="let ele of this.getSelect('Bolsa medicion')" [value]="ele.id">{{ele.valor}}</mat-option>
+                  </mat-select>
+                </mat-form-field> 
+              </div>
+
+              <div class="col-md-2" *ngIf="tipo=='bolsa'">
+                <mat-form-field appearance="fill" class="n-variable"> 
+                    <mat-label class="ancho">Buscar</mat-label>
+                    <input matInput formControlName='buscar' (keyup)='this.getFilters()'>
+                  </mat-form-field> 
+              </div> 
+
+              <div class="col-md-2" style="text-align: center;">
+                <button mat-button class="btn-abrir btn-general subrayado "  (click)="limpiarForm()" type="button"  >LIMPIAR</button>
+                 
+              </div>
+
+          </div>
+          <div class="row derecha">  
+            <div class="col-md-5" *ngIf="tipo=='total'">
+              <mat-form-field appearance="fill" class="n-variable"> 
+                <mat-label class="ancho">Buscar</mat-label>
+                <input matInput formControlName='buscar' (keyup)='this.getFilters()' >
+              </mat-form-field> 
+            </div>
+ 
+            <div class="col-md-5" >
+              <button mat-raised-button class="btn-basic  btn-general center " [disabled]="habilitarBtnReasignar()" (click)="openModalReasignar()">Reasignar registros seleccionados</button>
+            </div>
+             
+              <div class="col-md-2" >
+                <button mat-raised-button class="btn-basic  btn-general center btn-third" (click)="openModalReasignarDescarga()">Descargar</button>
+                 
+              </div>
+
+          </div>
+      </form>
+
+    <div class="row" style="overflow: auto;
+    height: 400px;">
+        <div class="col-md-12">
+          <table mat-table [dataSource]="dataSource" matSort class="table-striped">            
+            <ng-container matColumnDef="btns">
+              <th mat-header-cell *matHeaderCellDef  class="th-principal" style="text-align: center;">
+                <mat-checkbox
+                (change)="$event ? masterToggle() : null"
+                [checked]="selection.hasValue() && isAllSelected()"
+                [indeterminate]="selection.hasValue() && !isAllSelected()"
+                [aria-label]="checkboxLabel()">
+              </mat-checkbox>
+              </th>
+              <td mat-cell *matCellDef="let element" (click)="$event.stopPropagation()" style="width: 60px;">
+                <mat-checkbox
+                    (click)="$event.stopPropagation()"
+                    (change)="$event ? selection.toggle(element) : null"
+                    [checked]="selection.isSelected(element)"
+                    [aria-label]="checkboxLabel(element)">
+                </mat-checkbox>
+              </td>
+            </ng-container>
+
+            <ng-container matColumnDef="idRegistro">
+              <th mat-header-cell *matHeaderCellDef  class="th-principal columna">ID Registro</th>
+              <td mat-cell *matCellDef="let element" class="row-cursor columna size-font"> {{element.idRadicado}} </td>
+            </ng-container>
+            <ng-container matColumnDef="estado">
+              <th mat-header-cell *matHeaderCellDef  class="th-principal columna">Estado registro</th>
+              <td mat-cell *matCellDef="let element" class="row-cursor columna size-font"> {{element.estadoCodigo}} </td>
+            </ng-container>
+
+
+
+            <ng-container matColumnDef="entidad">
+              <th mat-header-cell *matHeaderCellDef  class="th-principal columna">Entidad</th>
+              <td mat-cell *matCellDef="let element" class="row-cursor size-font"> {{element.data_NombreEPS}} </td>
+            </ng-container>
+
+
+                <ng-container matColumnDef="asignacion">
+                  <th mat-header-cell *matHeaderCellDef  class="th-principal columna"> Asignación </th>
+                  <td mat-cell *matCellDef="let element" class="row-cursor columna size-font">{{element.fechaAsignacion| date:'yyyy-MM-dd'}}</td>
+                </ng-container>
+                <ng-container matColumnDef="enfermedadMadre">
+                  <th mat-header-cell *matHeaderCellDef  class="th-principal columna"> E Madre </th>
+                  <td mat-cell *matCellDef="let element" class="row-cursor columna size-font">{{element.nombreEnfermedadMadre }}</td>
+                </ng-container>
+                <ng-container matColumnDef="bolsaMedicion">
+                  <th mat-header-cell *matHeaderCellDef  class="th-principal columna"> Bolsa Medición </th>
+                  <td mat-cell *matCellDef="let element" class="row-cursor columna size-font">{{element.nombreMedicion }}</td>
+                </ng-container>
+                <ng-container matColumnDef="codigo">
+                  <th mat-header-cell *matHeaderCellDef  class="th-principal columna"> Código Auditor</th>
+                  <td mat-cell *matCellDef="let element" class="row-cursor columna size-font">
+                    {{element.codigoUsuario}}
+                </td>
+            </ng-container>
+            <ng-container matColumnDef="bolsa">
+              <th mat-header-cell *matHeaderCellDef  class="th-principal columna" style="text-align: left !important;"> Bolsa Medición </th>
+              <td mat-cell *matCellDef="let element" class="row-cursor columna size-font">
+                {{element.nombreMedicion}}
+            </td>
+        </ng-container>
+                  <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
+                  <tr mat-row *matRowDef="let row; columns: displayedColumns;" ></tr>
+              </table>
+        </div>
+    </div>
+
+
+    <div *ngIf="this.dataTable" style="margin-top: 20px;">
+      <nav aria-label="Page navigation example" *ngIf="this.dataTable.length > 0">
+        <ul class="pagination justify-content-center">
+          <li class="page-item"  [ngClass]="{'page-item disabled': pageNumber == 1}">
+            <a class="page-link" (click)="this.filtroPaginador(1, this.itemsPerpagina)">
+                <</a>
+            </li>
+            <li class="page-item" [ngClass]="{'page-item disabled': pageNumber == 1}">
+                <a class="page-link" (click)="this.filtroPaginador(pageNumber-1, this.itemsPerpagina)">
+                        <<</a>
+            </li>
+            <li class="page-item" [ngClass]="{'page-item active': pageNumber === page}" *ngFor="let page of pager.pages"><a class="page-link" (click)="this.filtroPaginador(page, this.itemsPerpagina)">{{page}}</a></li>
+            <li class="page-item" [ngClass]="{'page-item disabled': pageNumber === pager.totalPages}"><a class="page-link" (click)="this.filtroPaginador((pageNumber + 1) , this.itemsPerpagina)">>></a></li>
+            <li class="page-item" [ngClass]="{'page-item disabled': pageNumber === pager.totalPages-1}"><a class="page-link" (click)="this.filtroPaginador(pager.totalPages, this.itemsPerpagina)">></a></li>
+     
+            <div  class="selectAuditor" style="width: 100px;">
+              <mat-form-field appearance="fill"  >
+                <mat-label>Items per page</mat-label>
+                <mat-select  [(ngModel)]="itemsPerpagina" name="itemsPerpagina" >
+                  <mat-option class="text-center" (click)="this.filtroPaginador(1, item)" *ngFor="let item of sizeList" [value]="item">
+                    {{item}}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>                   
+            </div>
+        </ul>               
+    </nav>
+    
+  </div> 
+  <div class="d-flex justify-content-end">  
+      
+  </div> 
+  <div class="row" *ngIf="this.totalRegister > 0"  style="text-align: right; color: #A03781; width: 100%;">
+    <label>Total Mediciones: <b>{{this.totalRegister}}</b></label>
+  </div>
+
+
+</mat-card>

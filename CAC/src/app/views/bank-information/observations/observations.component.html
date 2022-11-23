@@ -1,0 +1,37 @@
+<div class="row" *ngIf='this.objUser.userId'>
+    <div class="cold-md-12 header-inbox text-center btn-general">
+       OBSERVACIONES
+    </div>
+    <div class="col-md-12 pd-new-inbox">
+
+      <form [formGroup]="this.formObservation" >
+      
+        <div  [ngClass]="{'elementdisabled': !data.tipificacionObservasionHabilitada}">
+          <mat-form-field appearance="fill">
+            <mat-label>Tipo</mat-label>
+            <mat-select [(value)]="selectedOption" formControlName='tipoObservacion'>
+              <mat-option [value]="option.id" *ngFor="let option of option">{{ option.itemName }}</mat-option>
+            </mat-select>
+            <mat-error >Campo requerido</mat-error>
+          </mat-form-field>
+        </div>
+
+          <div class="input-group">            
+              <textarea rows="3" maxlength='600' formControlName='observacion' class="form-control" 
+              [ngClass]="{'text' : error }"
+              placeholder="{{mensajePlaceholder}}" required (blur)="setObservacionTemporal()"></textarea>
+         </div>
+
+          <div class="row" style="margin-top: 20px;">
+              <div class="col-md-8">
+              </div>
+              <div class="col-md-4" [ngClass]="{
+                'elementdisabled': !validationSave()}">
+                <button mat-raised-button class="btn-basic btn-general btn-align-right" (click)="save()" >Enviar
+                </button>
+              </div>
+          </div>
+        </form>
+
+    </div>
+</div>

@@ -1,0 +1,123 @@
+<mat-card class="card-box" *ngIf="this.permisos.Gestor_de_Usuarios.visible" 
+[ngClass]="{'elementdisabled': !this.permisos.Gestor_de_Usuarios.habilitado}">
+
+    <h1 class="title_1">Gestor de usuarios Audicac</h1> 
+  
+
+    <div class="row title titulo">
+        <div class="col-md-12 titulo">
+           Gestor de perfiles
+        </div>
+    </div>
+
+    <br/>
+    <div class="row separar col-md-12">  
+        <div class="col-md-9"  >
+            <button mat-button class="btn-basic btn-general float-right" (click)="goToNewUser()"
+                    *ngIf="this.permisos.Nuevo_usuario.visible" 
+                    [ngClass]="{'elementdisabled': !this.permisos.Nuevo_usuario.habilitado}">
+                Nuevo Usuario
+            </button>
+        </div> 
+        <mat-form-field class="example-full-width col-md-3" appearance="fill">
+            <mat-label class="input-bold">Buscar</mat-label>
+            <input autocomplete="off" id="search_by_id"  (keyup)="this.applyFilter($any($event.target).value)" autofocus type="text" matInput>
+            <mat-icon matSuffix type="button">search</mat-icon>
+        </mat-form-field>
+    </div>
+
+    <div class="row">
+        <div class="col-md-12">
+            <div class="row"> 
+                <div class="col-md-12">
+                  <div class="tabla-over">  
+                  <table mat-table [dataSource]="dataScource" class="table-striped" style="height: 50px;">  
+
+                    <ng-container matColumnDef="Codigo">
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header class="th-principal"  style="padding-left: 50px !important; ">Código</th>
+                        
+                        <td mat-cell *matCellDef="let element" class="row-cursor size-font" > 
+                            
+                            <button mat-icon-button [matMenuTriggerFor]="menu"
+                                    *ngIf="this.permisos.Editar_Usuario.visible ||  
+                                           this.permisos.Eliminar_Usuario.visible ||
+                                           this.permisos.Log_Usuario.visible">
+                                <mat-icon class="info">more_vert</mat-icon>
+                              </button>
+                              <mat-menu #menu="matMenu">
+                                <button mat-menu-item class="btn-menu" (click)="EditarUsuario(element)"  
+                                *ngIf="this.permisos.Editar_Usuario.visible" 
+                                [ngClass]="{'elementdisabled': !this.permisos.Editar_Usuario.habilitado}">
+                              Editar
+                            </button> 
+                            <button mat-menu-item class="btn-menu" (click)="PopUpEliminar(element)"
+                                    *ngIf="this.permisos.Eliminar_Usuario.visible" 
+                                    [ngClass]="{'elementdisabled': !this.permisos.Eliminar_Usuario.habilitado}">
+                                Eliminar
+                            </button>
+                            <!-- <button mat-menu-item class="btn-menu" (click)="openLog(element.Id)"
+                                    *ngIf="this.permisos.Log_Usuario.visible" 
+                                    [ngClass]="{'elementdisabled': !this.permisos.Log_Usuario.habilitado}">
+                                Ver Log
+                            </button> -->
+                            <button mat-menu-item class="btn-menu" (click)="OpenLogUsuario(element)" 
+                                    *ngIf="this.permisos.Log_Usuario.visible" 
+                                    [ngClass]="{'elementdisabled': !this.permisos.Log_Usuario.habilitado}">
+                                Ver Log
+                            </button> 
+                              </mat-menu>
+                            
+                            {{element.codigo}} </td>
+                      </ng-container> 
+
+                      <ng-container matColumnDef="Nombre">
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header class="th-principal">Nombre</th>
+                        <td mat-cell *matCellDef="let element" class="row-cursor size-font">
+                            
+                             {{element.nombre}} 
+                        </td>
+                      </ng-container> 
+                      
+                      <ng-container matColumnDef="Apellido">
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header class="th-principal">Apellido</th>
+                        <td mat-cell *matCellDef="let element" class="row-cursor size-font"> {{element.apellidos}} </td>
+                      </ng-container> 
+                      
+                      <ng-container matColumnDef="Correo">
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header class="th-principal">Usuario</th>
+                        <td mat-cell *matCellDef="let element" class="row-cursor size-font"> {{element.usuario}} </td>
+                      </ng-container>  
+
+             
+
+                      <ng-container matColumnDef="Rol">
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header class="th-principal">Rol</th>
+                        <td mat-cell *matCellDef="let element" class="row-cursor size-font"> {{element.normalizedName}} </td>
+                      </ng-container> 
+                      
+                   
+
+                      <ng-container matColumnDef="Creación">
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header class="th-principal">Creación</th>
+                        <td mat-cell *matCellDef="let element" class="row-cursor size-font"> {{element.createdDate}} </td>
+                      </ng-container> 
+
+                      <ng-container matColumnDef="Estado">
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header class="th-principal">Estado</th>
+                        <td mat-cell *matCellDef="let element" class="row-cursor size-font"> {{element.nombreEstado}} </td>
+                      </ng-container> 
+
+                      <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
+                      <tr mat-row *matRowDef="let row; columns: displayedColumns;" ></tr>
+                  
+                  </table> 
+                </div>                 
+                </div>
+            </div>
+        
+
+        </div> 
+    </div> 
+</mat-card>
+
+<br/>

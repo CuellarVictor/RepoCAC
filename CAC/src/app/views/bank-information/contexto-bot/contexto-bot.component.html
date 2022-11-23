@@ -1,0 +1,32 @@
+
+
+ <mat-accordion class="margen" *ngFor="let element of inputdata.documentos.documento; index as i" >
+    <mat-expansion-panel [expanded]="true"  class="margen">
+      <mat-expansion-panel-header class="titulo specific-class">
+        <mat-panel-title class="titulo-color">
+            Documento {{i + 1}}
+        </mat-panel-title>  
+      </mat-expansion-panel-header>
+     <div class="margen-expansion">
+         
+        <a href="{{urlFiles}} + {{element.archivo.text}}"  target="_blank" >Ver Archivo</a>
+
+        <div  *ngFor="let context of element.contextos.contexto;" style="margin-bottom: 10px;">
+            <div class="card">
+                <div class="card-header">
+                    <label><b>Página:</b></label>  &nbsp; &nbsp; {{context.pagina.text}}
+                </div>
+                <ul class="list-group list-group-flush">
+                  <li class="list-group-item"><label><b>Palabra Clave:</b></label><br>{{context.parrafos.parrafo.palabraClave.text}}</li>
+                  <li class="list-group-item"><label><b>Fecha:</b></label><br>{{context.parrafos.parrafo.fecha.text}}</li>
+                  <li class="list-group-item"><label><b>Parrafo:</b></label><br>{{context.parrafos.parrafo.texto.text}}</li>
+                </ul>
+            </div>
+
+          </div>
+
+
+     </div>
+    </mat-expansion-panel>
+  </mat-accordion>
+

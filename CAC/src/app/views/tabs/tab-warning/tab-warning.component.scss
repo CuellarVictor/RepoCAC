@@ -1,0 +1,88 @@
+mat-divider{
+    display: block;
+    margin: 5px 9px;
+    border-top-width: 1px;
+    border-top-color: #2565b3;
+    border-top-style: solid;
+    width: 65%;
+}
+mat-icon{
+    cursor: pointer;
+}
+.material-icons{
+    font-size: 20px !important;
+}
+.separador{
+    margin-bottom: 10px;
+    margin-top: 10px;
+} 
+
+::ng-deep .custom-modalbox {
+    mat-dialog-container {
+        position: absolute;
+        padding: 0px; 
+        right: 0px;
+        height: 550px;
+        bottom: 0px;   
+    }
+}
+
+ /* Extra small devices (phones, 600px and down) */
+ @media only screen and (max-width: 600px){ 
+    ::ng-deep .custom-modalbox {
+        mat-dialog-container { 
+            width: 99%; 
+            height: 600px;  
+        }
+    }
+ }
+
+ /* Small devices (portrait tablets and large phones, 600px and up) */
+ @media only screen and (min-width: 600px) and (max-width: 767px) and (orientation: landscape) { 
+    ::ng-deep .custom-modalbox {
+        mat-dialog-container { 
+            width: 70%; 
+            height: 600px;
+        }
+    }
+ }
+ 
+ /* Medium devices (landscape tablets, 768px and up) */
+ @media only screen and (min-width: 768px) and (max-width: 991px) and (orientation: landscape) { 
+    ::ng-deep .custom-modalbox {
+        mat-dialog-container { 
+            width: 35%;  
+            height: 600px;
+        }
+    }
+ }
+ 
+ /* Large devices (laptops/desktops, 992px and up) */
+ @media only screen and (min-width: 992px) and (max-width: 1199px) and (orientation: landscape) {
+    ::ng-deep .custom-modalbox {
+        mat-dialog-container { 
+            width: 35%;    
+            height: 600px;
+        }
+    }
+ }
+ 
+ /* Extra large devices (large laptops and desktops, 1200px and up) */
+ @media only screen and (min-width: 1200px) { 
+    ::ng-deep .custom-modalbox {
+        mat-dialog-container { 
+            width: 35%;  
+            height: 600px;
+        }
+    }
+ } 
+ 
+ /* Extra large devices (large laptops and desktops, 1200px and up) */
+ @media only screen and (min-width: 1500px) { 
+    ::ng-deep .custom-modalbox {
+        mat-dialog-container { 
+            width: 30%; 
+            height: 600px; 
+        }
+    }
+ } 

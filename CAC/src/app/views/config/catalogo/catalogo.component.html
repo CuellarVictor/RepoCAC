@@ -1,0 +1,52 @@
+<app-card-percent
+    [title]="'Configuración'"
+    [page]="'audit-management'"
+></app-card-percent>
+<form [formGroup]="formCatalogo" (submit)="idCategoria ? update(formCatalogo.value) : create(formCatalogo.value)">
+
+  <table class="table table-card" style="margin-top: 20px;">
+    <tbody>
+      <tr class="title">
+        <td scope="col"  class="text-title" colspan="100%" style="font-weight: 500;"> Creación de catálogo </td>
+      </tr>
+      <tr >
+          <td style="padding-top: 20px;padding-bottom: 20px;">
+            <div class="row">
+           
+               
+           
+                    <div class="col-md-12">
+                      <mat-form-field appearance="fill">
+                        <mat-label class="input-bold">Nombre Catálogo</mat-label>
+                        <input formControlName="catalogName" matInput>
+                      </mat-form-field> 
+
+                    </div>
+                    <div class="row" formArrayName="items" >
+                      <div class="col-md-3" *ngFor="let item of item.controls; let i = index;">
+                          <mat-form-field appearance="fill" class="t-variable" floatLabel='never' [formGroupName]="i">
+                            <mat-label class="input-bold">Nombre Item</mat-label>
+                              <input formControlName="itemName" matInput class="input-config">
+                              <mat-icon matSuffix class="fondo-icon" (click)="remove(i, item)">clear</mat-icon>
+                            </mat-form-field>   
+                      </div>
+                  </div>       
+            </div> 
+          
+           
+            <div class="row end">        
+                <div class="col-md-2">
+                    <a mat-raised-button class="btn-item btn-general" (click)="add()" >NUEVO ITEM</a> 
+                </div>
+                <div class="col-md-2">
+                    <button mat-raised-button class="btn-basic btn-general">{{ idCategoria ? "ACTUALIZAR" : "CREAR" }}</button>
+                </div>
+            </div>
+          </td>
+      </tr>
+
+    </tbody>
+
+</table>
+</form>
+

@@ -1,0 +1,41 @@
+.end{
+    justify-content: flex-end;
+    text-align: right;
+}
+.fuente{ 
+    font-weight: 500;
+}
+
+.fondo-icon{
+    color: #a03781;
+}
+.margen{
+    margin-top: 20px !important;
+}
+::ng-deep .mat-primary .mat-pseudo-checkbox-checked, .mat-primary .mat-pseudo-checkbox-indeterminate{
+    background-color: #A03781;
+  }
+  
+  ::ng-deep .mat-option-text{
+    color: #000;
+  }
+  .centrar-check{
+    padding-left: 10px;
+  }
+  ::ng-deep .specific-class > .mat-expansion-indicator:after {
+    color: white;
+  }
+  .btn-menu:hover{
+    background-color: #A03781;   
+    color: #fff;   
+}
+.tabla-over {
+    overflow: auto; 
+    height: 300px;
+  }
+  .page-item.active .page-link {
+    z-index: 3;
+    color: #fff;
+    background-color: #a94785 !important;
+    border-color: #a94785 !important;
+  }

@@ -1,0 +1,24 @@
+<!-- loading progress -->
+<div>
+
+  
+    <div class="progress-wrapper">
+      <div class="current" [ngStyle]="getOverlayStyle()"> {{current}} / {{max}}</div>
+      <round-progress
+        [current]="current"
+        [max]="max"
+        [color]="gradient ? 'url(#gradient)' : color"
+        [background]="background"
+        [radius]="radius"
+        [stroke]="stroke"
+        [semicircle]="semicircle"
+        [rounded]="rounded"
+        [clockwise]="clockwise"
+        [responsive]="responsive"
+        [duration]="duration"
+        [animation]="animation"
+        [animationDelay]="animationDelay"
+      ></round-progress>
+    </div>
+  </div>
+   

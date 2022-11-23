@@ -1,0 +1,127 @@
+<mat-card class="card-box"> 
+  <form [formGroup]="userForm" *ngIf="this.userForm" novalidate>
+    <table class="table table-card" style="margin-top: 20px;">
+      <tbody>
+        <tr class="title"> 
+          <td scope="col" class="text-title" colspan="100%" style="display: flex;">
+            <p style="font-weight: 100; font-size: 1em; cursor:pointer;" [routerLink]="['/admin']"> < Gestor de usuario </p>
+          </td> 
+        </tr>
+        <tr >
+          <td style="padding-top: 20px;padding-bottom: 20px;">
+            <div class="container"> 
+            <div class="row"> 
+              <div class="col-md-4"> 
+                <mat-form-field appearance="fill">
+                  <mat-label class="input-bold">Nombres</mat-label>
+                  <input matInput  [(ngModel)]="userSelected.nombre" autocomplete="off" formControlName="nombres" maxlength="65" [readonly]="this.editedForm"> 
+                  <mat-error *ngIf="this.userForm.invalid">
+                    El nombre no debe contener caracteres especiales
+                   </mat-error>
+                </mat-form-field> 
+              </div>
+              <div class="col-md-4">
+                  <mat-form-field appearance="fill">
+                    <mat-label class="input-bold">Apellidos</mat-label>
+                    <input matInput  [(ngModel)]="userSelected.apellidos"   autocomplete="off" formControlName="apellidos" maxlength="65" [readonly]="this.editedForm">
+                    <mat-error *ngIf="this.userForm.invalid">
+                      El apellido no debe contener caracteres especiales
+                     </mat-error>
+                  </mat-form-field> 
+                </div>
+                <div class="col-md-4">
+                  <mat-form-field appearance="fill"> 
+                    <mat-label class="input-bold">Teléfono  <small>(max: 10)</small></mat-label>
+                    <input matInput  [(ngModel)]="userSelected.telefono"  autocomplete="off" formControlName="telefono" type="text" maxlength="10" mask="0000000000">
+                    <mat-error *ngIf="this.userForm.invalid">
+                      Porfavor ingresa un Teléfono válido
+                     </mat-error>
+                  </mat-form-field> 
+              </div>
+            </div>
+            <div class="row"> 
+              <div class="col-md-4">
+                <mat-form-field appearance="fill" [ngClass]="{'elementdisabled': userSelected.id != '' }">
+                  <mat-label class="input-bold">Usuario</mat-label>
+                  <input matInput autocomplete="off"   [(ngModel)]="userSelected.usuario" formControlName="usuario" maxlength="65" [readonly]="this.editedForm">
+                  <mat-error *ngIf="this.userForm.invalid">
+                    Por favor ingrese un usuario válido
+                   </mat-error>
+                </mat-form-field> 
+              </div>
+
+                <div class="col-md-4">
+                  <mat-form-field appearance="fill">
+                    <mat-label class="input-bold">Correo</mat-label>
+                    <input matInput autocomplete="off"  [(ngModel)]="userSelected.email"  formControlName="correo" maxlength="65" [readonly]="this.editedForm">
+                    <mat-error *ngIf="this.userForm.invalid">
+                      Por favor ingrese un correo válido
+                     </mat-error>
+                  </mat-form-field> 
+                </div>
+
+                <div class="col-md-4">
+                  <mat-form-field appearance="fill"  class="t-variable">                    
+                    <mat-label class="input-bold">Rol</mat-label>
+                    <mat-select formControlName="rol"  name="rol" (selectionChange)="validarLider()">
+                      <mat-option *ngFor="let item of roles" [value]="item.id" >
+                         {{item.id}}  {{item.name}}
+                      </mat-option>
+                    </mat-select>    
+                  </mat-form-field>
+                </div>
+
+                <div class="col-md-4" *ngIf="userSelected.id == ''"> 
+                    <mat-form-field appearance="fill">
+                      <mat-label class="input-bold">Contraseña</mat-label>
+                      <input matInput type="password"  [(ngModel)]="userSelected.password"  autocomplete="off" formControlName="contrasena" minlength="8" maxlength="32">   
+                      <mat-error *ngIf="this.userForm.invalid">
+                        Debes tener más de 8 caracteres alfanuméricos, mayusculas y #?!@$%^&*-  
+                      </mat-error>  
+                    </mat-form-field>
+                  </div>
+
+                
+                  <div class="col-md-4">
+                    <mat-form-field appearance="fill" [ngClass]="{'elementdisabled': true }">
+                      <mat-label class="input-bold">Código</mat-label>
+                      <input    matInput formControlName="codigo">
+
+                    </mat-form-field> 
+                  </div> 
+
+                  <div class="col-md-4">
+                    <mat-form-field [ngClass]="{'elementdisabled': userSelected.id == '' }" appearance="fill"  class="t-variable">                    
+                      <mat-label class="input-bold">Estado</mat-label>
+                      <mat-select formControlName="estado" [(ngModel)]="userSelected.estado"  name="estado">
+                        <mat-option *ngFor="let item of itemsEstado" [value]="item.id" >
+                          {{item.itemName}}
+                        </mat-option>
+                      </mat-select>    
+                    </mat-form-field>
+                  </div>
+
+                  
+                  <div class="col-md-4" *ngIf="esLider">
+                    <mat-form-field appearance="fill">
+                      <mat-label class="fuente">Enfermedades</mat-label> 
+                      <mat-select   [(ngModel)]="userSelected.usuariosxEnfermedad"  formControlName='enfermedades' multiple>
+                        <mat-option *ngFor="let enfermedad of this.enfermedades" [value]="enfermedad.IdCobertura">{{enfermedad.Nombre}}</mat-option>
+                      </mat-select> 
+                    </mat-form-field>
+                  </div>
+                </div>
+                <div class="row end">    
+                  <div class="col-md-2">
+                      <button mat-raised-button class="btn-basic btn-general" (click)="this.save()" [disabled]="this.userForm.invalid">Guardar</button>
+                  </div>
+                </div>
+              </div>
+            </td>        
+        </tr> 
+      </tbody> 
+    </table>
+  </form> 
+</mat-card>
+ 
+

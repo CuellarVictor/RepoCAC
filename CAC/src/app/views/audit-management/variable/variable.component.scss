@@ -1,0 +1,113 @@
+.title{
+    font-size: 20px;
+    background-color: #575757;
+    color: #fff;   
+    font-weight: 500; 
+  }
+  .text-title{
+    padding-top: 20px !important;
+    padding-bottom: 20px !important;
+    padding-left: 30px !important;
+    height: 70px;
+  } 
+.t-variable{
+    width: 100%;
+    display: inline-block !important;
+    margin-left: 10px;   
+    margin-right: 10px;  
+    padding-bottom: 0px;
+    padding-right: 20px;
+}
+.n-variable{
+    width: 35%;
+    display: inline-block !important;
+    margin-left: 10px;   
+    margin-right: 10px;   
+    padding-bottom: 0px;
+}
+.e-variable{
+    width: 20%;
+    display: inline-block !important;
+    padding-bottom: 0px;
+}
+.checkbox{
+   // width: 35%;\
+   vertical-align: super;
+    display: inline-block !important;
+}
+.div-checkbox{
+    display: contents;
+}
+
+.element-checkbox {
+    margin-left: 10px;   
+    margin-right: 10px; 
+    font-weight: 500;
+}
+.small-input{
+    width: 12%;
+    display: inline-block !important;
+    margin-left: 10px;   
+    margin-right: 10px;  ;
+    padding-bottom: 0px;
+}
+
+.full-input{
+    margin-left: 10px;   
+    margin-right: 10px;  
+    padding-bottom: 0px;
+}
+
+.options {
+    width: 15%;
+    display: inline-block !important;
+    margin-left: 10px;   
+    margin-right: 10px;  ;
+    padding-bottom: 0px;
+}
+
+.color-more{
+    background-color: #fff;
+    color:#A03781;
+    
+  }
+
+  .bton-crear {
+    margin-right: 20px;
+    float: right;
+}
+
+::ng-deep .mat-checkbox-checked.mat-accent .mat-checkbox-ripple .mat-ripple-element {
+    opacity: 0.03 !important;
+    background-color: #A03781!important;
+  }
+
+::ng-deep .mat-checkbox-checked.mat-accent .mat-checkbox-background,.mat-checkbox-indeterminate.mat-accent .mat-checkbox-background {
+    background-color: #A03781;
+  }
+
+
+  ::ng-deep .mat-checkbox-indeterminate.mat-accent .mat-checkbox-background {
+    background-color: #A03781 !important;
+  }
+    .span-variable{
+        display: contents;
+    }
+
+    .margen{
+
+        margin-top: 20px;
+        padding-bottom: 50px;
+    }
+    .aling-check{
+        padding-top: 10px;
+    }
+    .separacion{
+        display: flex !important;
+    justify-content: space-between;
+    }
+    .fuente{
+        font-weight: 500;
+    }
+
+    

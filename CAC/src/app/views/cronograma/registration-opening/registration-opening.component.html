@@ -1,0 +1,135 @@
+
+<app-card-percent 
+[title]="'Registro No 2345678'"
+[page]="'summary1'"
+></app-card-percent>
+
+<mat-card class="card-body">
+    <div class="row title">        
+            <div class="col-md-3">
+                <b class="text-title">Paciente </b>
+                <p class="text-title">Teresa Martinez Rayo</p>
+            </div>
+            <div class="col-md-2">
+                <b class="text-title">ID </b>
+                <p class="text-title">CC1016030654</p>
+            </div>
+            <div class="col-md-2">
+                <b class="text-title">Entidad </b>
+                <p class="text-title">Salud total</p>
+            </div>
+            <div class="col-md-3">
+                <b class="text-title">Lider </b>
+                <p class="text-title">Yenny Zambrano</p>
+            </div>
+            <div class="col-md-2">
+                <b class="text-title">Estado </b>
+                <p class="text-title">RN</p>
+            </div>       
+    </div>  
+    <div class="row btns">
+        <div class="col-md-3">
+       
+                     
+        </div>
+        <div class="col-md-3">
+            <button mat-raised-button class="btn-basic btn1" >MANTENER CALIFICACIÓN</button>
+        </div>
+        <div class="col-md-3">
+
+            <button mat-raised-button class="btn-basic btn2" >EDITAR CALIFICACIÓN</button>
+
+                
+        </div>
+        <div class="col-md-3">
+            <button mat-raised-button class="btn-basic" >CERRAR AUDITORIA</button>
+             
+            
+        </div>
+        
+
+    </div>
+    <div class="row" >
+        <div class="col-md-12" >
+            <table mat-table
+            [dataSource]="dataSource" multiTemplateDataRows
+            class="mat-elevation-z8" >
+       <ng-container matColumnDef="name" >
+         <th mat-header-cell *matHeaderCellDef class="cell0"></th>
+         <td mat-cell *matCellDef="let element" class="th-title">{{element.name}}</td>
+       </ng-container>
+       <ng-container matColumnDef="DatoReportado">
+        <th mat-header-cell *matHeaderCellDef > DatoReportado </th>
+        <td mat-cell *matCellDef="let element" class="th-title"></td>
+      </ng-container>
+      <ng-container matColumnDef="Motivo">
+        <th mat-header-cell *matHeaderCellDef > Motivo </th>
+        <td mat-cell *matCellDef="let element" class="th-title"></td>
+      </ng-container>
+      <ng-container matColumnDef="H" >
+        <th mat-header-cell *matHeaderCellDef > H </th>
+        <td mat-cell *matCellDef="let element" class="th-title"></td>
+      </ng-container>
+      <ng-container matColumnDef="E">
+        <th mat-header-cell *matHeaderCellDef > E </th>
+        <td mat-cell *matCellDef="let element" class="th-title"></td>
+      </ng-container>
+      <ng-container matColumnDef="select">
+        <th mat-header-cell *matHeaderCellDef > DC NC ND</th>
+        <td mat-cell *matCellDef="let element" class="th-title"></td>
+      </ng-container>
+     
+       <!-- Expanded Content Column - The detail row is made up of this one column that spans across all columns -->
+       <ng-container matColumnDef="expandedDetail">
+         <td mat-cell *matCellDef="let element" [attr.colspan]="columnsToDisplay.length">
+           <div class="example-element-detail"
+                [@detailExpand]="element == expandedElement ? 'expanded' : 'collapsed'">
+             
+                <table   *ngFor="let e of element.variables"> 
+                 <tr class="fila">
+                    <td class="cell0 variable"> {{e.reducido}} </td>
+                    <td class="cell0 text-general"> {{e.estado}} </td>
+                    <td class="cell3 text-general detalle"> {{e.detalle}} </td>
+                    <td class="cell2 text-general detalle"> {{e.dato_reportado}} </td>
+                    <td class="cell2 text-general detalle"> 
+                        <mat-form-field appearance="fill" class="medium-input2" *ngIf="e.motivo=='1'">
+                            <mat-label>Seleccione un elemento</mat-label>
+                            <mat-select>
+                              <mat-option *ngFor="let element of type_medicion" [value]="element.id">
+                                {{element.value}}
+                              </mat-option>
+                            </mat-select>
+                          </mat-form-field>
+                          <mat-form-field appearance="fill"  class="small-input" *ngIf="e.motivo=='2'">
+                            <mat-label></mat-label>
+                            <input matInput type="date">
+                          </mat-form-field>                       
+                      </td>
+                    <td class="cell0 text-general"> {{e.hallazgo}} </td>
+                    <td class="cell0 text-general"> {{e.error}} </td>
+                    <td class="cell1 text-general">
+                        <mat-radio-group aria-label="Select an option" class="select">
+                           <mat-radio-button value="1"></mat-radio-button>
+                           <mat-radio-button value="2"></mat-radio-button>
+                           <mat-radio-button value="3"></mat-radio-button>
+                          
+                      </mat-radio-group></td>
+                 </tr>            
+               
+                </table>
+           </div>
+         </td>
+       </ng-container>
+     
+       <tr mat-header-row *matHeaderRowDef="columnsToDisplay"></tr>
+       <tr mat-row *matRowDef="let element; columns: columnsToDisplay;"
+           class="example-element-row"
+           [class.example-expanded-row]="expandedElement === element"
+           (click)="expandedElement = expandedElement === element ? null : element">
+       </tr>
+       <tr mat-row *matRowDef="let row; columns: ['expandedDetail']" class="example-detail-row"></tr>
+     </table>
+        </div>
+    </div>
+
+</mat-card>

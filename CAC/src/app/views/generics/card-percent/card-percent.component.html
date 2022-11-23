@@ -1,0 +1,45 @@
+<div class="container">
+    <div class="row">
+
+        <div class="col-md-12" *ngIf="page == 'audit-management'"> 
+            <h1 id="titulo" class="title">{{title}}</h1> 
+            <p *ngIf="subtitle !== 'undefined' "> {{ subtitle }}</p>
+        </div>
+
+        <div class="col-md-6" *ngIf="page !== 'audit-management'"> 
+            <h1 id="titulo" class="title">{{title}}</h1>
+            <p *ngIf="page === 'summary' " class="subtitulo">Código auditor: <span class="p-link subtitulo">{{ this.userCode }}</span></p>
+            <p *ngIf="page === 'summary1' ">Cáncer de mama</p>
+            <p *ngIf="page === 'profile' "> <span class="link">Ver log de actividad </span></p>
+            <p *ngIf="page === 'undefined' "> {{ subtitle }}</p>
+            <p *ngIf="page === 'config' " class="azul"> {{ subtitle }}</p>
+           <!--
+                <p *ngIf="page === 'audit-management' ">Quedan <span class="p-link">10  días </span>para finalizar la auditoria</p>
+           -->
+            <p *ngIf="page === 'buzon' ">Maria Camila  <span class="p-link">estos registros </span> requieren de tu acción</p>
+    
+        </div>
+        <div class="col-md-6 cuadroLateral" *ngIf="page !== 'audit-management'"> 
+            <mat-card class="card-percent" style="max-width: 200px;">
+                <div *ngIf="page !== 'audit-management' && user == 3"  class="row">
+                    <div class="col-md-12">
+                        <h2 class="progeso" >Progreso diario</h2>
+                    </div>
+                    <div class="col-md-12">
+                        <h1 class="color-percent progreso-indicador"><span *ngIf="this.progresoDia">{{this.progresoDia}}/{{this.totales}}</span></h1>
+                    </div>
+                </div> 
+                <div *ngIf="user == 2" class="row">
+                    <div class="col-md-12 left">
+                        <h2 class="progeso">Alertas pendientes</h2>
+                    </div>
+                    <div class="col-md-12" *ngIf="alerts != undefined">
+                         <h1 class="color-percent progreso-indicador">
+                              {{totales}}</h1>
+                    </div>
+                </div>
+            </mat-card>
+        </div>
+    </div>
+    
+</div>

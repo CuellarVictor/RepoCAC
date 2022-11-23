@@ -1,0 +1,20 @@
+.header-inbox{
+    background: #2E2D2D 0% 0% no-repeat padding-box;
+border-radius: 4px 0px 0px 4px;
+opacity: 1;
+color: #fff;
+width: 100%;
+padding: 10px;
+}
+
+::ng-deep .mat-dialog-container{
+    position: absolute !important;
+    padding: 0px !important;
+    margin-left: -21%;
+    width: 48%;
+    background-color: #F3F2F3;
+}
+
+.pd-new-inbox{
+    padding: 23px 35px;
+}

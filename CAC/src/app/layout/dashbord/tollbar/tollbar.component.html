@@ -1,0 +1,20 @@
+<mat-toolbar class="header-nav"> 
+    <span class="example-spacer"></span>
+
+    <button mat-icon-button class="avatar-background">
+      {{ initialName }}
+    </button>
+
+    <button mat-icon-button [matMenuTriggerFor]="menu"  class="button-no-background">
+      <mat-icon>more_vert</mat-icon>
+    </button>
+
+    <mat-menu #menu="matMenu" class="tollbar-menu">
+      <button mat-menu-item >
+        <span>{{version}}</span>
+      </button>
+      <button mat-menu-item (click)="btnlogin()">
+        <span>Salir</span>
+      </button> 
+    </mat-menu>  
+  </mat-toolbar>

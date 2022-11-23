@@ -1,0 +1,15 @@
+
+<section *ngIf="this.seleccion==0">
+<h2 mat-dialog-title class="swal2-title margen-espacio" >¿Qué registros desea descargar?</h2>
+<div mat-dialog-content>
+  <div class="row" >
+    <div class="col-12 textcenter">
+      <a style="display:none;" [href]="'data:application/octet-stream;base64,' + base64Total | safe" download="Reporte.csv" #total>De la bolsa asignados al auditor</a>
+      <a style="display:none;" [href]="'data:application/octet-stream;base64,' + base64Filtrado | safe" download="Reporte.csv" #filtrado>Todos los filtrados y seleccionados</a>
+         
+      <button mat-raised-button class="btn-basic  btn-general btn-invertido margen ancho" (click)="btnDescargarTotal()" >De la bolsa asignados al auditor</button>
+       <button mat-raised-button class="btn-basic  btn-general margen ancho" (click)="btnDescargarfiltrado()" >Todos los filtrados y seleccionados</button>
+    </div>   
+  </div>
+</div>
+</section>

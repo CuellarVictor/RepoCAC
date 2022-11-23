@@ -1,0 +1,104 @@
+<mat-card class="card-box" *ngIf="this.permisos.Log_Usuario.visible" 
+[ngClass]="{'elementdisabled': !this.permisos.Log_Usuario.habilitado}">
+
+    <h1 class="title_1">Gestor de usuarios Audicac</h1> 
+  
+
+    <div class="row title titulo">
+        <div class="col-md-12 titulo">
+           <a routerLink="/admin" style="color: white; text-decoration: none; font-weight: 100;">  Gestor de perfiles < </a><strong style="font-weight: 500;">Log de Usuario {{ userSelected.usuario}}</strong>
+      
+           
+        </div>
+    </div>
+
+    <br/>
+   
+<div class="row justify-content-end">
+    <div class=" col-md-4">
+        <form [formGroup]="form">
+            <mat-form-field appearance="fill" class="t-variable" floatLabel='never'>      
+                <mat-label class="fuente">Buscar</mat-label>                
+                <input matInput class="input-config" formControlName='buscar' (keyup)='this.getFiltros(1, this.itemsPerpagina)' >
+                <mat-icon matSuffix class="fondo-icon">search</mat-icon>
+              </mat-form-field>   
+        </form>
+    </div>  
+    
+    </div>
+
+   
+
+    <div class="row">
+        <div class="col-md-12">
+            <div class="row"> 
+                <div class="col-md-12">
+                    <div class="container-principal margen tabla-over">
+                        <table mat-table [dataSource]="dataSource" matSort class="w-100" >
+                            <ng-container matColumnDef="processLogId">
+                                <th mat-header-cell *matHeaderCellDef mat-sort-header class="th-principal" style="text-align: center;">Id </th>
+                                <td mat-cell *matCellDef="let element" class="row-cursor " style="text-align: center;">
+                                     {{element.processLogId}}               
+                                </td>
+                              </ng-container>
+                    
+                              <ng-container matColumnDef="nombreActividad">
+                                <th mat-header-cell *matHeaderCellDef class="th-principal">  Nombre Actividad  </th>
+                                <td mat-cell *matCellDef="let element">
+                                   {{element.nombreActividad}}
+                                </td>
+                            </ng-container>
+                            <ng-container matColumnDef="observation">
+                                <th mat-header-cell *matHeaderCellDef class="th-principal">  Observación  </th>
+                                <td mat-cell *matCellDef="let element">
+                                   {{element.observation}}
+                                </td>
+                            </ng-container>
+                            <ng-container matColumnDef="date">
+                                <th mat-header-cell *matHeaderCellDef class="th-principal">  Fecha  </th>
+                                <td mat-cell *matCellDef="let element">
+                                    {{element.date | date:'yyyy-MM-dd hh:mm'}} 
+                                </td>
+                            </ng-container>              
+                              <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
+                              <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+                          </table>
+                      </div>
+                      <div *ngIf="this.dataSource" style="margin-top: 20px;">
+                        <nav aria-label="Page navigation example" *ngIf="this.dataSource.length > 0">
+                          <ul class="pagination justify-content-center">
+                              <li class="page-item"  [ngClass]="{'page-item disabled': pageNumber == 1}">
+                                  <a class="page-link" (click)="this.getFiltros(1, this.itemsPerpagina)">
+                                      <</a>
+                              </li>
+                              <li class="page-item" [ngClass]="{'page-item disabled': pageNumber == 1}">
+                                  <a class="page-link" (click)="this.getFiltros(pageNumber, this.itemsPerpagina)">
+                                      <<</a>
+                              </li>
+                              <li class="page-item" [ngClass]="{'page-item active': pageNumber === page}" *ngFor="let page of pager.pages"><a class="page-link" (click)="this.getFiltros(page, this.itemsPerpagina)">{{page}}</a></li>
+                              <li class="page-item" [ngClass]="{'page-item disabled': pageNumber === pager.totalPages}"><a class="page-link" (click)="this.getFiltros((pageNumber + 1) , this.itemsPerpagina)">>></a></li>
+                              <li class="page-item" [ngClass]="{'page-item disabled': pageNumber === pager.totalPages-1}"><a class="page-link" (click)="this.getFiltros(pager.totalPages, this.itemsPerpagina)">></a></li>
+                      
+                              <div  class="selectAuditor" style="width: 100px;">
+                                <mat-form-field appearance="fill"  >
+                                  <mat-label>Cant. por página</mat-label>
+                                  <mat-select  [(ngModel)]="itemsPerpagina" name="itemsPerpagina" >
+                                    <mat-option class="text-center" (click)="this.getFiltros(1, item)" *ngFor="let item of sizeList" [value]="item">
+                                      {{item}}
+                                    </mat-option>
+                                  </mat-select>
+                                </mat-form-field>                   
+                              </div>
+                          </ul>               
+                      </nav>
+                      
+                    </div>                  
+                </div>
+            </div>
+        
+
+        </div> 
+    </div> 
+</mat-card>
+
+<br/>

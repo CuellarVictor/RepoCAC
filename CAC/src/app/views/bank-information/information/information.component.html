@@ -1,0 +1,406 @@
+<!-- Card id register audit-->
+<app-card-percent
+    [title]='"ID Registro " + this.objAuditar.idRadicado'
+    [page]="'audit-management'"
+    [subtitle]='this.objAuditar.nombreMedicion'
+    [progresoDia]='0'
+    [totales]='0'
+></app-card-percent>
+<mat-card class="card-box">
+    <!-- Header register audit info-->
+    <div class="row title" style="height: 120%;">
+        <div class="col-md-3">
+            <p class="text-title p-subtitle">Paciente </p>
+            <p class="text-title">{{this.objAuditar.primerNombre}} {{this.objAuditar.primerApellido}} {{this.objAuditar.segundoApellido}}</p>
+        </div>
+        <div class="col-md-2" >
+            <p class="text-title p-subtitle">ID</p>
+            <p class="text-title">{{this.objAuditar.tipoIdentificacion}} {{this.objAuditar.identificacion}}</p>
+        </div>
+        <div class="col-md-3">
+            <p class="text-title p-subtitle">Entidad </p>
+            <p class="text-title" style=" font-size: 12px;">{{this.objAuditar.nombreEPS}}</p>
+        </div>
+        <!-- <div class="col-md-2" >
+            <p class="text-title p-subtitle">Lider </p>
+             <p class="text-title">{{this.objAuditar.primerNombre}}</p>
+        </div> -->
+        <div class="col-md-2" >
+          <p class="text-title p-subtitle">Enfermedad madre </p>
+           <p class="text-title">{{this.objAuditar.enfermedadMadre}}</p>
+      </div>
+        <div class="col-md-1">
+            <p class="text-title p-subtitle">Estado </p>
+            <p class="text-title" >{{this.objAuditar.estadoCodigo}}</p>
+        </div>
+        <div class="col-md-1">
+          <p class="text-title p-subtitle">IPS </p>
+          <p class="text-title">{{this.objAuditar.encuesta ? 'SI' : 'NO'}}</p>
+        </div>
+        <div class="col-md-3"
+              *ngIf="estado == _enumEstadoRegistroAuditoria.Glosaobjetada1 ||
+              estado == _enumEstadoRegistroAuditoria.Glosaobjetadaenrevisionporlaentidad ||
+              estado == _enumEstadoRegistroAuditoria.Glosaobjetada2 ||
+              estado == _enumEstadoRegistroAuditoria.Comiteadministrativo ||
+              estado == _enumEstadoRegistroAuditoria.Comiteexpertos">
+          <p class="text-title p-subtitle">Glosa Levantada</p>
+          <p class="text-title">{{this.objAuditar.levantarGlosa > 0 ? 'SI' : 'NO'}}</p>
+        </div>
+        <div class="col-md-3">
+          <p class="text-title p-subtitle">Fecha corte auditoria</p>
+          <p class="text-title">{{this.objAuditar.fechaCorteAuditoria}}</p>
+        </div>
+    </div>
+
+    <!-- Action buttons -->
+    <div [ngClass]="{'elementdisabled': objAuditar.estadoMedicion == _enumEstadosMedicion.Finalizada } " >
+    <div class="row btns">
+      <!-- Committe button validations -->
+      <div class="col-md-2"  *ngIf="this.permisos.Comite_adminsitrativo.visible && validationObj.visibleBotonComiteAdministrativo" 
+      [ngClass]="{'elementdisabled': (!validationObj.habilitarBotonComiteAdministrativo || !this.permisos.Comite_adminsitrativo.habilitado)}">
+          <button mat-button class="btn-new btn-general" (click)="openComiteManagement()" >C. ADMINISTRATIVO</button>
+      </div>
+
+      <!-- Committe button validations -->
+      <div class="col-md-1"  *ngIf="this.permisos.Comite_Experto.visible && validationObj.visibleBotonComiteExperto" 
+      [ngClass]="{'elementdisabled': (!validationObj.habilitarBotonComiteExperto || !this.permisos.Comite_Experto.habilitado)}">
+          <button  mat-button class="btn-new btn-general" (click)="openComiteExpert()">C. EXPERTO</button>
+      </div>
+
+      <!-- Calification button validations -->
+      <div class="col-md-3" *ngIf="this.permisos.Mantener_calificacion.visible && validationObj.visibleBotonMantenerCalificacion" 
+      [ngClass]="{'elementdisabled': (!validationObj.habilitarBotonMantenerCalificacion || !this.permisos.Mantener_calificacion.habilitado)}">
+          <button  mat-button  class="btn-new btn-general" (click)="openModalMaintainQualification()">MANTENER CALIFICACIÓN</button>
+      </div>
+
+      <!-- Glosa button validations -->
+      <div class="col-md-2" *ngIf="this.permisos.Levantar_Glosa.visible && validationObj.visibleBotonLevantarGlosa" 
+      [ngClass]="{'elementdisabled': (!validationObj.habilitarBotonLevantarGlosa || !this.permisos.Levantar_Glosa.habilitado)}">
+        <button mat-button class="btn-new btn-general" (click)="openModalUpGlosa()">LEVANTAR GLOSA</button>
+     </div>
+
+    <!-- Edit button validations -->
+      <div class="col-md-1" *ngIf="this.permisos.Editar.visible && validationObj.visibleBotonEditarCalificacion" 
+      [ngClass]="{'elementdisabled': (!validationObj.habilitarBotonEditarCalificacion || !this.permisos.Editar.habilitado)}">
+          <button  mat-raised-button class="btn-basic btn2 btn-general" (click)="editAction()">EDITAR</button>
+      </div>
+
+       <!-- Revers button -->
+      <div class="col-md-3  btn-final"
+      *ngIf="validationObj.visibleBotonReversar" 
+      [ngClass]="{'elementdisabled': (!validationObj.habilitadoBotonReversar)}">
+          <button mat-raised-button class="btn-basic btn-general" (click)="openModalReversar()">REVERSAR</button>
+          
+      </div>
+
+      <!-- Save button validations -->
+      <div class="col-md-3  btn-final"
+      *ngIf="this.permisos.Guardar.visible && validationObj.visibleBotonGuardar" 
+      [ngClass]="{'elementdisabled': (!validationObj.habilitadoBotonGuardar || !this.permisos.Guardar.habilitado)}">
+          <button mat-raised-button class="btn-basic btn-general" (click)="save()">GUARDAR</button>
+          
+      </div>
+
+      <!-- <button mat-raised-button class="btn-basic btn-general" (click)="test()">TEST ERROR</button> -->
+     
+      
+
+    <!-- Table -->
+    <div class="row" style="margin-top: 10px;" >
+
+      <!-- Header Table and group -->
+      <div class="col-md-12 centrar-tabla" >
+            <table mat-table
+            [dataSource]="registerSelected" multiTemplateDataRows
+            class="mat-elevation-z8">
+           
+       <ng-container matColumnDef="name" >
+         <th mat-header-cell *matHeaderCellDef class="cell25 th-principal"></th>
+         <td mat-cell *matCellDef="let element" class="th-title" >
+             {{element.name}}
+            </td>
+       </ng-container>
+        <ng-container matColumnDef="DatoReportado" >
+          <th mat-header-cell *matHeaderCellDef class="cell2 th-principal"> Dato reportado </th>
+          <td mat-cell *matCellDef="let element" class="th-title" ></td>
+        </ng-container>
+      
+        <ng-container matColumnDef="BOT" >
+          <th mat-header-cell *matHeaderCellDef  class="cell00 th-principal th-general-center" > BOT </th>
+          <td mat-cell *matCellDef="let element" class="th-title" ></td>
+        </ng-container>
+
+        <ng-container matColumnDef="CT" >
+          <th mat-header-cell *matHeaderCellDef  class="cell00 th-principal th-general-center" > CT </th>
+          <td mat-cell *matCellDef="let element" class="th-title" ></td>
+        </ng-container>
+
+        <ng-container matColumnDef="H" >
+          <th mat-header-cell *matHeaderCellDef  class="cell00 th-principal th-general-center" style="min-width: 39px;"> H </th>
+          <td mat-cell *matCellDef="let element" class="th-title" ></td>
+        </ng-container>
+        <ng-container matColumnDef="E" >
+          <th mat-header-cell *matHeaderCellDef  class="cell00 th-principal th-general-center" style="min-width: 39px; text-align: right; padding-right: 5px;"> E </th>
+          <td mat-cell *matCellDef="let element" class="th-title error th-general-center" style="text-align: right; padding-right: 5px;">{{element.error}}</td>
+        </ng-container>
+        <ng-container matColumnDef="C" >
+          <th mat-header-cell *matHeaderCellDef  class="cell00 th-principal th-general-center" style="min-width: 39px; text-align: right; padding-right: 5px;"> C </th>
+          <td mat-cell *matCellDef="let element" class="th-title error th-general-center" style="text-align: right; padding-right: 5px;"></td>
+        </ng-container>
+        <ng-container matColumnDef="select">
+          <th mat-header-cell *matHeaderCellDef class="cell08 th-principal centrar" > <p class="select-th">DC</p> <p class="select-th">NC</p> <p class="select-th">ND</p></th>
+          <td mat-cell *matCellDef="let element" class="th-title" ></td>
+        </ng-container>
+        
+        <ng-container matColumnDef="Motivo" >
+          <th mat-header-cell *matHeaderCellDef class="cell23 th-principal" > Motivo </th>
+          <td mat-cell *matCellDef="let element" class="th-title derecha" style="padding-right: 0px;" >
+            <mat-icon  class="up-down" *ngIf="!verifyExpand(element.name)">keyboard_arrow_down</mat-icon>
+            <mat-icon class="up-down" *ngIf="verifyExpand(element.name)">keyboard_arrow_up</mat-icon></td>
+        </ng-container>
+
+        <!-- Variables detail -->
+        <ng-container matColumnDef="expandedDetail" > 
+          <td mat-cell *matCellDef="let element" [attr.colspan]="columnsToDisplay.length">
+              
+            <!-- Disabled group validation -->
+            <div [ngClass]="
+            {
+              'elementdisabled': 
+                  (
+                  (!validationObj.habilitarVariablesCalificar && (element.idgrupo != validationObj.idItemGlosa))
+                  ||
+                  (!validationObj.habilitarGlosa && (element.idgrupo == validationObj.idItemGlosa))
+                  )
+            }"
+            class="example-element-detail"  [@detailExpand]="verifyExpand(element.name) ? 'expanded' : 'collapsed'">
+                
+                 <table  *ngFor="let e of element.variables; index as i">
+                     <tr class="fila" id="{{e.reducido}}"
+                     [ngClass]="
+                     {
+                       'variabledisabled': 
+                           (
+                             e.tipoVariableId == _enumTipoVariable.Informativa
+                             ||
+                             !e.esCalificable
+                           )
+                     }">
+                      <td  class="cell0 variable size-font th-general-center">{{e.tipoVariableNombre}}</td>
+                      <!--  <td  class="cell0 variable size-font">{{e.reducido}}</td> -->
+                       <td  class="cell3 text-general detalle desborde"> {{e.detalle}} </td>
+                       <td  class="cell2 text-general detalle">{{e.dato_reportado}} {{e.valorDatoReportado}}</td>
+                      
+                       <td class="cell0 text-general th-general-center">
+                         <mat-icon *ngIf='e.bot == false' class="info icono-padding">info</mat-icon>
+                         <mat-icon *ngIf='e.bot == true' class="check icono-padding">check_circle_outline</mat-icon>
+                       </td>
+                       <td class="cell0 text-general th-general-center">
+                        <mat-icon *ngIf='e.contexto != null'  (click)="openModalContexto(e.contexto)">title</mat-icon>
+                      </td>
+                       <td class="cell0 text-general th-general-center">
+                        <mat-icon style="color: #ffc107;" *ngIf="e.countHallazgos > 0" (click)="openModalHallazgos(e.registroAuditoriaDetalleId)">warning</mat-icon>
+                       </td> 
+                       <td class="cell0 text-general th-general-center">
+                         <mat-icon 
+                         [ngClass]="{
+                          'errorTextBlue': e.enableError}" 
+                        class="error tm-ico-error"  *ngIf="e.error != null && e.error != ''" >report_problem</mat-icon>
+                       </td>
+                       <td class="cell0 text-general th-general-center">
+                        <mat-icon class="calculadora tm-ico-error"  *ngIf="e.calculadora != null && e.calculadora"
+                        (click)="openModalCalculadora(e)" >dialpad</mat-icon>
+                      </td>
+                       <td class="cell1 text-general">
+                           <mat-radio-group  [value]='e.dato_DC_NC_ND' aria-label="Select an option" class="select" >
+                             <mat-radio-button 
+                             [ngClass]="
+                             {
+                               'elementdisabled': 
+                                   (
+                                     (item.id == _enumCalificacion.DC && e.enableDC)
+                                     ||
+                                     (item.id == _enumCalificacion.NC && e.enableNC)
+                                     ||
+                                     (item.id == _enumCalificacion.ND && e.enableND)
+
+                                   )
+                             }"
+
+                             [disabled]="(!validationObj.habilitarVariablesCalificar && (element.idgrupo != validationObj.idItemGlosa))"    
+                             (click)="e.dato_DC_NC_ND = item.id; updateAuditRegisterDetail(e)"
+                             (change)="e.dato_DC_NC_ND = item.id; updateAuditRegisterDetail(e)"
+                             *ngFor="let item of itemsCalifications; let i = index;"  value="{{item.id}}" [checked]="item.id === e.dato_DC_NC_ND"></mat-radio-button>
+                          </mat-radio-group>
+                       </td>
+
+                       <!-- <td class="cell2 text-general detalle" [ngClass]="{
+                        'elementdisabled': e.dato_DC_NC_ND != validationObj.idItemNC}"> -->
+                        <td class="cell2 text-general detalle" [ngClass]="{
+                          'elementdisabled': 
+                          (e.dato_DC_NC_ND != validationObj.idItemNC && e.tipoVariableId != _enumTipoVariable.Adicional)
+                          ||
+                          (e.dato_DC_NC_ND != validationObj.idItemDC && e.dato_DC_NC_ND != validationObj.idItemNC && e.tipoVariableId == _enumTipoVariable.Adicional)
+                        
+                        }">
+                        <div *ngIf="e.tablaReferencial==''">
+                          <mat-form-field *ngIf="e.idTipoVariable==='varchar' || e.idTipoVariable===''" value='e.motivo' appearance="fill"  style="margin-bottom: -1em" >
+                            <mat-label >Texto</mat-label >
+                            <input (blur)="updateAuditRegisterDetail(e)" matInput 
+                            type="text" [maxlength]="e.longitud!=''?e.longitud:30"  name="motivo" 
+                              [(ngModel)]="e.motivo">
+                             </mat-form-field>
+                             <mat-form-field *ngIf="e.idTipoVariable==='int' || e.idTipoVariable==='intEDT'" value='e.motivo' appearance="fill"  style="margin-bottom: -1em" >
+                              <mat-label >Entero</mat-label >
+                              <input (blur)="updateAuditRegisterDetail(e)" matInput 
+                              type="number" [maxlength]="e.longitud!=''?e.longitud:30"  name="motivo"  
+                              [(ngModel)]="e.motivo">
+                             </mat-form-field>
+                             <mat-form-field *ngIf="e.idTipoVariable==='datetime'" value='e.motivo' appearance="fill"  style="margin-bottom: -1em" >
+                              <mat-label >Fecha</mat-label >
+                              <input (blur)="updateAuditRegisterDetail(e)" matInput 
+                              type="text" name="motivo" [(ngModel)]="e.motivo" [patterns]="customPatterns" mask="ABEE-CE-DE" [dropSpecialCharacters]="false" >
+                             </mat-form-field>
+                             
+                           
+                             
+                             <mat-form-field *ngIf="e.idTipoVariable==='numeric'" value='e.motivo' appearance="fill"  style="margin-bottom: -1em" >
+                              <mat-label >Numerico</mat-label>
+                              <input (blur)="updateAuditRegisterDetail(e)" matInput 
+                              type="number" [maxlength]="e.longitud"  name="motivo"  
+                              [(ngModel)]="e.motivo">
+                             </mat-form-field>
+
+                            
+
+                             
+
+                        </div>
+                        <div *ngIf="e.tablaReferencial!=''">
+                          <mat-form-field class="example-full-width" appearance="fill">
+                            <mat-label >Lista</mat-label>
+                              <input type="text"                              
+                                   placeholder="Seleccione un motivo"
+                                   aria-label="motivo"
+                                   matInput
+                                   [id]="'motivo_'+e.variableId"    
+                                   [(ngModel)]="e.motivo"
+                                   [matAutocomplete]="auto"
+                                   (ngModelChange)="getListaReferencial(e)"
+                                   (focus)="getListaReferencial(e)"
+                                   (blur)="revisiondata(e)"
+                                   (keydown)="cambioCampo($event,e)">
+                            <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete" >
+                              <mat-option *ngFor="let option of options" [value]="option.itemId" (click)="updateAuditRegisterDetail(e)" >
+                                {{option.itemId}} - {{ option.itemDescripcion }}
+                              </mat-option>
+                            </mat-autocomplete>
+                          </mat-form-field>
+                        </div>
+                        
+                     </td>
+                    </tr>
+
+                    <tr  class="fila" *ngIf="e.error != undefined && e.error != null && e.error.length > 0 && this.validationObj.validarErroresLogica">
+                      <!-- <td [ngClass]="{
+                        'errorTextBlue': a.enable}" class="mensaje-error" colspan="3">                          
+                         <span class="ancho">{{a.reducido}}</span> - {{a.descripcion}} - (Sentencia: {{a.sentencia}} )
+                         </td>                   -->
+
+                         <td  class="mensaje-error" colspan="100%" style="padding-left: 3%;padding-bottom: 2%;">                          
+                           
+                          <mat-expansion-panel hideToggle  *ngFor="let a of e.error"  >
+                            <mat-expansion-panel-header class="headerExpand">
+                              <!-- <mat-panel-title>
+                                {{a.idError}}
+                              </mat-panel-title> -->
+                              <mat-panel-description class="panelExpand">
+                              <b>↓ &nbsp; Error {{a.idError}}: &nbsp; </b> {{a.descripcionError}}
+                              </mat-panel-description>
+                            </mat-expansion-panel-header>
+
+
+                            <td colspan="100%"  *ngIf="a.restricciones.length > 0" style="width: 3500px !important;">
+                              <table class="table table-sm mensaje-error w-100" >
+                                <tbody>
+                                  <tr *ngFor="let rs of a.restricciones" 
+                                   style="width: 3500px !important;"> 
+                                    <th scope="row" style="width: 15%;">{{rs.reducido}}</th>
+                                    <td>{{rs.descripcion}}</td>
+                                    <td>(Sentencia: {{rs.sentencia}} )</td>
+                                  </tr>
+      
+                                </tbody>
+                              </table>
+    
+                             </td>
+                            
+                            
+                          </mat-expansion-panel>
+
+                           </td> 
+
+                         
+
+
+                         <!-- <td colspan="100%"  *ngIf="this.validationObj.validarErroresLogica">
+                          <table class="table table-sm mensaje-error" >
+                            <tbody>
+                              <tr *ngFor="let a of e.error" 
+                              [ngClass]="{
+                                'errorTextBlue': a.enable}"> 
+                                <th scope="row" style="width: 15%;">{{a.reducido}}</th>
+                                <td>{{a.descripcion}}</td>
+                                <td>(Sentencia: {{a.sentencia}} )</td>
+                              </tr>
+  
+                            </tbody>
+                          </table>
+
+                         </td> -->
+                          
+  
+                   </tr>
+ 
+ 
+                 
+                 </table>
+            </div>
+          </td>
+        </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="columnsToDisplay"></tr>
+      <tr mat-row *matRowDef="let element; columns: columnsToDisplay;"
+          class="example-element-row"
+          [class.example-expanded-row]="verifyExpand(element.name)"
+          (click)="expand(element.name)">
+      </tr>
+      <tr mat-row *matRowDef="let row; columns: ['expandedDetail']" class="example-detail-row"></tr>
+     </table>
+        </div>
+    </div>
+
+
+  </div>
+</div>
+
+</mat-card>
+
+
+<!-- Observation Modal -->
+<!--
+<mat-card  [ngClass]="{
+  'elementdisabled': !validationObj.observacionHabilitada}">
+-->
+  <mat-card >
+  <div class="row footer">
+      <div class="col-md-12">
+          <button (click)='this.openModalObservation()' mat-raised-button class="btn-basic btn-new-inbox btn-general" [ngClass]="{'btn-display' : display_btn_footer}" >Observaciones
+              <mat-icon class="ico-observacion">expand_less</mat-icon>
+          </button>
+      </div>
+  </div>
+</mat-card>
+
+<!-- Menu options -->
+<app-tab-warning [Autorizacion]='2'></app-tab-warning>

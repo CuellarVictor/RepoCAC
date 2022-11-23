@@ -1,0 +1,51 @@
+
+<div class="row">
+    <div class="col-md-12" >
+        <h3 class="tab-title" style="padding-bottom: 5px !important; ">Para finalizar califique la IPS</h3>
+    </div>
+    <mat-form-field  appearance="fill" class="medium-input">
+      <mat-label  class="input-bold" >Seleccione un elemento</mat-label>
+      <mat-select [(ngModel)]="registerDetailSelected" >         
+        <mat-option  *ngFor="let lista of this.objlistado" [value]="lista"  (click)="this.varibleSelected(lista)">
+           {{lista.dato_reportado}} {{lista.valorDatoReportado}}
+        </mat-option>
+      </mat-select>
+  </mat-form-field>
+
+      <div *ngIf="this.listCalifications.length > 0 && !hidestart">          
+                      
+              <div class="row" *ngFor="let item of this.listCalifications;let indice2=index">               
+                  <div class="col-md-6 color-calificacion">
+                    {{item.nombreItem}}
+                  </div>
+                  <div class="col-md-6">
+                      <div class="rating"  >
+                        <star-rating #start (click)="assignStartValue(start.value, item.itemId)"  [readonly]="this.disabledCalification" [value]="item.calificacion" [totalstars]="5" checkedcolor="#EBDB18 " uncheckedcolor="#575757" size="24px" ></star-rating>
+                      </div>          
+                  </div>                 
+                <mat-divider></mat-divider> 
+              </div>         
+    
+  </div>
+
+
+      <div class="col-md-12" style="margin-top: 10px;">
+        <div class="input-group mb-3 input-bold">
+              Observación
+          </div>
+      </div>
+
+    <div class="col-md-12" style="margin-top: 2px;">
+        <div class="input-group">
+            <textarea  [(ngModel)]="this.observation" aria-label="With textarea" placeholder="Escriba su comentario." style="width: 100%;"></textarea>
+        </div>
+    </div>
+
+    <div class="col-md-12 text-right">
+        <br>
+        <br>
+        <button (click)="this.saveCalification()" [disabled]="!validationSave()" mat-raised-button class="btn-basic btn-align-right">{{this.nombreBoton}}</button>
+    </div>    
+</div>
+
+

@@ -1,0 +1,23 @@
+<div class="row">
+    <div class="col-md-12">
+        <h3 class="tab-title" >Soportes del periodo</h3>
+    </div>
+    <div  class="col-md-12  alto-tabla">
+        <table class="table-bar" >
+            <div *ngFor="let item of this.soportes;let indice=index">
+                <tr class="fondo">
+                    <td class="td-a">
+                        Soporte {{indice + 1}}
+                    </td>
+                    <td class="td-b">
+                        <a class="link-bar" target="_blank" [href]="item.urlSoporte">{{item.nombreSoporte}}</a>
+                    </td>
+                </tr>              
+                
+            </div>
+
+        </table>
+    </div>
+</div>
+
+

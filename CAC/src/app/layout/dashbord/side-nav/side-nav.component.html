@@ -1,0 +1,56 @@
+<mat-sidenav #sidenav mode="side" opened class="example-sidenav side-overflow">
+    <!-- <button mat-button (click)="sidenav.toggle()">Toggle</button> -->
+    <div >
+      <img src="../../../../assets/imgs/Logo.svg" routerLink="/cronograma" style="width: 100%;">
+    </div>
+
+    <div class="spacer-height"></div>
+    <!-- <button mat-icon-button  class="button-no-background">
+        <mat-icon matBadge="15" matBadgeColor="accent" routerLink="/cronograma">calendar_today</mat-icon>
+    </button> 
+    <button mat-icon-button  class="button-no-background" routerLink="/buzon">
+        <mat-icon>info_outline</mat-icon >
+    </button>-->  
+
+    <!--Iconos de Gestión de plataforma--> 
+    <button mat-icon-button 
+        *ngIf="this.permisos.Gestor_de_Mediciones.visible" 
+        [ngClass]="{'elementdisabled': !this.permisos.Gestor_de_Mediciones.habilitado}"
+        matTooltip matTooltip="Gestor de Mediciones" class="button-no-background" 
+        routerLink="/gestion-de-auditoria">
+        <mat-icon>dashboard</mat-icon>
+    </button>
+
+    <!--Iconos de navegacion Lider y Auditor-->
+    <button mat-icon-button 
+    *ngIf="this.permisos.Cronograma.visible" 
+    [ngClass]="{'elementdisabled': !this.permisos.Cronograma.habilitado}"
+     matTooltip matTooltip="Cronograma de Auditores" class="button-no-background" routerLink="/cronograma">
+        <mat-icon>calendar_today</mat-icon>
+    </button> 
+    <!--
+  <button mat-icon-button *ngIf="this.rol != 'Admin'" matTooltip matTooltip="Mensajería" class="button-no-background" routerLink="#">
+        <mat-icon>email_outline</mat-icon>
+    </button> 
+    -->
+   
+ 
+    <!--Iconos de Gestión de Administrador-->  
+    <button mat-icon-button 
+    *ngIf="this.permisos.Gestor_de_Usuarios.visible" 
+    [ngClass]="{'elementdisabled': !this.permisos.Gestor_de_Usuarios.habilitado}"
+     matTooltip matTooltip="Gestor de usuarios" class="button-no-background" routerLink="/admin">
+        <mat-icon>person</mat-icon>
+    </button>
+    
+    
+    <button mat-icon-button 
+    *ngIf="this.permisos.Configuracion.visible" 
+    [ngClass]="{'elementdisabled': !this.permisos.Configuracion.habilitado}"
+     matTooltip matTooltip="Configuración" class="button-no-background" routerLink="/config">
+        <mat-icon>settings</mat-icon>
+    </button>
+    
+
+    
+</mat-sidenav>

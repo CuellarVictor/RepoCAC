@@ -1,0 +1,58 @@
+<div class="row">
+    <div class="col-md-12">
+        <h3 class="tab-title" >Errores no corregibles</h3>
+    </div>
+    <div class="check" *ngIf="errorsList.length > 0" [ngClass]="{
+        'elementdisabled': this.objUser.rol.userRolId == rolAuditor || !validationObj.observacionHabilitada   }">
+        <div  [ngClass]="{
+            'opacidad': this.objUser.rol.userRolId == rolAuditor || !validationObj.observacionHabilitada   }">
+            <mat-checkbox #checkEnable name="enable" [(ngModel)]="masivo"style="padding-left:15px;"
+            [(indeterminate)]="indeterminate"
+            (change)="this.UpsertErroresRegistrosAuditoriaMasivo()"><div style="padding: 10px;">Marcar todos</div></mat-checkbox>
+        </div>
+        
+    </div>
+    <div  class="col-md-12 table-h" *ngIf="errorsList.length > 0">
+       
+        <table class="table-bar" [ngClass]="{
+            'elementdisabled': this.objUser.rol.userRolId == rolAuditor || !validationObj.observacionHabilitada   }">
+            <tr class="fondo"  *ngFor="let error of errorsList; index as i">
+                <td class="check" [ngClass]="{
+                    'opacidad': this.objUser.rol.userRolId == rolAuditor || !validationObj.observacionHabilitada   }">
+                    <mat-checkbox #checkEnable [(ngModel)]="error.noCorregible" (change)="upsertErroresRegistrosAuditoria(checkEnable.value, error)" name="enable"></mat-checkbox>
+                </td>
+                <td class="variable">
+                    Error: {{error.errorId}}, {{error.reducido}} : {{error.descripcion}}
+                </td>
+            </tr>     
+        </table>
+    </div>
+</div>
+
+<div class="row"  [ngClass]="{
+    'elementdisabled': errorsList.length == 0}">
+    <div class="col-md-12">
+        <h3  class="tab-title">Mensaje para {{ rolOpuesto }}</h3>
+    </div>
+    <div class="col-md-12">
+        <div class="input-group">
+            <textarea [(ngModel)]="observacion" name="observacion"  aria-label="With textarea" placeholder="Para poder cerrar el registro debe reportar los errores al {{ rolOpuesto }}" style="width: 100%;"></textarea>
+        </div>
+    </div>
+   
+    <div class="col-md-12 text-right mt-2">   
+        <div class="mensaje-enviado" style="display: flex;" *ngIf="enviado">
+          <div style="width: 20px; ">
+            <mat-icon class="tm-ico-check">done</mat-icon> 
+          </div> 
+          <div style="padding-top: 2px; padding-left: 12px;">{{ mensaje }}</div>
+        </div> 
+        <button [ngClass]="{
+            'elementdisabled': (observacion == null || observacion == '' || !validationObj.observacionHabilitada) }"
+            mat-raised-button class="btn-basic btn-general btn-align-right" *ngIf="!enviado" (click)="save()">{{labelbtn}}</button>
+    </div>
+</div>
+
+
+
+

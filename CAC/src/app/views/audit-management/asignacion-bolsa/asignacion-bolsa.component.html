@@ -1,0 +1,168 @@
+<app-card-percent
+    [title]='"Administrador"'
+    [page]="'audit-management'"
+></app-card-percent>
+
+<mat-card class="card-body">
+    <div class="row title">
+        <div class="col-md-12 text-title">
+           <a  (click)="goPlaces(1)" style="color: white; text-decoration: none; cursor: pointer;font-weight: 100;">< Gestor de mediciones</a> <a  style="color: white; text-decoration: none; cursor: pointer;"> < Asignación de cronograma {{ objMedicion.nombre}}</a>
+
+      </div>
+    </div>
+    <div class="contenedor">
+
+      <div class="row subtitle">       
+        <div class="col-md-3 text-subtitle">
+          <p class="text-subtitle-a">Bolsa de medicíon</p>
+          <p class="text-subtitle-b">{{ objMedicion.nombre }}</p>
+        </div>
+        <div class="col-md-2 text-subtitle">
+            <p class="text-subtitle-a">Resolución</p>
+            <p class="text-subtitle-b">{{ objMedicion.resolucion }}</p>
+          </div>
+          <div class="col-md-1 text-subtitle" >
+            <p class="text-subtitle-a">Estado</p>
+            <p class="text-subtitle-b">{{ objMedicionQuery.estadoAuditoria }}</p>
+          </div>
+          <div class="col-md-2 text-subtitle">
+            <p class="text-subtitle-a">Fecha inicio</p>
+            <p class="text-subtitle-b">{{ objMedicion.fechaInicioAuditoria==null?'-':objMedicion.fechaInicioAuditoria | date:'yyyy-MM-dd'}}</p>
+          </div>
+          <div class="col-md-2 text-subtitle">
+            <p class="text-subtitle-a">Fecha fin</p>
+            <p class="text-subtitle-b">{{ objMedicion.fechaFinAuditoria==null?'-':objMedicion.fechaFinAuditoria | date:'yyyy-MM-dd'}}</p>
+          </div>
+          <div class="col-md-2 text-subtitle">
+            <p class="text-subtitle-a">Fecha corte</p>
+            <p class="text-subtitle-b">{{ objMedicion.fechaCorteAuditoria==null?'-':objMedicion.fechaCorteAuditoria | date:'yyyy-MM-dd'}}</p>
+          </div>
+      </div>
+    </div>
+
+    <form [formGroup]="form">
+          <div class="row" style="justify-content: flex-end;">              
+
+              <div class="col-md-3">  
+                <mat-form-field appearance="fill">
+                  <mat-label class="fuente" >Auditor</mat-label>
+                  <mat-select (closed)='this.getFilters()' formControlName='auditor' name="auditor" multiple>
+                    <mat-option  *ngFor="let auditor of this.selectlistaAuditores" [value]="auditor.codigo">{{auditor.nombres}} {{auditor.apellidos}}</mat-option>
+                  </mat-select>
+                </mat-form-field> 
+              </div>
+
+              <div class="col-md-3" >
+                <mat-form-field appearance="fill" class="n-variable"> 
+                    <mat-label class="ancho">Buscar</mat-label>
+                    <input matInput formControlName='buscar' (keyup)='this.getFilters()' >
+                  </mat-form-field> 
+              </div> 
+
+              <div class="col-md-2" >
+                <button mat-raised-button class="btn-basic  btn-general center btn-third" (click)="limpiarForm()" type="button">LIMPIAR</button>
+                 
+              </div>
+
+          </div>
+      </form>
+
+    <div class="row" style="overflow: auto;
+    height: 400px;">
+        <div class="col-md-12">
+          <table mat-table [dataSource]="dataSource" matSort class="table-striped">
+
+
+
+            
+            <ng-container matColumnDef="btns">
+              <th mat-header-cell *matHeaderCellDef  class="th-principal"></th>
+              <td mat-cell *matCellDef="let element" (click)="$event.stopPropagation()" style="width: 60px;">
+                <button mat-icon-button [matMenuTriggerFor]="menu">
+                  <mat-icon class="color-more">more_vert</mat-icon>
+                </button>
+                <mat-menu #menu="matMenu">
+                   <button mat-menu-item class="btn-menu" (click)="btnReasignarBolsa(element,'bolsa')" >Asignación de bolsa</button>
+                  <button mat-menu-item class="btn-menu" (click)="btnReasignarBolsa(element,'total')" >Asignación total</button>
+                
+                </mat-menu>
+            </td>
+            </ng-container>
+
+            <ng-container matColumnDef="auditor">
+              <th mat-header-cell *matHeaderCellDef  class="th-principal " style="text-align: left;">Auditor</th>
+              <td mat-cell *matCellDef="let element" class="row-cursor size-font"> {{element.auditorNombres}} {{element.auditorApellidos}} </td>
+            </ng-container>
+            <ng-container matColumnDef="usuario">
+              <th mat-header-cell *matHeaderCellDef  class="th-principal columna">Usuario</th>
+              <td mat-cell *matCellDef="let element" class="row-cursor columna size-font "> {{element.auditorUsuario}} </td>
+            </ng-container>
+
+
+
+            <ng-container matColumnDef="codigo">
+              <th mat-header-cell *matHeaderCellDef  class="th-principal columna">Código</th>
+              <td mat-cell *matCellDef="let element" class="row-cursor columna size-font "> {{element.auditorCodigo}} </td>
+            </ng-container>
+
+
+                <ng-container matColumnDef="asignados">
+                  <th mat-header-cell *matHeaderCellDef  class="th-principal columna"> Asignados / Auditados </th>
+                  <td mat-cell *matCellDef="let element" class="row-cursor columna size-font ">{{element.registrosAsignados}}/{{element.registrosAuditados}}</td>
+                </ng-container>
+              
+
+                <ng-container matColumnDef="estado">
+                  <th mat-header-cell *matHeaderCellDef  class="th-principal columna"> Estado</th>
+                  <td mat-cell *matCellDef="let element" class="row-cursor columna size-font " style="padding-right: 0px;">
+                    {{element.auditorEstado}}
+                </td>
+            </ng-container>
+                  <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
+                  <tr mat-row *matRowDef="let row; columns: displayedColumns;" ></tr>
+              </table>
+        </div>
+    </div>
+
+
+    <div *ngIf="this.dataTable" style="margin-top: 20px;">
+      <nav aria-label="Page navigation example" *ngIf="this.dataTable.length > 0">
+        <ul class="pagination justify-content-center">
+            <li class="page-item"  [ngClass]="{'page-item disabled': pageNumber == 1}">
+                <a class="page-link" (click)="this.getFilters()">
+                    <</a>
+            </li>
+            <li class="page-item" [ngClass]="{'page-item disabled': pageNumber == 1}">
+                <a class="page-link" (click)="this.getFilters()">
+                    <<</a>
+            </li>
+            <li class="page-item" [ngClass]="{'page-item active': pageNumber === page}" *ngFor="let page of pager.pages"><a class="page-link" (click)="this.getFilters()">{{page}}</a></li>
+            <li class="page-item" [ngClass]="{'page-item disabled': pageNumber === pager.totalPages}"><a class="page-link" (click)="this.getFilters()">>></a></li>
+            <li class="page-item" [ngClass]="{'page-item disabled': pageNumber === pager.totalPages-1}"><a class="page-link" (click)="this.getFilters()">></a></li>
+    
+            <div  class="selectAuditor" style="width: 100px;">
+              <mat-form-field appearance="fill"  >
+                <mat-label>Cant. por página</mat-label>
+                <mat-select  [(ngModel)]="itemsPerpagina" name="itemsPerpagina" >
+                  <mat-option class="text-center" (click)="this.getFilters()" *ngFor="let item of sizeList" [value]="item">
+                    {{item}}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>                   
+            </div>
+        </ul>               
+    </nav>
+    
+  </div> 
+  <div class="d-flex justify-content-end">  
+      
+  </div> 
+  <div class="row" *ngIf="this.totalRegister > 0"  style="text-align: right; color: #A03781; width: 100%;">
+    <label>Total Mediciones: <b>{{this.totalRegister}}</b></label>
+  </div>
+
+
+</mat-card>
+
+
+

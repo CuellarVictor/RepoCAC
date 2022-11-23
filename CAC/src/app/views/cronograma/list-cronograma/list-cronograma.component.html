@@ -1,0 +1,460 @@
+<script type="text/javascript"> 
+    var script = document.createElement('script'); 
+    var version = Date.time();
+    script.src = "common.js?v="+version; 
+    document.head.appendChild(script) 
+</script>
+
+<!--Progreso Auditor-->
+<app-card-percent
+    [title]='this.primerNombre + ", estos son sus registros por auditar"'
+    [page]="'summary'"
+    [progresoDia]='this.progresoDia'
+    [totales]='this.diasTotales'
+    [user]='3'
+    *ngIf='this.objUser.rol.userRolId == "3"'
+></app-card-percent>
+
+<!--Alertas Líder-->
+<app-card-percent
+    [title]='this.primerNombre + ", aquí puede gestionar sus auditorías"'
+    [page]="'schedule'"
+    [progresoDia]='25'
+    [totales] = 'this.totalLiderRegister'
+    [user]='2'
+    *ngIf='this.objUser.rol.userRolId == "2"'
+></app-card-percent> 
+
+<div class="row" *ngIf='this.informeGenerado' style="height: 60px;">
+  <div class="col-md-1"><mat-progress-bar mode="determinate" [value]='this.spinnerCarga' ></mat-progress-bar>
+    <span class="completed_progress_bar">{{spinnerCarga}}% completed</span>
+  </div>
+  <div class="col-md-1">
+    <a style="color: #014291;" [href]="'data:application/octet-stream;base64,' + base64Data | safe" download="Reporte.csv">DESCARGAR</a>
+  </div>
+</div>
+
+<mat-card class="card-body">
+    <div class="row title">
+      <div class="col-md-12 titulo">
+        Cronograma de auditoría
+      </div>
+    </div>
+ 
+    <div class="row title info" *ngIf='this.objUser.rol.userRolId == "2"'>
+      <div  class="col-md-3">         
+          <div  class="selectAuditor">
+            <mat-form-field appearance="fill"  >
+              <mat-label class="fuente">Seleccione el auditor</mat-label>
+              <mat-select name="medicion" [(ngModel)]="idAuditor">
+                <mat-option  #auditorSelected selected [value]="this.objUser.userId" (click)="this.changeAuditor(auditorSelected.value, 'Todos')" selected>Todos los auditores</mat-option>
+                <mat-option #auditorSelected *ngFor="let lista of listaAuditor"(click)="this.changeAuditor(auditorSelected.value, lista.nombreUsuario)" [value]="lista.idAuditor">
+                    {{lista.codigo}} - {{lista.nombres}} {{lista.apellidos}}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>            
+          </div>
+               
+      </div>
+      <div class="col-md-3" *ngIf='this.logActividades'>
+        <a [routerLink]="" (click)="this.openLog()" class="aCustom">LOG DE ACTIVIDAD</a>
+      </div>
+
+     
+      <div class="col-md-3">
+          <p class="subtext-title p-subtitle" *ngIf="selectedUser != 'Todos'">Email</p>
+          <p class="subtext-title" style="word-wrap: break-word;"  *ngIf="selectedUser != 'Todos'">{{ this.selectedUser }}</p>
+      </div>
+      <div class="col-md-3" [ngClass]="{
+        'elementdisabled': ELEMENT_DATA.length == 0}">
+        <button mat-raised-button class="btn-basic  btn-general" (click)="this.exportToExcel()">GENERAR INFORME</button>
+    </div>
+  </div>
+
+    <div class="contenedor">
+
+      <div class="row subtitle">
+        <div  (click)="filterByState(item.nombre)" class="col-md-2 text-subtitle" *ngFor="let item of detalleAsignacionList">
+          <p class="text-subtitle-a">{{ item.nombre }}</p>
+          <p class="text-subtitle-b">{{ item.noRegistros }}</p>
+        </div>
+      </div>
+    </div>
+
+    <form [formGroup]="this.listDetails" (keydown.enter)="$event.preventDefault()">
+      <div class="row">
+        <div class="col-md-2" style="width: 15%;">
+          <mat-form-field class="example-full-width" appearance="fill">
+              <mat-label class="input-bold">Buscar por Id</mat-label>
+              <input autocomplete="off" id="search_by_id" formControlName='search' #searchInput autofocus  (keyup.enter)='searchValueFunction(searchInput.value)' type="text" matInput>
+              <mat-icon matSuffix (click)='searchValueFunction(searchInput.value)'  type="button">search</mat-icon>
+          </mat-form-field>
+          </div>
+
+          <div class="col-md-2" style="width: 18%;">
+            <mat-form-field appearance="fill">
+              <mat-label class="fuente">Medición</mat-label>
+              <mat-select formControlName='medition' name="medicion" (selectionChange)="this.getFilters(1, this.itemsPerpagina)" >
+                <mat-option value="">Todos</mat-option>
+                <mat-option *ngFor="let medicion of this.Medicion" [value]="medicion.id">
+                  {{medicion.valor}}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+
+          <div class="col-md-2" style="width: 14%;">
+            <mat-form-field appearance="fill">
+              <mat-label class="fuente">Perfil acción</mat-label>
+              <mat-select formControlName='pAccion' name="pAccion" >
+                <mat-option  *ngFor="let item of perfilAccionList" (blur)='filterByActionPerfil(item.actionStatus)' value="item.roleId">{{item.roleName}}</mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div> 
+
+          
+          <div class="col-md-2" style="width: 11%;">
+              <mat-form-field appearance="fill">
+                <mat-label class="fuente">Estado</mat-label> 
+                <mat-select (closed)='this.getFilters(1, this.itemsPerpagina)' formControlName='state' name="estado" multiple>
+                  <mat-option  *ngFor="let estado of this.Estado" [value]="estado.id"> {{estado.valor}}</mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+            
+            <div class="col-md-2" style="width: 12%;">
+              <mat-form-field appearance="fill">
+                <mat-label class="fuente">Entidad</mat-label>
+                <mat-select formControlName='entity' name="entidad"  (selectionChange)="this.getFilters(1, this.itemsPerpagina)">
+                  <mat-option  value="">Todos</mat-option>
+                  <mat-option  *ngFor="let entidad of this.Entidad" [value]="entidad.id">
+                    {{entidad.valor}}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>               
+            </div>
+
+            <div class="col-md-3" style="width: 18%;">
+              <mat-form-field appearance="fill">
+                <mat-label style="font-weight: 500;">Fecha de asignación</mat-label>
+                <mat-date-range-input [rangePicker]="picker">
+                  <input matStartDate (dateInput)='this.getFilters(1, this.itemsPerpagina)' formControlName='Startdate' placeholder="Inicio" (disabled)=true>
+                  <input matEndDate (dateInput)='this.getFilters(1, this.itemsPerpagina)' formControlName='Enddate' placeholder="Fin" (disabled)=true>
+                </mat-date-range-input>
+  
+                <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                <mat-date-range-picker #picker></mat-date-range-picker>
+              </mat-form-field>
+            </div> 
+
+            <!-- <div class="col-md-1" style="width: 11%;">
+              <button mat-raised-button class="btn-basic btn-general" (click)='this.getFilters()'>FILTRAR</button>
+            </div> -->
+
+            <div class="col-md-1" style="width: 12%; text-align: right;">
+              <button mat-raised-button class="btn-basic  btn-general" style="background-color: #014291; width: 100%;" (click)='this.cleanFilters()'>LIMPIAR</button> <!--es nuevo y displayOrder = 1 > boton rosado -->
+            </div>
+
+          </div>
+      </form>  
+      <!-- <div class="row" *ngIf="this.totalRegister > 0" style="text-align: right; color: #A03781;">
+              <label>Total de Registros: <b>{{this.totalRegister}}</b></label>
+          </div> -->  
+
+    <div class="row">
+        
+        <div class="col-md-12">
+          <div class="tabla-over">
+            
+            <table *ngIf="this.objUser.rol.userRolId == 2" mat-table [dataSource]="dataSource2" matSort class="table-striped" style="height: 50px;">
+
+              <ng-container  matColumnDef="check">
+                    <th mat-header-cell *matHeaderCellDef  class="th-principal centrar" style="width: 5%; max-width: 50px; padding-right: 10px !important;">
+                        <mat-checkbox style="padding-left: 20px;"
+                                    (change)="$event ? masterToggle() : null"
+                                    [checked]="selection.hasValue() && isAllSelected()"
+                                    [indeterminate]="selection.hasValue() && !isAllSelected()"
+                                    [aria-label]="checkboxLabel()">
+                        </mat-checkbox>
+                    </th>
+                    <td mat-cell *matCellDef="let row" style="width: 5%;  max-width: 50px;" class="centrar">
+                        <mat-checkbox
+                                    (click)="$event.stopPropagation()"
+                                    (change)="$event ? selection.toggle(row) : null"
+                                    [checked]="selection.isSelected(row)"
+                                    [aria-label]="checkboxLabel(row)">
+                        </mat-checkbox>
+                    </td>
+                </ng-container>
+    
+                <ng-container matColumnDef="id">
+                  <th mat-header-cell *matHeaderCellDef  class="th-principal centrar" style="width: 8%;  max-width: 100px;">ID</th>
+                  <td (click)='this.redirect(element)' mat-cell *matCellDef="let element" class="row-cursor size-font centrar" style="width: 8%;  max-width: 100px;"> {{element.idRadicado}} </td>
+                </ng-container>
+    
+                <ng-container matColumnDef="icon">
+                  <th mat-header-cell *matHeaderCellDef mat-sort-header class="th-principal" style="width: 8%;  max-width: 100px;"></th>
+                  <td (click)='this.redirect(element)' mat-cell *matCellDef="let element" class="row-cursor size-font" style="text-align: right;width: 8%;  max-width: 100px;"><!--rol 3 auditor, rol 2 lider-->                  
+                    <mat-icon 
+                      class="color-icon-details color-ico" 
+                        *ngIf="((this.objUser.rol.userRolId == '2') &&
+                                (element.estado == '1' 
+                                || element.estado == '2'  
+                                || element.estado == '3'  
+                                || element.estado == '4'  
+                                || element.estado == '5'  
+                                || element.estado == '8' 
+                                || element.estado == '7'   
+                                || element.estado == '12'  
+                                || element.estado == '13' 
+                                || element.estado == '16'
+                                || element.estado == '11'
+                                || element.estado == '17'
+                                || element.estado == '15'
+                                || element.estado == '18'))">
+                                pending_actions
+                    </mat-icon>
+                    <mat-icon 
+                      class="color-icon-details" 
+                      *ngIf="((this.objUser.rol.userRolId == '2') &&
+                              (element.estado == '6' 
+                              || element.estado == '10'
+                              || element.estado == '9'
+                              || element.estado == '14'))">
+                              warning
+                    </mat-icon>
+                  </td>
+                </ng-container> 
+
+                <ng-container matColumnDef="estado">
+                  <th mat-header-cell *matHeaderCellDef  class="th-principal" style="width: 10%;  max-width: 100px;"><span class="centrar" >Estado </span></th>
+                  <td mat-cell *matCellDef="let element" class="row-cursor size-font" style="width: 10%;  max-width: 100px;"><p #tooltip="matTooltip"
+                    matTooltip={{element.estadoNombre}}
+                    matTooltipPosition="left" class="centrar size-font" style="margin-bottom: 0px;">
+                    {{element.estadoCodigo}}
+                </p></td>
+                </ng-container> 
+    
+                <ng-container matColumnDef="emadre">
+                  <th mat-header-cell *matHeaderCellDef mat-sort-header class="th-principal" style="width: 10%;">E Madre</th>
+                  <td (click)='this.redirect(element)' mat-cell *matCellDef="let element" class="row-cursor size-font" style="width: 10%;"> {{element.enfermedadMadre}} </td>
+                </ng-container>
+    
+                <ng-container matColumnDef="nombreMedicion">
+                  <th mat-header-cell *matHeaderCellDef mat-sort-header class="th-principal" style="width: 10%;">Medición</th>
+                  <td (click)='this.redirect(element)' mat-cell *matCellDef="let element" class="row-cursor size-font"> {{element.nombreMedicion}} </td>
+                </ng-container>
+                <ng-container matColumnDef="fechaasignacion">
+                  <th mat-header-cell *matHeaderCellDef mat-sort-header class="th-principal" style="width: 10%;">Asignación</th>
+                  <td (click)='this.redirect(element)' mat-cell *matCellDef="let element" class="row-cursor size-font"> {{element.fechaAsignacion | date:'yyyy-MM-dd'}} </td>
+                </ng-container>
+                <ng-container matColumnDef="fechainicio">
+                  <th mat-header-cell *matHeaderCellDef mat-sort-header class="th-principal" style="width: 10%;">Fecha inicio</th>
+                  <td (click)='this.redirect(element)' mat-cell *matCellDef="let element" class="row-cursor size-font"> {{element.fechaMaxConsultaAudit | date:'yyyy-MM-dd'}} </td>
+                </ng-container>
+                <ng-container matColumnDef="fechacierre">
+                  <th mat-header-cell *matHeaderCellDef mat-sort-header class="th-principal" style="width: 10%;">Fecha cierre</th>
+                  <td (click)='this.redirect(element)' mat-cell *matCellDef="let element" class="row-cursor size-font"> {{element.fechaCierre | date:'yyyy-MM-dd'}} </td>
+                </ng-container>
+    
+                <ng-container matColumnDef="CodigoAuditor">
+                  <th mat-header-cell *matHeaderCellDef mat-sort-header class="th-principal" style="width: 10%;">Código</th>
+                  <td (click)='this.redirect(element)' mat-cell *matCellDef="let element" class="row-cursor size-font"> {{element.codigoUsuario}} </td>
+                </ng-container>
+
+                <ng-container matColumnDef="auditor">
+                  <th mat-header-cell *matHeaderCellDef mat-sort-header class="th-principal">Auditor</th>
+                  <td (click)='this.redirect(element)' mat-cell *matCellDef="let element" class="row-cursor size-font"> {{element.createdBy}} </td>
+                </ng-container>
+    
+                <ng-container matColumnDef="eps">
+                  <th mat-header-cell *matHeaderCellDef mat-sort-header class="th-principal" style=" max-width: 300px;"> Entidad </th>
+                  <td (click)='this.redirect(element)' mat-cell *matCellDef="let element" class="row-cursor size-font" style=" max-width: 300px;">{{element.data_NombreEPS}}</td>
+                </ng-container>          
+              
+                <ng-container matColumnDef="ips">
+                  <th mat-header-cell *matHeaderCellDef mat-sort-header class="th-principal centrar"  style=" max-width: 150px;"> IPS </th>
+                  <td mat-cell *matCellDef="let element" class="row-cursor size-font" style=" max-width: 150px;">{{element.nombreIPS}}</td>
+                </ng-container>
+
+                <ng-container matColumnDef="ultimaapertura">
+                  <th mat-header-cell *matHeaderCellDef mat-sort-header class="th-principal" style="width: 10%;">Modificación</th>
+                  <td (click)='this.redirect(element)' mat-cell *matCellDef="let element" class="row-cursor size-font"> {{element.createdDate | date:'yyyy-MM-dd'}} </td>
+                </ng-container>
+
+                <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
+                <tr mat-row *matRowDef="let row; columns: displayedColumns;" ></tr>
+              </table>
+
+          <table *ngIf="this.objUser.rol.userRolId == 3" mat-table [dataSource]="dataSource2" matSort class="table-striped" style="height: 50px;">
+
+            <!-- <ng-container matColumnDef="check">
+                  <th mat-header-cell *matHeaderCellDef  class="th-principal">
+                      <mat-checkbox
+                                  (change)="$event ? masterToggle() : null"
+                                  [checked]="selection.hasValue() && isAllSelected()"
+                                  [indeterminate]="selection.hasValue() && !isAllSelected()"
+                                  [aria-label]="checkboxLabel()">
+                      </mat-checkbox>
+                  </th>
+                  <td mat-cell *matCellDef="let row">
+                      <mat-checkbox
+                                  (click)="$event.stopPropagation()"
+                                  (change)="$event ? selection.toggle(row) : null"
+                                  [checked]="selection.isSelected(row)"
+                                  [aria-label]="checkboxLabel(row)">
+                      </mat-checkbox>
+                  </td>
+              </ng-container> --> 
+  
+              <ng-container matColumnDef="fechadeasignacion">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header class="th-principal" style="width: 10%;">Asignación</th>
+                <td mat-cell *matCellDef="let element" class="row-cursor size-font"  style="width: 10%;" (click)='this.redirect(element)'> {{element.fechaAsignacion | date:'yyyy-MM-dd'}} </td>
+              </ng-container> 
+  
+              <ng-container matColumnDef="id">
+                <th mat-header-cell *matHeaderCellDef  class="th-principal centrar"  style="width: 10%;">Id único</th>
+                <td mat-cell *matCellDef="let element" class="row-cursor size-font centrar"  style="width: 10%;" (click)='this.redirect(element)'>  {{element.idRadicado}} </td>
+              </ng-container>
+
+              <ng-container matColumnDef="emadre">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header class="th-principal"  style="width: 10%;">E madre</th>
+                <td mat-cell *matCellDef="let element" class="row-cursor size-font"  style="width: 10%;" (click)='this.redirect(element)'> {{element.enfermedadMadre}} </td>
+              </ng-container>   
+  
+              <ng-container matColumnDef="nombreMedicion">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header class="th-principal " style="width: 10%;">Medición</th>
+                <td mat-cell *matCellDef="let element" class="row-cursor size-font" style="width: 10%;" (click)='this.redirect(element)'> {{element.nombreMedicion}} </td>
+              </ng-container>
+  
+              <ng-container matColumnDef="eps">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header class="th-principal" style="max-width: 300px;"> Entidad </th>
+                <td mat-cell *matCellDef="let element" class="row-cursor size-font" style="max-width: 300px;" (click)='this.redirect(element)'>{{element.data_NombreEPS}}</td>
+              </ng-container>
+              
+              <!-- <ng-container matColumnDef="ips">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header class="th-principal centrar" style="max-width: 150px;min-width: 150px;"> IPS </th>
+                <td mat-cell *matCellDef="let element" class="row-cursor size-font" style="max-width: 150px;" (click)='this.redirect(element)'>{{element.nombreIPS}}</td>
+              </ng-container> -->
+
+              <ng-container matColumnDef="icon">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header class="th-principal" style="width: 5%;"></th>
+                <td mat-cell *matCellDef="let element" class="row-cursor size-font" style="width: 5%;" (click)='this.redirect(element)'>                  
+                  <!-- <mat-icon class="color-icon-details color-ico" *ngIf="(element.estado == '5' && this.objUser.rol.userRolId == 3) || (element.estado == '1' && element.estado != '5')">pending_actions</mat-icon>
+                  <mat-icon class="color-icon-details" *ngIf="(element.estado == '2' || element.estado == '5') && this.objUser.rol.userRolId == 2">warning</mat-icon> -->
+                  <!--p #tooltip="matTooltip"
+                  matTooltip={{element.estadoNombre}}
+                  matTooltipPosition="left" class="centrar size-font">
+                  <img src="{{element.imagePath}}" width="20" height="20" placement="top" style="margin-top: 10px"-->
+                  <mat-icon 
+                    class="color-icon-details color-ico" 
+                    *ngIf="((this.objUser.rol.userRolId == '3') &&
+                            (element.estado == '2' 
+                            || element.estado == '4'
+                            || element.estado == '6'
+                            || element.estado == '7'
+                            || element.estado == '9'
+                            || element.estado == '10'
+                            || element.estado == '8'
+                            || element.estado == '11'
+                            || element.estado == '14'
+                            || element.estado == '15'
+                            || element.estado == '17') ) ">
+                            pending_actions
+                  </mat-icon>
+                  <mat-icon 
+                    class="color-icon-details" 
+                    *ngIf="((this.objUser.rol.userRolId == '3') &&
+                            (element.estado == '1' 
+                            || element.estado == '3'
+                            || element.estado == '5'
+                            || element.estado == '12'
+                            || element.estado == '13'
+                            || element.estado == '16'
+                            || element.estado == '18')) ">
+                            warning
+                  </mat-icon>
+                </td>
+              </ng-container>
+              
+              <ng-container matColumnDef="estado">
+                <th mat-header-cell *matHeaderCellDef  class="th-principal" style="width: 5%;"><span class="centrar">Estado </span></th>
+                <td mat-cell *matCellDef="let element" class="row-cursor size-font" style="width: 5%;" (click)='this.redirect(element)'><p #tooltip="matTooltip"
+                  matTooltip={{element.estadoNombre}}
+                  matTooltipPosition="left" class="centrar size-font" style="margin-bottom: 0px;">
+                  {{element.estadoCodigo}}
+              </p></td>
+              </ng-container> 
+  
+              <ng-container matColumnDef="fechadecierre">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header class="th-principal" style="width: 10%;"> Fecha de cierre </th>
+                <td mat-cell *matCellDef="let element" (click)='this.redirect(element)' class="row-cursor size-font" style="width: 10%;"> {{element.fechaCierre | date:'yyyy-MM-dd'}} </td>
+              </ng-container>
+
+              <ng-container matColumnDef="displayOrder">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header class="th-principal" style="width: 10%;min-width: 150px;"></th>
+                <td mat-cell *matCellDef="let element" class="row-cursor size-font centrar" style="width: 10%;">
+                  <button mat-raised-button class="btn-basic btn-general" (click)='this.redirect(element)' *ngIf="element.estado == 1">AUDITAR</button> <!--es nuevo y displayOrder = 1 > boton rosado -->
+                  <!-- <button mat-raised-button class="btn-disabled btn-general" *ngIf="element.estado == 1 && element.displayOrder != 1">AUDITAR</button>el estado en Nuevo y displayOrder != 1 > boton gris -->
+                    <span class="btn-abrir btn-general" (click)='this.redirect(element)' *ngIf="element.estado != 1">ABRIR </span><!--si el boton NO tiene estado nuevo y no displayOrder ==1 > boton blanco -->
+                </td>
+              </ng-container>
+
+              <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
+              <tr mat-row *matRowDef="let row; columns: displayedColumns;" ></tr>
+          </table>
+
+        </div> 
+        <!-- <mat-paginator [pageSizeOptions]="[5, 10, 25, 100, +this.totalPage]" aria-label="Select page of users"></mat-paginator> -->
+        
+        <!-- INICIA PAGINADOR -->    
+        <div *ngIf="this.ELEMENT_DATA" style="margin-top: 20px;">
+          <nav aria-label="Page navigation example" *ngIf="this.ELEMENT_DATA.length > 0">
+            <ul class="pagination justify-content-center">
+                <li class="page-item"  [ngClass]="{'page-item disabled': pageNumber == 1}">
+                    <a class="page-link" (click)="this.getFilters(1, this.itemsPerpagina)">
+                        <</a>
+                </li>
+                <li class="page-item" [ngClass]="{'page-item disabled': pageNumber == 1}">
+                    <a class="page-link" (click)="this.getFilters(pageNumber - 1, this.itemsPerpagina)">
+                        <<</a>
+                </li>
+                <li class="page-item" [ngClass]="{'page-item active': pageNumber === page}" *ngFor="let page of pager.pages"><a class="page-link" (click)="this.getFilters(page, this.itemsPerpagina)">{{page}}</a></li>
+                <li class="page-item" [ngClass]="{'page-item disabled': pageNumber === pager.totalPages}"><a class="page-link" (click)="this.getFilters((pageNumber + 1) , this.itemsPerpagina)">>></a></li>
+                <li class="page-item" [ngClass]="{'page-item disabled': pageNumber === pager.totalPages}"><a class="page-link" (click)="this.getFilters(pager.totalPages, this.itemsPerpagina)">></a></li>
+        
+                <div  class="selectAuditor" style="width: 100px;">
+                  <mat-form-field appearance="fill"  >
+                    <mat-label>Cant. por página</mat-label>
+                    <mat-select  [(ngModel)]="itemsPerpagina" name="itemsPerpagina" >
+                      <mat-option class="text-center" (click)="this.getFilters(1, item)" *ngFor="let item of sizeList" [value]="item">
+                        {{item}}
+                      </mat-option>
+                    </mat-select>
+                  </mat-form-field>                   
+                </div>
+            </ul>               
+          </nav> 
+        </div>
+
+          <div class="d-flex justify-content-end">  
+              
+          </div> 
+          <div class="row" *ngIf="this.totalRegister > 0"  style="text-align: right; color: #A03781;">
+            <label>Total de Registros: <b>{{this.totalRegister}}</b></label>
+          </div>
+        
+          <!-- FINALIZA PAGINADOR --> 
+        
+        </div>
+    </div>
+
+
+    <!-- <app-management *ngIf="this.objUser.rol.userRolId == 1"></app-management> -->
+    <!-- <app-management></app-management> -->
+
+
+
+</mat-card>
+
+<app-tab-warning [Autorizacion]='1'></app-tab-warning>

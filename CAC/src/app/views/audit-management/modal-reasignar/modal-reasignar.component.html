@@ -1,0 +1,100 @@
+
+<div *ngIf="loading" class="centrar-loading">
+  <mat-spinner diameter="50"></mat-spinner>
+</div>
+
+<div  *ngIf="!loading">
+  <section *ngIf="this.seleccion==0">
+    <h2 mat-dialog-title class="swal2-title margen-espacio" >¿Cómo desea hacer la reasignación?</h2>
+    <div mat-dialog-content>
+      <div class="row" >
+        <div class="col-6 textcenter">
+          <div class="textcenter margen">
+            Asignar de manera equitativa a todos los auditories seleccionados
+          </div>
+         
+          <button mat-raised-button class="btn-basic  btn-general btn-invertido" (click)="btnEquitativa()"   >EQUITATIVA</button>
+        </div>
+        <div class="col-6 textcenter">
+          <div class="textcenter margen">
+          Asignar mediante base de datos con número de registro detallado por auditor
+        </div>
+          <button mat-raised-button class="btn-basic  btn-general" (click)="btnDescargarfiltrado()" >DETALLADO</button>
+          <a style="display:none;" [href]="'data:application/octet-stream;base64,' + base64Plantilla | safe" download="Plantilla.csv" #plantilla>Plantilla</a>
+          
+        </div>
+      </div>
+    </div>
+    </section>
+    
+    
+    <section *ngIf="this.seleccion==1">
+      <h2 mat-dialog-title class="swal2-title margen-espacio" >Seleccione el/los auditor/es a quien/es le asignará los registros marcados</h2>
+      <div mat-dialog-content>
+        <div class="row" [formGroup]="form">
+          <div class="col-12 textcenter">
+            <div class="textcenter margen">
+             Los registros se asignarán de manera equitativa entre los auditores seleccionados
+            </div>   
+            <mat-form-field appearance="fill" style="margin: auto;width: 200px;">
+              <mat-label class="fuente ancho">Auditores</mat-label>
+              <mat-select formControlName='auditor' name="auditor" multiple >
+                <mat-option  *ngFor="let auditor of this.selectlistaAuditores" [value]="auditor.id"><span class="ancho">{{auditor.codigo}}</span> - {{auditor.nombres}} {{auditor.apellidos}}</mat-option>
+              </mat-select>         
+            </mat-form-field>   
+            <div *ngIf="errorAuditores" style="color:red; margin-bottom: 10px;">La cantidad de auditores supera la cantidad de  registros seleccionados</div>
+            <button mat-raised-button class="btn-basic  btn-general" (click)="btnEnviarEquitativa()" >Reasignar</button>
+          </div>     
+        </div>
+      </div>
+      </section>
+    
+      <section *ngIf="this.seleccion==2">
+        <h2 mat-dialog-title class="swal2-title margen-espacio" >Cargue el archivo con los id de los registros y el código de los nuevos auditores</h2>
+        <div mat-dialog-content>
+          <div class="row" [formGroup]="form">
+            <div class="col-12 textcenter margen">
+              <div class="form-group">
+                <Input type="file" accept=".csv" class="form-control-file"  (change)="fileSelected($event)">
+             </div>        
+            </div>         
+            <div class="col-6 textcenter">       
+              <button mat-raised-button class="btn-basic  btn-general margen-btn" (click)="btnEnviarDetallado()" [disabled]="!allowLoadFile"  [ngClass]="{'buttonfile-dis': allowLoadFile}" >Reasignar</button>
+            </div>
+            <div class="col-6 textcenter">         
+              <button mat-raised-button class="btn-basic  btn-general btn-invertido margen-btn" [mat-dialog-close]="true">Cancelar</button>
+            </div>
+          </div>
+        </div>
+        </section>
+    
+    
+    
+    
+    
+      <section *ngIf="this.seleccion==4">
+        <h2 mat-dialog-title class="swal2-title margen-espacio" >La reasignación fue realizada con éxito</h2>
+        <div mat-dialog-content>
+          <div class="row" [formGroup]="form">
+            <div class="col-12 textcenter">            
+              <button mat-raised-button class="btn-basic  btn-general" [mat-dialog-close]="true" >ENTENDIDO</button>
+            </div>     
+          </div>
+        </div>
+        </section>
+    
+        
+      <section *ngIf="this.seleccion==5">
+        <h2 mat-dialog-title class="swal2-title margen-espacio" >Algunas reasignaciones no pudieron ser realizadas</h2>
+        <div mat-dialog-content>
+          <div class="row" [formGroup]="form">
+            <div class="col-12 textcenter">            
+              <button mat-raised-button class="btn-basic  btn-general" [mat-dialog-close]="true" (click)="downloadMyFile(this.urlArchivoError)" >Descargar detalle</button>
+            </div>     
+          </div>
+        </div>
+        </section>
+    
+
+</div>
+

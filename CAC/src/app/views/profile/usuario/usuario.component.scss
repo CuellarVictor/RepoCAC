@@ -1,0 +1,81 @@
+.title{
+    font-size: 20px;
+    background-color: #575757;
+    color: #fff;   
+    font-weight: 500; 
+  }
+  .text-title{
+    padding-top: 20px !important;
+    padding-bottom: 20px !important;
+    padding-left: 30px !important;
+    height: 70px;
+  }
+  .btn-item{
+    text-decoration: underline;
+    color: #7c7c7c;
+}
+
+.end{
+    justify-content: flex-end;
+    padding-right: 20px;
+}
+
+.element-checkbox {
+    margin-left: 10px;   
+    margin-right: 10px; 
+    font-weight: 500;
+}
+
+::ng-deep .mat-radio-button.mat-accent.mat-radio-checked .mat-radio-outer-circle{
+    border-color:#A03781; 
+  }
+  
+::ng-deep .mat-radio-button.mat-accent .mat-radio-inner-circle{
+    color: #A03781;
+    background-color:#A03781 ;
+  }
+  
+::ng-deep .mat-radio-button.mat-accent .mat-radio-ripple .mat-ripple-element {
+      background-color:#A03781;
+  }
+  .select{
+    display: flex;
+    width: 100%;   
+    justify-content: space-around;
+}
+.title_1{
+  font-family: 'Roboto';
+  font-weight: 500;
+  color: #575757;
+  padding-top: 20px;
+  padding-left: 20px;
+}
+
+.cac-radio-group{
+  display: flex;
+  margin: 15px 0;
+}
+.subrayado{
+  text-decoration: underline;
+  cursor: pointer;
+}
+.fuente{
+  font-weight: 500;
+}
+.container{
+  margin: 0px;
+    max-width: 3000px !important
+}
+
+
+.elementdisabled,
+.btn[disabled],
+fieldset[disabled] .btn {
+    pointer-events: none;
+    cursor: not-allowed;
+    filter: alpha(opacity=80);
+    -webkit-box-shadow: none;
+    box-shadow: none;
+    opacity: 0.4;
+    cursor: not-allowed;  
+}

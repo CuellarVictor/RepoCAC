@@ -1,0 +1,38 @@
+<h2 mat-dialog-title class="swal2-title margen-espacio" >Seleccione las bolsas de medición en las que desea aplicar los cambios de la variable</h2>
+
+{{idMedicion}}
+<div mat-dialog-content>
+  <mat-form-field appearance="fill" class="t-variable margen-espacio"> 
+    <mat-label class="input-bold">Buscar</mat-label>
+    <input matInput>
+    <mat-icon matSuffix class="fondo-icon">search</mat-icon>
+  </mat-form-field> 
+  <table class="table table-striped table-hover">
+   
+      <thead>
+        <tr>
+          <!-- <th class="th-principal check-th">
+            <mat-checkbox (change)="checkUncheckAll($event)">
+          </mat-checkbox>
+        </th> -->
+          <th class="th-principal css_tipo-a">Bolsa de medición</th>
+          <th class="th-principal css_tipo-b">Creación</th>
+      </tr>
+    </thead>
+  <!-- <form [formGroup]="formulario"> -->
+    <tbody class="tabla-alto">
+      <tr  *ngFor="let item of listaMediciones">
+          <td class="size-font"><mat-checkbox value="{{item.idMedicion}}" (change)="addItem(item.idMedicion, $event)" [checked]="item.idMedicion == checkeada || checkedList" [disabled]="item.idMedicion == checkeada"></mat-checkbox></td>
+          <td class="css_tipo size-font">{{item.medicion}}</td>
+          <td class="css_tipo size-font">{{item.fechaCreacion | date}}</td>
+      </tr>                
+  </tbody>
+  <!-- </form> -->
+</table>
+</div>
+<div mat-dialog-actions class="btns">
+  <div class="btn-abrir btn-general"  (click)="onNoClick()" style="padding-top: 10px;" >SALIR </div>
+  <button mat-raised-button class="btn-basic  btn-general" [mat-dialog-close]="true" (click)="eventAddOrUpdate()" cdkFocusInitial >CONTINUAR</button>
+
+  
+</div>

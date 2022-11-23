@@ -1,0 +1,326 @@
+<div>
+    <app-card-percent
+      [title]="'Configuración Audicac'"
+      [page]="'audit-management'">
+    </app-card-percent>
+
+
+
+
+
+
+
+  <!-- <form [formGroup]="this.permisosAccesos"> -->
+     
+    
+       <mat-accordion class="margen"  *ngIf="this.permisos.Permisos_Accesos.visible" 
+       [ngClass]="{'elementdisabled': !this.permisos.Permisos_Accesos.habilitado}">   
+    <mat-expansion-panel  [expanded]="false">
+      <mat-expansion-panel-header class="titulo specific-class">
+        <mat-panel-title class="titulo-color">
+            Permisos y accesos
+        </mat-panel-title>      
+
+        
+      </mat-expansion-panel-header>
+
+      <div class="container-principal  margen">
+        <app-permisos></app-permisos>
+          </div>      
+    </mat-expansion-panel>    
+  </mat-accordion>
+
+
+
+ 
+  <mat-accordion class="margen"   *ngIf="this.permisos.Administracion_rol.visible" 
+  [ngClass]="{'elementdisabled': !this.permisos.Administracion_rol.habilitado}">   
+    <mat-expansion-panel  [expanded]="false" class="margen" >
+      <mat-expansion-panel-header class="titulo specific-class">
+        <mat-panel-title class="titulo-color">
+           Administrador Rol
+        </mat-panel-title>      
+
+        
+      </mat-expansion-panel-header>
+
+      <div class="container-principal  margen">
+        <app-admin-rol></app-admin-rol>
+          </div>      
+    </mat-expansion-panel>    
+  </mat-accordion>
+
+<!-- </form> -->
+
+<mat-accordion class="margen"   *ngIf="this.permisos.Consulta_Asignacion_lider_por_entidad.visible" 
+[ngClass]="{'elementdisabled': !this.permisos.Consulta_Asignacion_lider_por_entidad.habilitado}">   
+  <mat-expansion-panel  [expanded]="false" class="margen" >
+    <mat-expansion-panel-header class="titulo specific-class">
+      <mat-panel-title class="titulo-color">
+        Asignación Lider por Entidad
+      </mat-panel-title>      
+
+      
+    </mat-expansion-panel-header>
+
+    <div class="container-principal  margen">
+      <app-lider-entidad></app-lider-entidad>
+        </div>      
+  </mat-expansion-panel>    
+</mat-accordion>
+
+
+  <mat-accordion class="margen" *ngIf="this.permisos.Parametrizacion_calificacion_IPS.visible" 
+                 [ngClass]="{'elementdisabled': !this.permisos.Parametrizacion_calificacion_IPS.habilitado}">
+    <mat-expansion-panel   [expanded]="false" class="margen">
+      <mat-expansion-panel-header class="titulo specific-class">
+        <mat-panel-title class="titulo-color">
+            Parametrización calificación IPS
+        </mat-panel-title>  
+      </mat-expansion-panel-header>
+      <div class="margen-expansion">
+        <div class="parrafo">Items para calificación por registro de IPS</div>
+        <div>
+            <div class="row" *ngIf='this.objCatalogIPS'>        
+                <div class="col-md-3" *ngFor="let item of this.objCatalogIPS; let pointIndex=index">
+                  <mat-form-field appearance="fill" class="t-variable" floatLabel='never' >
+                    <mat-label class="input-bold">Nombre Item</mat-label>
+                      <input  matInput #nombreitem class="input-config" value={{item.itemName}}>
+                      <mat-icon matSuffix class="fondo-icon" (click)="eliminarItemAction(item,'3')" *ngIf="nombreitem.value==item.itemName">clear</mat-icon>                 
+                      <mat-icon matSuffix class="fondo-icon" (click)="editarItemAction('',nombreitem.value,item,'3')" *ngIf="nombreitem.value!=item.itemName">check</mat-icon>
+                    </mat-form-field>  
+                </div>
+                <div class="col-md-3" *ngIf="activarCrearItem=='3'">
+                  <mat-form-field appearance="fill" class="t-variable" floatLabel='never' >
+                    <mat-label class="input-bold">Nuevo Item</mat-label>
+                      <input matInput #nuevo class="input-config">
+                      <mat-icon matSuffix class="fondo-icon" (click)="saveItemAction('',nuevo.value,'3')" *ngIf="nuevo.value!=''">check</mat-icon>                 
+                     
+                    </mat-form-field>  
+                </div>
+
+               
+            </div>
+            <div class="row end" *ngIf="(activarCrearItem=='' || activarCrearItem=='4')">               
+                <div class="col-md-3">
+                    <button mat-raised-button class="btn-basic btn-general" (click)='this.activarCrearItemAction("3")'
+                    *ngIf="this.permisos.Agregar_nuevo_Item_IPS.visible" 
+                    [ngClass]="{'elementdisabled': !this.permisos.Agregar_nuevo_Item_IPS.habilitado}">
+                      AGREGAR NUEVO ITEM
+                    </button>
+                </div>
+            </div>
+        </div>
+     </div>
+    </mat-expansion-panel>
+  </mat-accordion>
+
+
+ <mat-accordion class="margen" *ngIf="this.permisos.Grupo__de_Variables.visible" 
+ [ngClass]="{'elementdisabled': !this.permisos.Grupo__de_Variables.habilitado}">
+    <mat-expansion-panel [expanded]="false"  class="margen">
+      <mat-expansion-panel-header class="titulo specific-class">
+        <mat-panel-title class="titulo-color">
+            Grupos de variables
+        </mat-panel-title>  
+      </mat-expansion-panel-header>
+     <div class="margen-expansion">
+        <div class="parrafo">Los grupos creados en esta sección aparecerán en el registro de auditoría</div>
+        <div>
+            <div class="row" *ngIf='this.objCatalogVariables'>    
+              <div class="col-md-4" *ngFor="let item of this.objCatalogVariables; let pointIndex=index">
+                <div class="row">
+                  <div class="col-md-4">
+                    <mat-form-field appearance="fill" class="t-variable" floatLabel='never' >
+                      <mat-label class="input-bold">Orden</mat-label>
+                        <input matInput #ordenGrupo   class="input-config" [disabled]="item.itemName=='Glosas'?true:false"
+                        value={{item.concept}} (blur)="validarOrden()"
+                        type="number">
+                    </mat-form-field>
+                  </div>
+                  <div class="col-md-6">
+                    <mat-form-field appearance="fill" class="t-variable" floatLabel='never' >
+                      <mat-label class="input-bold">Nombre Item</mat-label>
+                        <input  matInput #nombreitem class="input-config" value={{item.itemName}} [disabled]="item.itemName=='Glosas'?true:false">
+                        <mat-icon matSuffix class="fondo-icon" (click)="eliminarItemAction(item,'4')" 
+                        *ngIf="ordenGrupo.value==item.concept &&  nombreitem.value==item.itemName && item.itemName!='Glosas'">clear</mat-icon>                 
+                        <mat-icon matSuffix class="fondo-icon" (click)="editarItemAction(ordenGrupo.value,nombreitem.value,item,'4')" *ngIf="ordenGrupo.value!=item.concept || nombreitem.value!=item.itemName">check</mat-icon>
+                      </mat-form-field> 
+                  </div>  
+                </div>                       
+              </div>                         
+            </div>
+            <div class="col-md-4" *ngIf="activarCrearItem=='4'">
+              <div class="row">
+                <div class="col-md-4">
+                  <mat-form-field appearance="fill" class="t-variable" floatLabel='never' >
+                    <mat-label class="input-bold">Orden</mat-label>
+                      <input matInput   class="input-config" [(ngModel)]="nuevoOrden" (blur)="validarOrden()"
+                      type="number">
+                  </mat-form-field>
+                </div>
+                <div class="col-md-6">
+                  <mat-form-field appearance="fill" class="t-variable" floatLabel='never' >
+                      <mat-label class="input-bold">Nuevo Item</mat-label>
+                      <input matInput class="input-config" [(ngModel)]="nuevoValue">
+                      <mat-icon matSuffix class="fondo-icon" (click)="saveItemAction(nuevoOrden,nuevoValue,'4')"  
+                                *ngIf="nuevoValue !='' && nuevoOrden != ''">check</mat-icon>                 
+                  </mat-form-field> 
+                </div>  
+              </div>                       
+            </div>
+            <div class="row end" *ngIf="(activarCrearItem=='' || activarCrearItem=='3')">               
+              <div class="col-md-3">
+                  <button mat-raised-button class="btn-basic btn-general" (click)='this.activarCrearItemAction("4")'
+                  *ngIf="this.permisos.Agregar_nuevo_item_Grupos_de_Variables.visible" 
+                  [ngClass]="{'elementdisabled': !this.permisos.Agregar_nuevo_item_Grupos_de_Variables.habilitado}"
+                  >
+                  AGREGAR NUEVO ITEM
+                </button>
+              </div>
+          </div>
+        </div>
+     </div>
+    </mat-expansion-panel>
+  </mat-accordion>
+<!--
+
+  <mat-accordion class="margen">
+    <mat-expansion-panel  [expanded]="false" class="margen">
+      <mat-expansion-panel-header class="titulo specific-class">
+        <mat-panel-title class="titulo-color">
+            Solicitudes Extemporáneas
+        </mat-panel-title>  
+      </mat-expansion-panel-header>
+      <div class="row margen-expansion">        
+        <div class="col-md-4 parrafo">
+            Solicitudes extemporáneas GLOSA permitidas por registro 
+        </div>
+        <div class="col-md-2">
+            <mat-form-field appearance="fill" class="t-variable input-solicitud" floatLabel='never'>                      
+                <input matInput class="input-config">              
+              </mat-form-field>   
+        </div>
+        <div class="col-md-4 parrafo">
+            Solicitudes extemporáneas Hallazgo permitidas por registro
+        </div>       
+        <div class="col-md-2">
+            <mat-form-field appearance="fill" class="t-variable input-solicitud" floatLabel='never'>                      
+                <input matInput class="input-config">               
+              </mat-form-field>   
+        </div>              
+    </div>
+   
+    </mat-expansion-panel>
+  </mat-accordion>
+-->
+
+<mat-accordion class="margen" *ngIf="this.permisos.Tipo_codigos_administrativo_rol.visible" 
+[ngClass]="{'elementdisabled': !this.permisos.Tipo_codigos_administrativo_rol.habilitado}">
+<mat-expansion-panel   [expanded]="false" class="margen">
+<mat-expansion-panel-header class="titulo specific-class">
+<mat-panel-title class="titulo-color">
+Tipos Código Administrativo
+</mat-panel-title>  
+</mat-expansion-panel-header>
+<div class="margen-expansion">
+<div class="parrafo">Tipos de código para asignar en codigos administrativos</div>
+<div>
+<div class="row" *ngIf='this.objCatalogCodigo'>        
+<div class="col-md-3" *ngFor="let item of this.objCatalogCodigo; let pointIndex=index">
+ <mat-form-field appearance="fill" class="t-variable" floatLabel='never' >
+   <mat-label class="input-bold">Nombre Item</mat-label>
+     <input  matInput #nombreitem class="input-config" value={{item.itemName}}>
+     <mat-icon matSuffix class="fondo-icon" (click)="eliminarItemAction(item,'2')" *ngIf="nombreitem.value==item.itemName">clear</mat-icon>                 
+     <mat-icon matSuffix class="fondo-icon" (click)="editarItemAction('',nombreitem.value,item,'2')" *ngIf="nombreitem.value!=item.itemName">check</mat-icon>
+   </mat-form-field>  
+</div>
+<div class="col-md-3" *ngIf="activarCrearItem=='3'">
+ <mat-form-field appearance="fill" class="t-variable" floatLabel='never' >
+   <mat-label class="input-bold">Nuevo Item</mat-label>
+     <input matInput #nuevo class="input-config">
+     <mat-icon matSuffix class="fondo-icon" (click)="saveItemAction('',nuevo.value,'2')" *ngIf="nuevo.value!=''">check</mat-icon>                 
+    
+   </mat-form-field>  
+</div>
+
+
+</div>
+<div class="row end" *ngIf="(activarCrearItem=='' || activarCrearItem=='4')">               
+<div class="col-md-3">
+   <button mat-raised-button class="btn-basic btn-general" (click)='this.activarCrearItemAction("3")'
+   *ngIf="this.permisos.Agregar_nuevo_Item_IPS.visible" 
+   [ngClass]="{'elementdisabled': !this.permisos.Agregar_nuevo_Item_IPS.habilitado}">
+     AGREGAR NUEVO ITEM
+   </button>
+</div>
+</div>
+</div>
+</div>
+</mat-expansion-panel>
+</mat-accordion>
+
+
+  <mat-accordion class="margen" *ngIf="this.permisos.Codigos_administrativos.visible" 
+  [ngClass]="{'elementdisabled': !this.permisos.Codigos_administrativos.habilitado}">
+    <mat-expansion-panel   [expanded]="false" class="margen">
+      <mat-expansion-panel-header class="titulo specific-class">
+        <mat-panel-title class="titulo-color">
+            Códigos administrativos
+        </mat-panel-title>  
+      </mat-expansion-panel-header>
+      <div class="margen-expansion">
+        <app-codigos></app-codigos>        
+      </div>
+    
+    </mat-expansion-panel>
+  </mat-accordion>
+
+
+
+  <mat-accordion class="margen" *ngIf="this.permisos.Administracion_de_Catalogos.visible" 
+  [ngClass]="{'elementdisabled': !this.permisos.Administracion_de_Catalogos.habilitado}">
+    <mat-expansion-panel  [expanded]="false" class="margen">
+      <mat-expansion-panel-header class="titulo specific-class">
+        <mat-panel-title class="titulo-color">
+            Administración de catálogos
+        </mat-panel-title>  
+      </mat-expansion-panel-header>
+      <div class="margen">
+     
+        <app-lista-catalogo *ngIf="estadoCatalogo=='listaCatalogo'" (editarCatalogo)="editarCatalogo($event)"></app-lista-catalogo>
+        <app-lista-items *ngIf="estadoCatalogo=='listaItem'" [data]="catalogoActivo" (volverCatalogo)="volverCatalogo()"></app-lista-items>
+    </div>
+      
+    </mat-expansion-panel>
+  </mat-accordion>
+
+  <mat-accordion class="margen" *ngIf="this.permisos.Parametrizar_Actas.visible" 
+                 [ngClass]="{ 'elementdisabled': !this.permisos.Parametrizar_Actas.habilitado }">
+    <mat-expansion-panel [expanded]="false" class="margen">
+      <mat-expansion-panel-header class="titulo specific-class">
+        <mat-panel-title class="titulo-color">
+          Parametrizar Actas
+        </mat-panel-title>
+      </mat-expansion-panel-header>
+      <div class="margen">
+        <app-parameter-template></app-parameter-template>
+      </div>
+    </mat-expansion-panel>
+  </mat-accordion>
+
+  <mat-accordion class="margen" *ngIf="this.permisos.Generar_Actas.visible" 
+                 [ngClass]="{ 'elementdisabled': !this.permisos.Generar_Actas.habilitado }">
+    <mat-expansion-panel [expanded]="false" class="margen">
+      <mat-expansion-panel-header class="titulo specific-class">
+        <mat-panel-title class="titulo-color">
+          Generar Actas
+        </mat-panel-title>
+      </mat-expansion-panel-header>
+      <div class="margen">
+        <app-generar-actas></app-generar-actas>
+      </div>
+    </mat-expansion-panel>
+  </mat-accordion>
+
+</div>

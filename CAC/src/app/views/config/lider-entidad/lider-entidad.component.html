@@ -1,0 +1,169 @@
+<form [formGroup]="formAsignacionLider" *ngIf="asignarLider">
+    <div class="row" >
+    <div class="col-md-3">
+        <mat-form-field appearance="fill" class="t-variable elementdisabled" floatLabel='never'>      
+            <mat-label class="fuente">EPS</mat-label>       
+            <input matInput class="input-config" formControlName='eps' >          
+          </mat-form-field>   
+    </div>
+    <div class="col-md-3">
+        <mat-form-field appearance="fill" class="t-variable elementdisabled" floatLabel='never'>      
+            <mat-label class="fuente">Cobertura</mat-label>       
+            <input matInput class="input-config" formControlName='cobertura' >          
+          </mat-form-field>   
+    </div>
+    <div class="col-md-3">
+        <mat-form-field appearance="fill" class="t-variable elementdisabled" floatLabel='never'>      
+            <mat-label class="fuente">Periodo</mat-label>       
+            <input matInput class="input-config" formControlName='periodo' >          
+          </mat-form-field>   
+    </div>
+    <div class="col-md-3">         
+        <mat-form-field appearance="fill" class="t-variable" floatLabel='never' >
+            <mat-label class="fuente">Seleccione lider Auditor</mat-label>    
+            <mat-select formControlName='auditorLider' id="auditorLider">
+                <mat-option class="text-center"  *ngFor="let item of listAuditores"  [value]="item.idAuditor">
+                {{item.usuario}}
+                </mat-option>
+            </mat-select>
+            </mat-form-field> 
+    </div>
+
+</div>
+<div class="row end" >
+    <div class="col-md-4">
+        <button mat-raised-button class="btn-basic btn-general" (click)="editarEpsAction()" >ASIGNAR</button>
+    </div>
+    <div class="col-md-3" >
+        <button mat-raised-button class="btn-basic btn-invertido" (click)="cancelar()" >CANCELAR</button>
+    </div>
+    </div>
+    </form>
+
+
+
+<div *ngIf="!asignarLider">
+    <form [formGroup]="form" >
+        <div class="row end">    
+             
+            <div class="col-md-3">
+               
+                    <mat-form-field appearance="fill" class="t-variable" floatLabel='never'>
+                        <mat-label class="fuente">Cobertura</mat-label>    
+                        <mat-select formControlName='cobertura' id="cobertura" (selectionChange)="changeCobertura()">
+                            <mat-option *ngFor="let enfermedad of this.listCobertura" [value]="enfermedad.IdCobertura">
+                                {{ enfermedad.IdCobertura }}-{{ enfermedad.Nombre}}
+                            </mat-option>
+   
+                       
+                        </mat-select>
+                        </mat-form-field> 
+              
+              
+            </div>
+
+            <div class="col-md-3">      
+                <mat-form-field appearance="fill" class="t-variable" floatLabel='never'
+                [ngClass]="{'elementdisabled': form.controls.cobertura.value == '' }">
+                    <mat-label class="fuente">Periodo</mat-label>    
+                    <mat-select formControlName='periodo' id="periodo" (selectionChange)="changePeriodo()">
+                        <mat-option class="text-center"  *ngFor="let item of listPeriodo"  [value]="item.id">
+                        {{item.id}}
+                        </mat-option>
+                    </mat-select>
+                    </mat-form-field> 
+              </div>  
+
+            <div class="col-md-1">
+                <button mat-raised-button class="btn-basic btn-general" (click)="ngOnInit()" >Limpiar</button>
+            </div>
+           
+        </div>
+        </form>
+        <div class="container-principal margen tabla-over">
+            <table mat-table [dataSource]="dataSource2" matSort class="w-100" >
+               
+            
+                <ng-container matColumnDef="ideps">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header class="th-principal" style="padding-left: 60px !important; ">Id Eps </th>
+                    <td mat-cell *matCellDef="let element" class="row-cursor size-font fuente"> 
+                    <button mat-icon-button aria-label="detalle" [matMenuTriggerFor]="menu" *ngIf="this.permisos.Asignar_auditor_lider.visible" 
+                    [ngClass]="{'elementdisabled': !this.permisos.Asignar_auditor_lider.habilitado}" >
+                      <mat-icon class="p-link">more_vert</mat-icon>
+                    </button>                   
+                  <mat-menu #menu="matMenu">
+                    <button mat-menu-item class="btn-menu" (click)="btnEditarEps(element)"
+                            *ngIf="this.permisos.Asignar_auditor_lider.visible" 
+                            [ngClass]="{'elementdisabled': !this.permisos.Asignar_auditor_lider.habilitado}" >
+                       Asignar Auditor Lider
+                    </button>
+                    
+                
+                  </mat-menu>{{element.data_IdEPS}} </td>
+                  </ng-container>
+        
+                  <ng-container matColumnDef="nombre_eps">
+                    <th mat-header-cell *matHeaderCellDef class="th-principal">  Nombre Eps  </th>
+                    <td mat-cell *matCellDef="let element">
+                        {{element.data_NombreEPS }} 
+                    </td>
+                </ng-container>
+                <ng-container matColumnDef="id_cobertura">
+                    <th mat-header-cell *matHeaderCellDef class="th-principal">  Cobertura  </th>
+                    <td mat-cell *matCellDef="let element">
+                        {{element.idCobertura }} 
+                    </td>
+                </ng-container>  
+                <ng-container matColumnDef="id_periodo">
+                    <th mat-header-cell *matHeaderCellDef class="th-principal">  Periodo  </th>
+                    <td mat-cell *matCellDef="let element">
+                        {{element.idPeriodo }} 
+                    </td>
+                </ng-container> 
+                <ng-container matColumnDef="usuario_Auditor">
+                    <th mat-header-cell *matHeaderCellDef class="th-principal">Auditor Lider</th>
+                    <td mat-cell *matCellDef="let element">
+                        {{element.usuarioAuditor }} 
+                    </td>
+                </ng-container>  
+                <ng-container matColumnDef="ver">
+                    <th mat-header-cell *matHeaderCellDef class="th-principal"> Auditores  </th>
+                    <td mat-cell *matCellDef="let element">
+                        <button mat-raised-button class="btn-basic btn-general" (click)="openModalAuditores(element.idCobertura, element.idPeriodo, element.data_IdEPS)" >Ver</button>
+                    </td>
+                </ng-container>            
+                  <tr mat-header-row *matHeaderRowDef="displayedColumns2; sticky: true"></tr>
+                  <tr mat-row *matRowDef="let row; columns: displayedColumns2;"></tr>
+              </table>
+          </div>
+          <div *ngIf="this.dataSource2" style="margin-top: 20px;">
+            <nav aria-label="Page navigation example" *ngIf="this.dataSource2.length > 0">
+              <ul class="pagination justify-content-center">
+                  <li class="page-item"  [ngClass]="{'page-item disabled': pageNumber == 1}">
+                      <a class="page-link" (click)="this.getFiltros(1, this.itemsPerpagina)">
+                          <</a>
+                  </li>
+                  <li class="page-item" [ngClass]="{'page-item disabled': pageNumber == 1}">
+                      <a class="page-link" (click)="this.getFiltros(pageNumber, this.itemsPerpagina)">
+                          <<</a>
+                  </li>
+                  <li class="page-item" [ngClass]="{'page-item active': pageNumber === page}" *ngFor="let page of pager.pages"><a class="page-link" (click)="this.getFiltros(page, this.itemsPerpagina)">{{page}}</a></li>
+                  <li class="page-item" [ngClass]="{'page-item disabled': pageNumber === pager.totalPages}"><a class="page-link" (click)="this.getFiltros((pageNumber + 1) , this.itemsPerpagina)">>></a></li>
+                  <li class="page-item" [ngClass]="{'page-item disabled': pageNumber === pager.totalPages-1}"><a class="page-link" (click)="this.getFiltros(pager.totalPages, this.itemsPerpagina)">></a></li>
+          
+                  <div  class="selectAuditor" style="width: 100px;">
+                    <mat-form-field appearance="fill"  >
+                      <mat-label>Cant. por página</mat-label>
+                      <mat-select  [(ngModel)]="itemsPerpagina" name="itemsPerpagina" >
+                        <mat-option class="text-center" (click)="this.getFiltros(1, item)" *ngFor="let item of sizeList" [value]="item">
+                          {{item}}
+                        </mat-option>
+                      </mat-select>
+                    </mat-form-field>                   
+                  </div>
+              </ul>               
+          </nav>
+          
+        </div> 
+</div>
+ 

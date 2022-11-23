@@ -1,0 +1,86 @@
+<div *ngIf="loading &&  currentProcess.id == 0" 
+style=" display: flex;
+justify-content: space-around;">
+    <mat-spinner diameter="50"></mat-spinner>
+</div>
+
+<div  *ngIf="!loading  && currentProcess.progress != -2">
+    <h2 mat-dialog-title class="titlem" style="text-align: center; margin-top: 5%; margin-bottom: 5%;"> Seleccione el archivo de <br>calificación masiva</h2>
+    <div class="row" style="margin-top: 10%;">
+        <div class="col-12" style="text-align: center;">
+            <span class="btn-abrir btn-general subrayado" style="padding-left: 0px;" (click)="generarTemplateCarguePoblacion()">DESCARGAR PLANTILLA</span>  
+            <br>
+        </div>
+    </div>
+    <div mat-dialog-content style="margin-top: 5%;">
+        <br>
+        <div class="form-group">
+            <Input type="file" style="width: 100%;" accept=".csv" class="form-control-file"  (change)="fileSelected($event)">
+    </div> 
+    <br>
+    </div>
+    <div class="row" style="margin-top: 10%;">
+        <div class="col-6" >
+            <button [ngClass]="{'button-dis': !allowLoadFile}"  (click)="ConfirmacionCargue()" cdkFocusInitial  mat-raised-button class="btn-basic  btn-general" style="width: 100%;">Cargar</button>
+        </div>
+
+        <div class="col-6">
+            <span class="btn-abrir btn-general subrayado" [mat-dialog-close]="true">CANCELAR</span>   
+        </div>
+    
+    </div>
+</div>
+
+<div *ngIf="loading && currentProcess.id != 0 && currentProcess.progress != -2" >
+
+
+    <h2 *ngIf="currentProcess.progress == this._enumValidationProcess.Initializing" mat-dialog-title class="titlem" style="text-align: center; margin-top: 5%; margin-bottom: 5%;"> 
+        Espere mientras se cargan los registros a la bolsa <span  *ngIf="max == 0 || current == 0"><br> este proceso puede tardar unos segundos en iniciar</span> </h2><br>
+   
+    <h2 *ngIf="currentProcess.progress == this._enumValidationProcess.InProgress" mat-dialog-title class="titlem" style="text-align: center; margin-top: 5%; margin-bottom: 5%;"> 
+        Cargue Iniciado, lectura de archivo en proceso</h2>
+    <br>    
+    
+
+    <div class="row cargar" >
+        <div class="col-6" style="text-align: right;width: 40%;" >
+        </div>
+        <div class="col-6" *ngIf="max == 0 || current == 0">
+            <mat-spinner diameter="50"></mat-spinner>
+        </div>
+        
+    </div>
+
+    
+    <app-loading-progress  *ngIf="max != 0 && current != 0" [current]="current"  [max]="max"></app-loading-progress>
+    <div class="col-12 text-center">
+        <button   mat-raised-button class="btn-basic  btn-general"  [mat-dialog-close]="true"cdkFocusInitial style="width: 50%;">Cerrar</button>
+    </div>
+
+</div>
+
+<div *ngIf=" currentProcess.progress == -2" >
+    <div style="display: flex;justify-content: flex-end;">
+        <button mat-icon-button aria-label="cerrar" [mat-dialog-close]="true" style="width: 24px;">
+        <mat-icon style="color:#666666">close</mat-icon>
+    </button>
+    </div>
+       
+    <h2 *ngIf="fileprocessResult == 'OK'" mat-dialog-title class="title" style="text-align: center;width: 90%;">Calificación masiva realizada exitosamente</h2>
+    <h2 *ngIf="fileprocessResult == 'ERROR'"  mat-dialog-title class="title" style="text-align: center;width: 90%;">Algunos registros no pudieron ser procesados</h2>
+
+    <br>
+    <div class="row" style="width: 90%;">
+        <div class="col-7">
+            <button mat-button  [mat-dialog-close]="true"cdkFocusInitial class="btn-basic" (click)="downloadFile()" style="width: 100%;">DESCARGAR DETALLE</button>
+        </div>
+        <div class="col-5">
+            <button mat-button  (click)="deleteCurrentProcess()" class="btn-new" style="width: 100%; color: #A03781;">NUEVO CARGUE</button>
+        </div>
+    </div>
+
+
+</div>
+
+
+

@@ -1,0 +1,67 @@
+
+// .example-sidenav > div{ 
+//   overflow-x: scroll !important;
+// }
+
+// .mat-drawer-inner-container{ 
+//   overflow-x: scroll !important;
+// }
+
+.example-sidenav {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 97px;
+    background: #014291;
+    padding: 23px;
+    // overflow-x: scroll !important;
+  }
+
+  .example-header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+  }
+
+  button{
+      color: #fff;
+      margin: 18px 0px;
+  }
+
+  button:hover{
+      background-color: #C9CF18;
+      border-radius: 5px;
+  }
+
+  .sapcer-height{
+      margin:25px 0px;
+  }
+
+  .mat-icon-button {
+    width: 50px;
+    height: 50px;
+  }
+
+
+::ng-deep .mat-badge-accent .mat-badge-content {
+    background: #C9CF18;
+    color: #fff;
+}
+
+.hoverLogo:hover{
+  background-color: #C9CF18;
+  border-radius: 5px;
+}
+.hoverLogo{
+  width: 100%;
+}
+
+
+// img {
+//   width: 70px;
+//   height: 70px;
+// }
+// img:hover {
+//   fill: red;
+// }

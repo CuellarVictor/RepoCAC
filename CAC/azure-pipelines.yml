@@ -1,0 +1,13 @@
+pool: 'cac' 
+steps:
+- script:
+    npm cache clean --force
+  displayName: 'npm cache'
+
+- script:
+    npm install
+  displayName: 'npm install'
+
+- script:
+    npm run build
+  displayName: 'npm build'

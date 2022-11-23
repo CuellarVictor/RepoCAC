@@ -1,0 +1,248 @@
+<div *ngIf="this.permisos.Gestor_de_Mediciones.visible" 
+[ngClass]="{'elementdisabled': !this.permisos.Gestor_de_Mediciones.habilitado}">
+  <app-card-percent
+     [title]=title
+    [page]="'audit-management'"
+></app-card-percent>
+<mat-card class="card-body">
+  <div class="row title">
+    <div class="col-md-12 titulo">
+      Gestor de mediciones
+    </div>
+  </div>
+          <div class="row" *ngIf="this.listFiltros" style="padding: 20px;">
+            <div class="col-md-3" > 
+                      <mat-form-field appearance="fill" class="">
+                        <mat-label class="input-bold">Enfermedad Madre</mat-label>
+                        <mat-select [(ngModel)]="this.idEnfMadre" (selectionChange)="this.getFiltros(this.IdEnfMadre,this.IdPeriodo,this.pageNumber, this.itemsPerpagina,this.IdEnfMadre);">
+                        <mat-option value="" >Todos</mat-option>                        
+                        <mat-option *ngFor="let element of this.listadoEnfermedades" [value]="element.idEnfMadre">{{element.enfMadre}}</mat-option>
+                        </mat-select>
+                        </mat-form-field> 
+                    </div>
+
+
+                    <div class="col-md-3" >   
+                            <mat-form-field appearance="fill">
+                              <mat-label class="fuente">Estado Auditoría</mat-label>
+                              <mat-select [(ngModel)]="estadosInput" (selectionChange)='getSelectedOptions($event);' (closed)='getFiltros("", "", "", "","");' multiple selectedOptions="selectedOptions">
+                                <mat-option *ngFor="let estado of this.estadosFiltro" [value]="estado.id">{{estado.itemName}}</mat-option>
+                              </mat-select>
+                            </mat-form-field>
+                    </div> 
+
+                    <div class="col-md-2"> 
+                        <mat-form-field appearance="fill" class="n-variable"> 
+                            <mat-label class="ancho">Buscar</mat-label>
+                            <input matInput (keyup)="applyFilter($event)" [(ngModel)]="search">
+                          </mat-form-field> 
+                      </div>
+                    <div class="col-md-2 center" > 
+                      <div class="btn-abrir btn-general limpiar center"  (click)='this.cleanFilters()' style="padding-top: 10px;" >LIMPIAR </div>
+                                </div>    
+                    <div class="col-md-2 center" >
+                        <button mat-raised-button class="btn-basic  btn-general center" (click)="btnMedicion(false);"  
+                                *ngIf="this.permisos.Nueva_medicion.visible" 
+                                [ngClass]="{'elementdisabled': !this.permisos.Nueva_medicion.habilitado}">
+                          NUEVA MEDICIÓN
+                        </button>
+                    </div>
+                </div>                
+     
+            <div class="container-principal tabla-over">
+                <table mat-table [dataSource]="dataSource" matSort class="table-striped" class="borde-top-tabla">
+                  <ng-container matColumnDef="star" >
+                    <th mat-header-cell *matHeaderCellDef class="th-principal" style="width: 60px;"></th>
+                    <td mat-cell *matCellDef="let element" (click)="$event.stopPropagation()" style="width: 60px;">
+                        <button mat-icon-button [matMenuTriggerFor]="menu">
+                          <mat-icon class="color-more">more_vert</mat-icon>
+                        </button>
+                        <mat-menu #menu="matMenu">
+                          <button mat-menu-item class="btn-menu" (click)="openModalEliminar_Registro_Auditoria(element.idMedicion, element.medicion)"
+                          *ngIf="this.permisos.Eliminar_Registro_Auditoria.visible" 
+                          [ngClass]="{'elementdisabled': !this.permisos.Eliminar_Registro_Auditoria.habilitado}">
+                              Eliminar Registro Auditoria
+                          </button>
+                          <button mat-menu-item class="btn-menu" (click)="openModalCarguePoblacion(element.idMedicion, element.medicion, element.esConSubGrupo)"
+                                  *ngIf="this.permisos.Cargar_Poblacion.visible" 
+                                  [ngClass]="{'elementdisabled': !this.permisos.Cargar_Poblacion.habilitado}">
+                              Cargar población
+                          </button>
+                          <button mat-menu-item class="btn-menu" (click)="openModalCalificacionMasiva(element.idMedicion, element.medicion, element.esConSubGrupo)"
+                          *ngIf="this.permisos.Calificacion_Masiva.visible" 
+                          [ngClass]="{'elementdisabled': !this.permisos.Calificacion_Masiva.habilitado}">
+                              Calificacion masiva
+                          </button>
+                          <!-- <button mat-menu-item class="btn-menu"  *ngIf="this.rol== 'Admin'" disabled>Correr BOT</button> -->
+                          <button mat-menu-item class="btn-menu" (click)="openModalBtnMover(element)" 
+                                  *ngIf="this.permisos.Mover_Registros.visible" 
+                                  [ngClass]="{'elementdisabled': !this.permisos.Mover_Registros.habilitado}">
+                              Mover Registros
+                          </button>
+                          <button mat-menu-item class="btn-menu" (click)="btnAsignacion(element)"
+                                  *ngIf="this.permisos.Asignacion.visible" 
+                                  [ngClass]="{'elementdisabled': !this.permisos.Asignacion.habilitado}">
+                              Asignación
+                          </button>
+                          <button mat-menu-item class="btn-menu" (click)="btnMedicion(element)" 
+                                  *ngIf="this.permisos.Editar_Medicion.visible" 
+                                  [ngClass]="{'elementdisabled': !this.permisos.Editar_Medicion.habilitado}">
+                              Editar
+                          </button>
+                          <button mat-menu-item class="btn-menu" (click)='openDialogDuplicar(element)'
+                                  *ngIf="this.permisos.Duplicar_Medicion.visible" 
+                                  [ngClass]="{'elementdisabled': !this.permisos.Duplicar_Medicion.habilitado}">
+                              Duplicar medición
+                          </button>
+                          <button mat-menu-item class="btn-menu" (click)="btnDetalleVariable(element)"
+                                  *ngIf="this.permisos.Ver_Variables.visible" 
+                                  [ngClass]="{'elementdisabled': !this.permisos.Ver_Variables.habilitado}">
+                              Ver Variables
+                          </button>                               
+                          <button mat-menu-item class="btn-menu" (click)='openDialogEliminar(element)' 
+                                  *ngIf="this.permisos.Eliminar_Medicion.visible" 
+                                  [ngClass]="{'elementdisabled': !this.permisos.Eliminar_Medicion.habilitado}">
+                              Eliminar
+                          </button>
+                        </mat-menu>
+                    </td>
+                  </ng-container>
+                <ng-container matColumnDef="select">
+                    <th mat-header-cell *matHeaderCellDef class="th-principal center" style="width: 50px;">
+                        <mat-checkbox
+                                    (change)="$event ? masterToggle() : null"
+                                    [checked]="selection.hasValue() && isAllSelected()"
+                                    [indeterminate]="selection.hasValue() && !isAllSelected()"
+                                    [aria-label]="checkboxLabel()">
+                        </mat-checkbox>
+                    </th>
+                    <td mat-cell *matCellDef="let row" class="center">
+                        <mat-checkbox
+                                    (click)="$event.stopPropagation()"
+                                    (change)="$event ? selection.toggle(row) : null"
+                                    [checked]="selection.isSelected(row)"
+                                    [aria-label]="checkboxLabel(row)"
+                                    style="padding-left: 5px;">
+                        </mat-checkbox>
+                    </td>
+                </ng-container>
+                <ng-container matColumnDef="idbolsa">
+                  <th mat-header-cell *matHeaderCellDef   class="th-principal center"> Id</th>
+                  <td mat-cell *matCellDef="let element" class="row-cursor size-font center"> {{element.idMedicion}} </td>
+                </ng-container>
+                  <ng-container matColumnDef="medicion">
+                      <th mat-header-cell *matHeaderCellDef   class="th-principal"  style="width: 120px;" > Medición </th>
+                      <td mat-cell *matCellDef="let element" class="row-cursor size-font text-2"> {{element.medicion}} </td>
+                    </ng-container>
+                    <ng-container matColumnDef="bot">
+                        <th mat-header-cell *matHeaderCellDef   class="th-principal center"> BOT </th>
+                        <td mat-cell *matCellDef="let element" class="row-cursor size-font center">  
+                             <mat-icon 
+                            class="color-icon-details color-ico" [ngClass]="{'color-ico-primary': element.totalRegistros === 1}">
+                                    done
+                          </mat-icon> </td>
+                      </ng-container>
+                    <ng-container matColumnDef="madre">
+                        <th mat-header-cell *matHeaderCellDef   class="th-principal center"  style="width: 120px;"> E Madre </th>
+                        <td mat-cell *matCellDef="let element" class="row-cursor size-font center"> {{element.enfMadre}} </td>
+                      </ng-container>
+                    <ng-container matColumnDef="registros">
+                      <th mat-header-cell *matHeaderCellDef   class="th-principal center"> Registros </th>
+                      <td mat-cell *matCellDef="let element" class="row-cursor size-font center"> {{element.totalRegistros}} </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="asignados">
+                      <th mat-header-cell *matHeaderCellDef   class="th-principal center"> Asignados </th>
+                      <td mat-cell *matCellDef="let element" class="row-cursor size-font center"> {{element.totalAsignados}} </td>
+                    </ng-container>
+
+                     <ng-container matColumnDef="auditados">
+                        <th mat-header-cell *matHeaderCellDef   class="th-principal center"> Auditados </th>
+                        <td mat-cell *matCellDef="let element" class="row-cursor size-font center"> {{element.totalAuditados}} </td>
+                      </ng-container>
+
+                      <ng-container matColumnDef="periodo">
+                        <th mat-header-cell *matHeaderCellDef   class="th-principal center"> Periodo </th>
+                        <td mat-cell *matCellDef="let element" class="row-cursor size-font center"> 0 </td>
+                      </ng-container>
+
+                      <ng-container matColumnDef="estado">
+                        <th mat-header-cell *matHeaderCellDef   class="th-principal center"  style="width: 80px;">Auditoría</th>
+                        <td mat-cell *matCellDef="let element" class="row-cursor size-font center"> {{element.estadoAuditoria}} </td>
+                      </ng-container>
+                      
+                    <!-- <ng-container matColumnDef="lider">
+                        <th mat-header-cell *matHeaderCellDef   class="th-principal"> Líder </th>
+                        <td mat-cell *matCellDef="let element" class="row-cursor size-font">{{element.lider}}</td>
+                      </ng-container> -->
+                      <ng-container matColumnDef="resolucion">
+                        <th mat-header-cell *matHeaderCellDef   class="th-principal center" style="min-width: 120px;"> Resolución </th>
+                        <td mat-cell *matCellDef="let element" class="row-cursor size-font center">{{element.resolucion}}</td>
+                      </ng-container>
+                      <!-- <ng-container matColumnDef="progreso">
+                        <th mat-header-cell *matHeaderCellDef   class="th-principal center" > Progreso </th>
+                        <td mat-cell *matCellDef="let element" class="row-cursor size-font center">{{element.progreso == null ? '0%' : element.progreso  +'%'}} </td>
+                      </ng-container> -->
+                      <ng-container matColumnDef="fechaInicio">
+                        <th mat-header-cell *matHeaderCellDef   class="th-principal center"> Fecha Inicio </th>
+                        <td mat-cell *matCellDef="let element" class="row-cursor size-font center">{{element.fechaInicio | date:'yyyy-MM-dd'}}</td>
+                      </ng-container>
+                      <ng-container matColumnDef="fechaFin">
+                        <th mat-header-cell *matHeaderCellDef   class="th-principal center"> Fecha Fin </th>
+                        <td mat-cell *matCellDef="let element" class="row-cursor size-font center">{{element.fechaFin | date:'yyyy-MM-dd'}}</td>
+                      </ng-container>
+                      <ng-container matColumnDef="fechaCreacion">
+                        <th mat-header-cell *matHeaderCellDef   class="th-principal center"> Creación </th>
+                        <td mat-cell *matCellDef="let element" class="row-cursor size-font center">{{element.fechaCreacion | date:'yyyy-MM-dd'}}</td>
+                      </ng-container>
+                      <ng-container matColumnDef="ultimaModificacion">
+                        <th mat-header-cell *matHeaderCellDef   class="th-principal center">Modificación </th>
+                        <td mat-cell *matCellDef="let element" class="row-cursor size-font center">{{element.ultimaModificacion | date:'yyyy-MM-dd'}} </td>
+                      </ng-container>
+                       
+                      <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
+                      <tr mat-row *matRowDef="let row; columns: displayedColumns;"  class="row-hover"></tr>
+                  </table>
+              </div>
+          
+              <!-- INICIA PAGINADOR -->            
+
+              <div *ngIf="this.dataTable" style="margin-top: 20px;">
+                <nav aria-label="Page navigation example" *ngIf="this.dataTable.length > 0">
+                  <ul class="pagination justify-content-center">
+                      <li class="page-item"  [ngClass]="{'page-item disabled': pageNumber == 1}">
+                          <a class="page-link" (click)="this.getFiltros(this.IdEnfMadre,this.IdPeriodo,1, this.itemsPerpagina,'')">
+                              <</a>
+                      </li>
+                      <li class="page-item" [ngClass]="{'page-item disabled': pageNumber == 1}">
+                          <a class="page-link" (click)="this.getFiltros(this.IdEnfMadre,this.IdPeriodo,pageNumber, this.itemsPerpagina,'')">
+                              <<</a>
+                      </li>
+                      <li class="page-item" [ngClass]="{'page-item active': pageNumber === page}" *ngFor="let page of pager.pages"><a class="page-link" (click)="this.getFiltros(this.IdEnfMadre,this.IdPeriodo,page, this.itemsPerpagina,'')">{{page}}</a></li>
+                      <li class="page-item" [ngClass]="{'page-item disabled': pageNumber === pager.totalPages}"><a class="page-link" (click)="this.getFiltros(this.IdEnfMadre,this.IdPeriodo,(pageNumber + 1) , this.itemsPerpagina,'')">>></a></li>
+                      <li class="page-item" [ngClass]="{'page-item disabled': pageNumber === pager.totalPages-1}"><a class="page-link" (click)="this.getFiltros(this.IdEnfMadre,this.IdPeriodo,pager.totalPages, this.itemsPerpagina,'')">></a></li>
+              
+                      <div  class="selectAuditor" style="width: 100px;">
+                        <mat-form-field appearance="fill"  >
+                          <mat-label>Cant. por página</mat-label>
+                          <mat-select  [(ngModel)]="itemsPerpagina" name="itemsPerpagina" >
+                            <mat-option class="text-center" (click)="this.getFiltros(this.IdEnfMadre,this.IdPeriodo,1, item,'')" *ngFor="let item of sizeList" [value]="item">
+                              {{item}}
+                            </mat-option>
+                          </mat-select>
+                        </mat-form-field>                   
+                      </div>
+                  </ul>               
+              </nav>
+              
+            </div> 
+            <div class="d-flex justify-content-end">  
+                
+            </div> 
+            <div class="row" *ngIf="this.totalRegister > 0"  style="text-align: right; color: #A03781; width: 100%;">
+              <label>Total Mediciones: <b>{{this.totalRegister}}</b></label>
+            </div>
+            <!-- FINALIZA PAGINADOR -->
+          </mat-card> 
+
+</div>

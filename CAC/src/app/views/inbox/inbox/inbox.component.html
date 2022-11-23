@@ -1,0 +1,31 @@
+<app-card-percent 
+    [title]="'Buzón de mensajes'"
+    [page]="'undefined'"
+    [subtitle]="'Contacte a su líder'"
+></app-card-percent>
+
+<mat-card>
+  <div class="row text-center">
+      <div class="col-md-6" (click)="selectTab(1)" [ngClass]="{ 'tabs-open' : tab1, 'tabs-closed' : tab2 }">RECIBIDOS</div>
+      <div class="col-md-6" (click)="selectTab(2)" [ngClass]="{ 'tabs-open' : tab2, 'tabs-closed' : tab1 }">ENVIADOS</div>
+  </div>
+  <div class="row">
+    <div class="col-md-12 pd" >
+        <br>
+        <app-received-inbox *ngIf="tab1"></app-received-inbox>
+        <app-send-inbox *ngIf="tab2"></app-send-inbox>
+    </div>
+</div>
+
+
+<div class="row">
+    <div class="col-md-12">
+        <button mat-raised-button class="btn-basic btn-new-inbox" (click)="openDialog()">Nuevo Mensaje
+            <mat-icon>expand_less</mat-icon>
+        </button>
+    </div>
+</div>
+
+
+</mat-card>
+

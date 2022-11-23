@@ -1,0 +1,98 @@
+
+
+
+  
+
+        <div class="row btns-superior">  
+            
+            <div class="col-md-3">
+                <form [formGroup]="form">      
+                    <mat-form-field appearance="fill" class="t-variable" floatLabel='never'>
+                    <mat-label class="fuente">Seleccione un rol </mat-label>    
+                    <mat-select formControlName='rol' id="rol" (selectionChange)="changeRol()">
+                        <mat-option class="text-center"  *ngFor="let item of listaRoles"  [value]="item.id">
+                        {{item.name}}
+                        </mat-option>
+                    </mat-select>
+                    </mat-form-field>  
+                    </form>                  
+            </div>
+          
+            
+          <!--
+             <div class="col-md-3" *ngIf="buscorol">  
+                <form [formGroup]="form">     
+                    <mat-form-field appearance="fill" class="t-variable" floatLabel='never'>      
+                        <mat-label class="fuente">Buscar Nombre</mat-label>                
+                        <input matInput class="input-config" formControlName='buscarcodigo'  >
+                        <mat-icon matSuffix class="fondo-icon">search</mat-icon>
+                      </mat-form-field>     
+                    </form>  
+            </div> 
+          -->
+            
+            
+        </div>
+       
+  <div *ngIf="buscorol">
+    <div class="container-principal margen tabla-over" >
+      <table mat-table [dataSource]="dataSource2" matSort class="w-100" >
+         
+      
+          <ng-container matColumnDef="tipo">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header class="th-principal" style="padding-left: 30px !important; ">Tipo</th>
+              <td mat-cell *matCellDef="let element" class="row-cursor size-font fuente"> 
+                {{element.tipo}}
+                </td>
+            </ng-container>
+           
+  
+            <ng-container matColumnDef="nombre">
+              <th mat-header-cell *matHeaderCellDef class="th-principal">  Nombre  </th>
+              <td mat-cell *matCellDef="let element">
+                  {{element.nombre}} 
+              </td>
+          </ng-container>
+          <ng-container matColumnDef="visible">
+              <th mat-header-cell *matHeaderCellDef class="th-principal">  Visible  </th>
+              <td mat-cell *matCellDef="let element">
+                <section class="example-section">
+                    <mat-slide-toggle
+                        (change)="actualizarVisible($event,element)"
+                        class="example-margin"
+                        [checked]="element.visible"
+                        
+                        >
+                      {{element.visible?'Activo':'Inactivo'}}
+                    </mat-slide-toggle>
+                  </section>
+              </td>
+          </ng-container>  
+          <ng-container matColumnDef="habilitado">
+            <th mat-header-cell *matHeaderCellDef class="th-principal">  Habilitado  </th>
+            <td mat-cell *matCellDef="let element">
+              <section class="example-section">
+                  <mat-slide-toggle
+                      (change)="actualizarHabilitado($event,element)"
+                      class="example-margin"
+                      [checked]="element.habilitado"
+                      
+                      >
+                    {{element.habilitado?'Habilitado':'Inhabilitado'}}
+                  </mat-slide-toggle>
+                </section>
+            </td>
+        </ng-container>      
+          <ng-container matColumnDef="guia">
+            <th mat-header-cell *matHeaderCellDef class="th-principal">  Guia  </th>
+            <td mat-cell *matCellDef="let element">
+                <button mat-raised-button class="btn-basic btn-general" (click)="openModalImg(element.img)" >Ver</button>
+            </td>
+        </ng-container>         
+            <tr mat-header-row *matHeaderRowDef="displayedColumns2; sticky: true"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns2;"></tr>
+        </table>
+    </div>
+   
+  </div>
+   

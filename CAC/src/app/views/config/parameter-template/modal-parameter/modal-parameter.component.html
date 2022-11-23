@@ -1,0 +1,23 @@
+<form>
+    <div class="col-12 pb-5">                   
+        <mat-form-field  class="example-form" appearance="fill">
+            <mat-label>Descripción</mat-label>
+            <textarea matInput  class="example-form"  name='descripcion'  [(ngModel)]="data.descripcion"></textarea>
+          </mat-form-field>
+
+    </div>
+
+    <div class="col-12  pb-5">                   
+        <mat-form-field  class="example-form" appearance="fill">
+            <mat-label>Valor</mat-label>
+            <textarea matInput class="example-form"   name='valor'  [(ngModel)]="data.valor"></textarea>
+          </mat-form-field>
+
+    </div>
+
+    <div class="col-md-12">
+        <button  mat-raised-button class="btn-basic  btn-general float-right" (click)="save()">GUARDAR</button>
+       </div>
+
+</form>
+

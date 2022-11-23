@@ -1,0 +1,153 @@
+<h1 mat-dialog-title class="title">Calculadora {{name}}</h1>
+<form [formGroup]="calculadoraTFG" *ngIf="data.tipoCalculadora==_enumCalculadora.calculadoraTFG">
+  <div mat-dialog-content>
+    <div class="row">
+      <div class="col-6">
+        <mat-form-field appearance="fill"> 
+          <mat-label class="input-bold">Edad</mat-label>
+          <input formControlName="edad" name="edad"   matInput (change)="onchangeEdad()">
+          <mat-hint class="fieldObligatory" *ngIf="!calculadoraTFG.controls.edad.valid">Edad invalida</mat-hint>
+        </mat-form-field> 
+      </div>
+    </div>
+    
+  
+  <div *ngIf="calculadoraTFG.controls.edad.valid">
+    <div class="row">
+      <div class="col-6">
+        <mat-form-field appearance="fill" class="t-variable"  >
+          <mat-label>Seleccione genero</mat-label>
+          <mat-select  formControlName="hombre">
+            <mat-option *ngFor="let element of type_genero" [value]="element.id">
+              {{element.value}}
+            </mat-option>
+          </mat-select>
+          <mat-hint class="fieldObligatory" *ngIf="!calculadoraTFG.controls.hombre.valid">Genero requerido</mat-hint>
+        </mat-form-field>
+      </div>
+      <div class="col-6">
+        <mat-form-field appearance="fill"> 
+          <mat-label class="input-bold">Creatinina</mat-label>
+          <input formControlName="creatinina" name="creatinina"   matInput>
+          <mat-hint class="fieldObligatory" *ngIf="!calculadoraTFG.controls.creatinina.valid">Creatinina invalida</mat-hint>
+        </mat-form-field> 
+      </div>
+      </div>
+      <div class="row">
+      <div class="col-6" *ngIf="calculadoraTFG.controls.edad.value>=18"> 
+        <mat-form-field appearance="fill" > 
+          <mat-label class="input-bold">Peso</mat-label>
+          <input formControlName="peso" name="peso"   matInput >
+          <mat-hint class="fieldObligatory" *ngIf="!calculadoraTFG.controls.peso.valid">Peso invalido</mat-hint>
+        </mat-form-field> 
+      </div>
+      <div class="col-6" *ngIf="calculadoraTFG.controls.edad.value<18"> 
+        <mat-form-field appearance="fill" > 
+          <mat-label class="input-bold">Estatura</mat-label>
+          <input formControlName="estatura" name="estatura"   matInput>
+          <mat-hint class="fieldObligatory" *ngIf="!calculadoraTFG.controls.estatura.valid">Estatura invalida</mat-hint>
+        </mat-form-field> 
+      </div>
+    </div>
+    
+  </div>
+   
+    
+  </div>
+</form>
+
+<form [formGroup]="calculadoraKRU" *ngIf="data.tipoCalculadora==_enumCalculadora.calculadoraKRU">
+  <div mat-dialog-content>
+    <div class="row">
+      <div class="col-6">
+        <mat-form-field appearance="fill" class="t-variable"  >
+          <mat-label>Tipo</mat-label>
+          <mat-select  formControlName="hemodialisis" (selectionChange)="onchangeHemodialisis()">
+            <mat-option *ngFor="let element of type_hemodialisis" [value]="element.id">
+              {{element.value}}
+            </mat-option>
+          </mat-select>
+          <mat-hint class="fieldObligatory" *ngIf="!calculadoraKRU.controls.hemodialisis.valid">Respuesta requerida</mat-hint>
+        </mat-form-field>
+      </div>
+      </div>
+        <div *ngIf="calculadoraKRU.controls.hemodialisis.valid">
+          <div class="row">
+            <div class="col-6">
+            <mat-form-field appearance="fill"> 
+              <mat-label class="input-bold">Nitrogeno Urinario</mat-label>
+              <input formControlName="nitrogenoUrinario" name="nitrogenoUrinario"   matInput>
+              <mat-hint class="fieldObligatory" *ngIf="!calculadoraKRU.controls.nitrogenoUrinario.valid">Nitrogeno Urinario invalido</mat-hint>
+            </mat-form-field>  
+            </div>
+            <div class="col-6">
+            <mat-form-field appearance="fill">
+              <mat-label class="input-bold">Volumen Urinario</mat-label>
+              <input formControlName="volumenUrinario" name="volumenUrinario"   matInput >
+              <mat-hint class="fieldObligatory" *ngIf="!calculadoraKRU.controls.volumenUrinario.valid">Volumen Urinario invalido</mat-hint>
+            </mat-form-field> 
+          </div>
+          </div> 
+          <div class="row">
+            <div class="col-6">
+            <mat-form-field appearance="fill"> 
+              <mat-label class="input-bold">BrunPre</mat-label>
+              <input formControlName="brunPre" name="brunPre"   matInput>
+              <mat-hint class="fieldObligatory" *ngIf="!calculadoraKRU.controls.brunPre.valid">BrunPre invalido</mat-hint>
+            </mat-form-field> 
+          </div>
+          <div class="col-6">
+            <mat-form-field appearance="fill" *ngIf="calculadoraKRU.controls.hemodialisis.value"> 
+              <mat-label class="input-bold">BrunPost</mat-label>
+              <input formControlName="brunPost" name="brunPost"   matInput>
+              <mat-hint class="fieldObligatory" *ngIf="!calculadoraKRU.controls.brunPost.valid">BrunPost invalido</mat-hint>
+            </mat-form-field> 
+          </div>
+        </div>
+      </div>
+      </div>
+</form>
+
+<form [formGroup]="promedio" *ngIf="data.tipoCalculadora==_enumCalculadora.promedio">
+  <div mat-dialog-content>
+    <div class="row">
+      <div class="col-6">
+        <button mat-button (click)="agregar()"   class="btn-new" >Agregar</button>
+      </div>
+      <div class="col-6">
+        <button mat-button (click)="eliminar()"  class="btn-new" *ngIf="listaPromedio.length>2" >Eliminar</button>
+      </div>
+    </div>
+        <div class="row">
+            <div class="col-6" *ngFor="let e  of listaPromedio; let i = index">
+            <mat-form-field appearance="fill"> 
+              <mat-label class="input-bold">Valor {{ i+1 }}</mat-label>
+                <input [formControlName]="'valor'+i"  matInput>
+                <mat-hint class="fieldObligatory" *ngIf="!promedio.get('valor'+i)!.valid">Respuesta requerida</mat-hint>
+              </mat-form-field>  
+            </div>
+          </div> 
+         
+      </div>
+</form>
+
+<div mat-dialog-actions class="btns">
+  <div class="row" *ngIf="resultado!=''">
+    <div class="col-6" *ngIf="resultado!=''">
+      <mat-form-field appearance="fill"> 
+        <mat-label class="input-bold">Resultado</mat-label>
+        <input [ngModel]="resultado" name="resultado"   matInput [disabled]="true">
+      </mat-form-field>  
+    </div>
+    <div class="col-6">
+      <button mat-button   [disabled]="!calculadoraTFG.valid && !calculadoraKRU.valid  && !promedio.valid" class="btn-new" (click)="onsubmit()">Recalcular</button>
+    </div>
+  </div>
+  <button mat-button cdkFocusInitial class="btn-basic" [disabled]="!calculadoraTFG.valid && !calculadoraKRU.valid && !promedio.valid" (click)="onsubmit()" *ngIf="resultado==''">Calcular</button>
+</div>
+
+<div mat-dialog-actions class="btns">
+    <button mat-button  (click)="enviar()" cdkFocusInitial class="btn-basic" *ngIf="resultado!=''">Aceptar</button>
+  <button mat-button (click)="onNoClick()" class="btn-new">Cancelar</button>
+  
+</div>

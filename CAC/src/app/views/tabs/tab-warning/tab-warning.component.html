@@ -1,0 +1,95 @@
+<div class="tab-right" *ngIf="this.Default">
+    <div class="row">
+        
+        <div *ngIf="this.permisos.Errores.visible && this.Error" 
+             [ngClass]="{'elementdisabled': !this.permisos.Errores.habilitado}"
+             class="col-md-12 separador">
+            <mat-icon
+                matTooltip="Reportar error"
+                matTooltipPosition="left"
+                (click)="openTab( 1, this.Autorizacion )">report_problem_outline</mat-icon>
+        </div>
+        <mat-divider *ngIf="this.permisos.Errores.visible && this.Error">
+        </mat-divider>
+
+
+        <div class="col-md-12 separador"
+             *ngIf="this.permisos.Soportes.visible && this.Soportes" 
+             [ngClass]="{'elementdisabled': !this.permisos.Soportes.habilitado}">
+            <mat-icon
+                matTooltip="Soportes"
+                matTooltipPosition="left"
+                (click)="openTab( 2, this.Autorizacion )">folder_open</mat-icon>
+        </div>
+        <mat-divider *ngIf="this.Soportes"></mat-divider>
+
+
+        <div class="col-md-12 separador"
+            *ngIf="this.permisos.Detalles_del_registro_en_auditoria.visible && this.Detalles" 
+            [ngClass]="{'elementdisabled': !this.permisos.Detalles_del_registro_en_auditoria.habilitado}">
+            <mat-icon
+                matTooltip="Detalles"
+                matTooltipPosition="left"                
+                (click)="openTab( 3, this.Autorizacion )">assignment</mat-icon>
+        </div>
+        <mat-divider *ngIf="this.permisos.Detalles_del_registro_en_auditoria.visible && this.Detalles"></mat-divider>
+
+
+        <div *ngIf="this.Contacto" class="col-md-12 separador">
+            <mat-icon
+                matTooltip="Contacto lider"
+                matTooltipPosition="left"
+                (click)="openTab( 4, this.Autorizacion )">quiz</mat-icon>
+        </div>
+        <mat-divider *ngIf="this.Contacto"></mat-divider>
+
+
+        <div class="col-md-12 separador"
+            *ngIf="this.permisos.CalificacionIPS.visible && this.Califica" 
+            [ngClass]="{'elementdisabled': !this.permisos.CalificacionIPS.habilitado}">
+            <mat-icon
+                matTooltip="Califica IPS"
+                matTooltipPosition="left"
+                (click)="openTab( 5, this.Autorizacion )">star_rate</mat-icon>
+        </div>
+        <mat-divider *ngIf="this.permisos.CalificacionIPS.visible && this.Califica" ></mat-divider>
+
+
+        <div class="col-md-12 separador"
+            *ngIf="this.permisos.Banco_de_Informacion.visible && this.Banco" 
+            [ngClass]="{'elementdisabled': !this.permisos.Banco_de_Informacion.habilitado}">
+            <mat-icon
+                matTooltip="Banco info"
+                matTooltipPosition="left"
+                (click)="openTab( 6, this.Autorizacion )">bookmark</mat-icon>
+        </div>
+       <!--
+            <mat-divider *ngIf="this.glosaM"></mat-divider>
+
+        <div *ngIf="this.glosaM" class="col-md-12 separador">
+                <mat-icon
+                matTooltip="Glosa masiva"
+                matTooltipPosition="left"
+                (click)="openTab( 7, this.Autorizacion )"><img src="./../../../../assets/imgs/g.svg" ></mat-icon>
+        </div>
+        <mat-divider *ngIf="this.glosaM"></mat-divider>
+
+
+        <div *ngIf="this.HallazgoM" class="col-md-12 separador">
+            <mat-icon
+                matTooltip="Hallazgo masivo"
+                matTooltipPosition="left"
+                (click)="openTab( 8, this.Autorizacion )"><img src="./../../../../assets/imgs/h.svg" ></mat-icon>
+        </div>
+        <mat-divider *ngIf="this.ExtemporaneidadM"></mat-divider>
+
+        <div *ngIf="this.ExtemporaneidadM" class="col-md-12 separador">
+            <mat-icon
+                matTooltip="Extemporaneidad masiva"
+                matTooltipPosition="left"
+                (click)="openTab( 9, this.Autorizacion )"><img src="./../../../../assets/imgs/e.svg" ></mat-icon>
+        </div>
+       -->
+    </div>
+    
+</div>

@@ -1,0 +1,38 @@
+.header-nav{
+    background: #FFFFFF 0% 0% no-repeat padding-box;
+    box-shadow: 0px 3px 6px #00000029;
+    opacity: 1;
+    height: 69px;
+  }
+
+  .mat-toolbar-single-row {
+    padding: 0px 5%;
+  }
+
+  .example-spacer {
+    flex: 1 1 auto;
+  }
+
+  .tollbar-menu{
+      background-color: red !important;
+  }
+
+  
+
+  .avatar-background{
+      background-color: #A03781;
+      color: #fff;
+  }
+
+  button.mat-menu-item:hover {
+    width: 100%;
+    background: #A03781;
+    color: #fff;
+}
+
+.mat-menu-item {
+  line-height: 28px ;
+  height: 34px;
+}
+
+

@@ -1,0 +1,84 @@
+<div class="row">
+    <div class="col-md-1">
+       <!--Left bar-->
+
+       <div class="tab-modal">
+        <div class="row">
+            <div    class="col-md-12"
+                    *ngIf="this.permisos.Errores.visible && this.Error" 
+                    [ngClass]="{'elementdisabled': !this.permisos.Errores.habilitado}">
+                <mat-icon [ngClass]="{'seleccionado': active === 1}"
+                    matTooltip="Reportar error"
+                    matTooltipPosition="left"
+                    (click)="selectTab( 1 )">report_problem_outline</mat-icon>
+            </div>
+            <mat-divider *ngIf="this.permisos.Errores.visible && this.Error"></mat-divider>
+            <div class="col-md-12"
+                 *ngIf="this.permisos.Soportes.visible && this.Soportes" 
+                 [ngClass]="{'elementdisabled': !this.permisos.Soportes.habilitado}">
+                <mat-icon [ngClass]="{'seleccionado': active === 2}"
+                    matTooltip="Soportes"
+                    matTooltipPosition="left"
+                    (click)="selectTab( 2 )">folder_open</mat-icon>
+            </div>
+            <mat-divider *ngIf="this.permisos.Soportes.visible && this.Soportes" ></mat-divider>
+            <div  class="col-md-12"
+                *ngIf="this.permisos.Detalles_del_registro_en_auditoria.visible && this.Detalles" 
+                [ngClass]="{'elementdisabled': !this.permisos.Detalles_del_registro_en_auditoria.habilitado}">
+                <mat-icon [ngClass]="{'seleccionado':active === 3}"
+                    matTooltip="Detalles"
+                    matTooltipPosition="left"
+                    (click)="selectTab( 3 )">assignment</mat-icon>
+            </div>
+            <mat-divider  *ngIf="this.permisos.Detalles_del_registro_en_auditoria.visible && this.Detalles" ></mat-divider>
+            <div *ngIf="this.Contacto" class="col-md-12">
+                <mat-icon [ngClass]="{'seleccionado':active === 4}"
+                    matTooltip="Contacto lider"
+                    matTooltipPosition="left"
+                    (click)="selectTab( 4 )">quiz</mat-icon>
+            </div>
+            <mat-divider *ngIf="this.Contacto"></mat-divider>
+            <div class="col-md-12" 
+                *ngIf="this.permisos.CalificacionIPS.visible && this.Califica" 
+                [ngClass]="{'elementdisabled': !this.permisos.CalificacionIPS.habilitado}">
+                <mat-icon [ngClass]="{'seleccionado': active === 5}"
+                    matTooltip="Califica IPS"
+                    matTooltipPosition="left"
+                    (click)="selectTab( 5 )">star_rate</mat-icon>
+            </div>
+            <mat-divider *ngIf="this.permisos.CalificacionIPS.visible && this.Califica"></mat-divider>
+            <div class="col-md-12" 
+                *ngIf="this.permisos.Banco_de_Informacion.visible && this.Banco" 
+                [ngClass]="{'elementdisabled': !this.permisos.Banco_de_Informacion.habilitado}">
+                <mat-icon [ngClass]="{'seleccionado': active === 6}"
+                    matTooltip="Banco info"
+                    matTooltipPosition="left"
+                    (click)="selectTab( 6 )">bookmark</mat-icon>
+            </div>
+           
+        </div>
+        
+    </div>
+
+
+
+    </div>
+    <div class="col-md-10">
+        <div class="top-bar-blue"></div>
+        
+        <div class="cont-bar">
+
+            <app-report-error *ngIf="active === 1"></app-report-error>
+            <app-support *ngIf="active === 2"></app-support>
+            <app-details *ngIf="active === 3"></app-details>
+            <app-contact-lead *ngIf="active === 4"></app-contact-lead>
+            <app-qualify *ngIf="active === 5"></app-qualify>
+            <app-info *ngIf="active === 6"></app-info>
+            <app-hallazgo-masiva *ngIf="active === 7"></app-hallazgo-masiva>
+            <app-detalle-glosa *ngIf="active === 8"></app-detalle-glosa>
+            <app-extemporanea *ngIf="active === 9"></app-extemporanea>
+            
+        </div>
+    </div>
+</div>
+

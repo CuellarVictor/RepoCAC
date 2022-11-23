@@ -1,0 +1,13 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net5.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\AuditCAC.Domain\AuditCAC.Domain.csproj" />
+    <ProjectReference Include="..\AuditCAC.ExternalServices\AuditCAC.ExternalServices.csproj" />
+    <ProjectReference Include="..\AuditCAC.MainCore.Module\AuditCAC.MainCore.Module.csproj" />
+  </ItemGroup>
+
+</Project>

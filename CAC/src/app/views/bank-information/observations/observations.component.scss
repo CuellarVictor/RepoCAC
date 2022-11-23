@@ -1,0 +1,44 @@
+.header-inbox{
+    background: #A03781 0% 0% no-repeat padding-box;
+border-radius: 4px 0px 0px 4px;
+opacity: 1;
+color: #fff;
+width: 100%;
+padding: 10px;
+font-weight: 500;
+}
+::ng-deep .my-custom-dialog-class {
+    mat-dialog-container {
+        position: fixed;
+        padding: 0px !important;
+        width: 550px;
+        height: 305px;
+        background-color: #F3F2F3;
+        bottom: 0;
+    }
+  }
+
+.pd-new-inbox{
+    padding: 23px 35px;
+}
+
+.full{
+    width: 100%;
+}
+.text::placeholder { color: red; }
+
+.font{
+    font-size: 14px;
+}
+
+.elementdisabled,
+.btn[disabled],
+fieldset[disabled] .btn {
+    pointer-events: none;
+    cursor: not-allowed;
+    filter: alpha(opacity=80);
+    -webkit-box-shadow: none;
+    box-shadow: none;
+    opacity: 0.4;
+    cursor: not-allowed;  
+}

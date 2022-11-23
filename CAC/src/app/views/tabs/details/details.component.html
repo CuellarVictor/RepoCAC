@@ -1,0 +1,50 @@
+<div class="row">
+    <div class="col-md-12">
+        <h3 class="tab-title">Detalles del registro en auditoría</h3>
+    </div>
+    <div hidden class="col-md-12">
+        <div class="input-group ">
+            
+            <input type="text" class="input-bold" placeholder="Búsqueda por palabra clave" >
+            <mat-icon class="input-icon">search</mat-icon>
+          </div>
+    </div>
+    <div hidden class="col-md-12" style="margin-top: 10px;">
+        <div class="input-group mb-3">
+            <select class="form-select  input-bold" id="inputGroupSelect01">
+              <option selected>Filtrar por</option>
+              <option value="1">One</option>
+              <option value="2">Two</option>
+              <option value="3">Three</option>
+            </select>
+          </div>
+    </div>
+
+    <div hidden class="col-md-12">
+        <h3 class="tab-title">Resultados de la búsqueda</h3>
+    </div>
+    <div *ngFor="let item of this.objObservaciones">
+        <mat-card>
+            <div class="row">
+                <div class="col-md-12 ancho">
+                    {{item.nombres}} {{item.apellidos}}
+                    <br>
+                    {{item.nombreRol}} - Codigo:  {{item.codigo}}
+                    <br> 
+                    {{item.createdDate | date:'d MMM y h:mm a'}}
+                    <br>
+                    <span class="color-tipificacion">
+                        {{item.nombreTipoObservacion}}
+                    </span>
+                    
+                </div>
+                <div class="col-md-12 txt-gris">
+                    {{item.observacion}}
+                </div>
+            </div>
+        </mat-card>
+        <br>
+    </div>    
+</div>
+
+

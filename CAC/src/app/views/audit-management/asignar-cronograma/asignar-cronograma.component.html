@@ -1,0 +1,130 @@
+<app-card-percent
+    [title]='"Maria Camila, aquí puede gestionar sus auditorias"'
+    [page]="'summary'"
+    [progresoDia]='this.progresoDia'
+    [totales]='this.diasTotales'
+></app-card-percent>
+
+<mat-card class="card-body">
+    <div class="row title">
+        <div class="col-md-12 text-title">
+          Detalle de su asignación
+      </div>
+    </div>
+    <div class="contenedor">
+
+      <div class="row subtitle">
+        <div class="col-md-2 st ">
+            Cáncer de mama
+          </div>
+        <div class="col-md-2 text-subtitle">
+          <p class="text-subtitle-a">Resolución</p>
+          <p class="text-subtitle-b">220423</p>
+        </div>
+        <div class="col-md-2 text-subtitle">
+            <p class="text-subtitle-a">Periodo</p>
+            <p class="text-subtitle-b">2021-6</p>
+          </div>
+          <div class="col-md-2 text-subtitle">
+            <p class="text-subtitle-a">Total de registros</p>
+            <p class="text-subtitle-b">135466</p>
+          </div>
+          <div class="col-md-2 text-subtitle">
+            <p class="text-subtitle-a">Total de entidades</p>
+            <p class="text-subtitle-b">78</p>
+          </div>
+      </div>
+    </div>
+
+    <form >
+          <div class="row">
+              <div class="col-md-3">
+                <mat-form-field appearance="fill" class="t-variable"> 
+                    <mat-label class="input-bold">Periodo</mat-label>
+                    <input matInput>
+                  </mat-form-field>  
+              </div>
+
+              <div class="col-md-3">     
+                <mat-form-field appearance="fill" class="t-variable"> 
+                    <mat-label class="input-bold">Nº registros por asignar</mat-label>
+                    <input matInput>
+                  </mat-form-field>      
+              </div>
+
+              <div class="col-md-3" style="width: 23%;">
+                <mat-form-field appearance="fill" class="t-variable"> 
+                    <mat-label class="input-bold">Nº entidades por asignar</mat-label>
+                    <input matInput>
+                  </mat-form-field>  
+              </div>  
+
+              <div class="col-md-2" style="width: 11%;">
+                <button mat-button class="btn-new btn1">CALCULAR ASIGNACIÓN</button> 
+              </div>
+
+          </div>
+      </form>
+
+    <div class="row">
+        <div class="col-md-12">
+          <table mat-table [dataSource]="dataSource2" matSort class="table-striped">
+
+            <ng-container matColumnDef="auditordesignado">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header class="th-principal">Auditor asignado</th>
+              <td mat-cell *matCellDef="let element" class="row-cursor columna"> {{element.auditor }} </td>
+            </ng-container>
+
+
+            <ng-container matColumnDef="registros">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header class="th-principal">Registros</th>
+              <td mat-cell *matCellDef="let element" class="row-cursor columna"> {{element.registro}} </td>
+            </ng-container>
+
+
+
+            <ng-container matColumnDef="entidades">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header class="th-principal">Entidades</th>
+              <td mat-cell *matCellDef="let element" class="row-cursor columna"> {{element.entidades}} </td>
+            </ng-container>
+
+
+                <ng-container matColumnDef="horas">
+                  <th mat-header-cell *matHeaderCellDef mat-sort-header class="th-principal"> Horas aprox </th>
+                  <td mat-cell *matCellDef="let element" class="row-cursor columna">{{element.horas}}</td>
+                </ng-container>
+              
+
+                <ng-container matColumnDef="disponible">
+                  <th mat-header-cell *matHeaderCellDef mat-sort-header class="th-principal"> Disponible</th>
+                  <td mat-cell *matCellDef="let row" class="columna">
+                    <mat-checkbox
+                                (click)="$event.stopPropagation()"
+                                (change)="$event ? selection.toggle(row) : null"
+                                [checked]="selection.isSelected(row)"
+                                [aria-label]="checkboxLabel(row)">
+                    </mat-checkbox>
+                </td>
+            </ng-container>
+                  <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
+                  <tr mat-row *matRowDef="let row; columns: displayedColumns;" ></tr>
+              </table>
+        </div>
+    </div>
+
+
+    <div  class="row btns-final">
+        <div   class="col-md-3">
+            <button mat-button class="btn-new" >AÑADIR AUDITOR</button> 
+        </div>
+        <div   class="col-md-3">
+            <button mat-button class="btn-new">EJECUTAR ASIGNACIÓN</button>
+        </div>        
+
+    </div>
+
+
+</mat-card>
+
+
+

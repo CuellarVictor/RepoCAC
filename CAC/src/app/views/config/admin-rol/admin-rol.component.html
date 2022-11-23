@@ -1,0 +1,57 @@
+
+<div class="parrafo">Administrador de roles y asignación tipo lider</div>
+<div>
+<div class="row" *ngIf='this.listaRol'>        
+<div class="col-md-6" *ngFor="let item of this.listaRol; let pointIndex=index">
+<div class="row">
+    <div class="col-md-4">
+        <mat-checkbox
+            (change)="editarItemAction(item.esLider,nombreitem.value,item)"
+            [checked]="item.esLider"            
+        >Lider
+    </mat-checkbox>
+    </div>
+    <div class="col-md-8">
+        <mat-form-field appearance="fill" class="t-variable" floatLabel='never' >
+            <mat-label class="input-bold">Nombre Rol</mat-label>
+            <input  matInput #nombreitem class="input-config" value={{item.name}}>
+            <mat-icon matSuffix class="fondo-icon" (click)="eliminarItemAction(item,'2')" *ngIf="nombreitem.value==item.name">clear</mat-icon>                 
+            <mat-icon matSuffix class="fondo-icon" (click)="editarItemAction(!item.esLider,nombreitem.value,item)" *ngIf="nombreitem.value!=item.name">check</mat-icon>
+        </mat-form-field>  
+    </div>
+</div>
+    
+</div>
+<div class="col-md-6" *ngIf="activarCrearItem">
+    <div class="row">
+        <div class="col-md-4">
+            <mat-checkbox
+                [(ngModel)]="checkSaveLider"
+                [checked]="checkSaveLider"            
+            >Lider
+        </mat-checkbox>
+        </div>
+        <div class="col-md-8">
+            <mat-form-field appearance="fill" class="t-variable" floatLabel='never' >
+                <mat-label class="input-bold">Nuevo Rol</mat-label>
+                  <input matInput #nuevo class="input-config">
+                  <mat-icon matSuffix class="fondo-icon" (click)="activarCrearItemAction(false)" *ngIf="nuevo.value==''">clear</mat-icon> 
+                  <mat-icon matSuffix class="fondo-icon" (click)="saveItemAction(nuevo.value)" *ngIf="nuevo.value!=''">check</mat-icon>
+                </mat-form-field>  
+        </div>
+    </div> 
+
+</div>
+
+
+</div>
+<div class="row end" *ngIf="!activarCrearItem">               
+<div class="col-md-3">
+   <button mat-raised-button class="btn-basic btn-general" (click)='this.activarCrearItemAction(true)'
+   *ngIf="this.permisos.Agregar_nuevo_Item_IPS.visible" 
+   [ngClass]="{'elementdisabled': !this.permisos.Agregar_nuevo_Item_IPS.habilitado}">
+     AGREGAR NUEVO ROL
+   </button>
+</div>
+</div>
+</div>

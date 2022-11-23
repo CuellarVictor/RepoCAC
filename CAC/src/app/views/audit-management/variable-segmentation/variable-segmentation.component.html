@@ -1,0 +1,99 @@
+<app-card-percent 
+    [title]="'Maria Camila , aquí puede gestionar sus auditorias'"
+    [page]="'audit-management'"   
+></app-card-percent>
+
+<table class="table table-card">
+    <tbody>
+      <tr class="title">
+        <td scope="col"  class="text-title" colspan="100%">Detalle variable de medición: Cancer mama nuevos</td>               
+      </tr>
+          <tr class="subtitle">
+            <td scope="col" class="text-title" >Resolución-0247-2014</td>
+            <td scope="col">
+                <p class="text-subtitle-a">Variables de SISCAC</p>
+                <p class="text-subtitle-b">220</p>
+            </td>
+            <td scope="col">
+                <p class="text-subtitle-a">Variables Adicionales</p>
+                <p class="text-subtitle-b">12</p>
+            </td>
+            <td scope="col">
+                <p class="text-subtitle-a">Variables Informativas</p>
+                <p class="text-subtitle-b">12</p>
+            </td> 
+          </tr>  
+          <tr>  
+            <td scope="col">
+               
+            </td>
+            <td scope="col">
+                <button mat-raised-button class="btn-basic" (click)="btnVariable();" >CREAR VARIABLE</button>   
+            </td>
+            <td scope="col" colspan="2">
+                <mat-form-field appearance="fill" class="n-variable"> 
+                    <mat-label>Nombre variable</mat-label>
+                    <input matInput>
+                  </mat-form-field> 
+            
+                <button mat-raised-button class="btn-basic">CREAR GRUPO</button>       
+            </td>
+          </tr>  
+          <tr>
+              <td colspan="100%" cdkDropListGroup>
+                <div class="drag-drop-container" cdkDropList [cdkDropListData]="list.amount" *ngFor="let list of listas; let i=index;" (cdkDropListDropped)="drop($event)">
+                    <div class="title">
+                        <h2 class="color-text-title">
+                            <button mat-icon-button [matMenuTriggerFor]="menu">
+                                <mat-icon class="color-more-title">more_vert</mat-icon>                               
+                            </button>
+                            <mat-menu #menu="matMenu">
+                                <button mat-menu-item class="btn-menu" (click)="openDialogEliminar()">Eliminar grupo</button>
+                            </mat-menu>  
+                            {{list.number}}</h2>
+                    </div>     
+                           <div class="header-drag" >
+                            <table>
+                                <tr>
+                                    <td class="drag-a">                                         
+                                    </td>
+                                    <td  class="header-drag-color drag-b">
+                                       Variable
+                                    </td>
+                                    <td  class="header-drag-color drag-b">
+                                       Auditable
+                                    </td>
+                                </tr>
+                            </table>
+                           </div>         
+                        <div class="drag-drop-list">                        
+                        <div class="drag-drop-box" cdkDrag [cdkDragData]="item" *ngFor="let item of list.amount" (mouseenter)="enter(i)">
+                            <table>
+                                <tr>
+                                    <td class="drag-a">
+                                        <button mat-icon-button [matMenuTriggerFor]="menu">
+                                            <mat-icon class="color-more">more_vert</mat-icon>                               
+                                        </button>
+                                        <mat-menu #menu="matMenu">
+                                            <button mat-menu-item class="btn-menu">Eliminar grupo</button>
+                                        </mat-menu>  
+                                    </td>
+                                    <td  class="drag-b">
+                                        {{item}}
+                                    </td>
+                                    <td  class="drag-b">
+                                        <section class="checkbox">                 
+                                            <mat-checkbox class="element-checkbox" ></mat-checkbox>                                       
+                                        </section>
+                                    </td>
+                                </tr>
+                            </table>
+                            
+                        </div>
+                        </div>
+                    </div>   
+              </td>
+          </tr>  
+        </tbody>
+    
+    </table>

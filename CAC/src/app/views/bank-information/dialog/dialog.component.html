@@ -1,0 +1,25 @@
+<h1 mat-dialog-title class="title">{{data.name}}</h1>
+<div mat-dialog-content>
+  <p class="contenido">{{ data.content}}</p>
+  <mat-form-field appearance="fill" class="t-variable"  *ngIf="data.type=='mover'">
+    <mat-label>Seleccione la medición de destino</mat-label>
+    <mat-select  formControlName="tipo_variable">
+      <mat-option *ngFor="let element of type_variable" [value]="element.id">
+        {{element.value}}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+  <mat-form-field appearance="fill" class="t-variable"  *ngIf="data.type=='moverSegmento'">
+    <mat-label>Seleccione la medición de destino</mat-label>
+    <mat-select  formControlName="tipo_variable">
+      <mat-option *ngFor="let element of type_segmento" [value]="element.id">
+        {{element.value}}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+</div>
+<div mat-dialog-actions class="btns">
+    <button mat-button [mat-dialog-close]="true" cdkFocusInitial class="btn-basic">Entendido</button>
+  <button mat-button (click)="onNoClick()" class="btn-new">Cancelar</button>
+  
+</div>

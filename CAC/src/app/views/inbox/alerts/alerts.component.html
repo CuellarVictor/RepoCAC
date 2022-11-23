@@ -1,0 +1,95 @@
+<app-card-percent 
+    [title]="'Buzón de alertas'"
+    [page]="'buzon'"
+    [subtitle]="'Ubique las acciones para cerrar sus registros'"
+></app-card-percent>
+<mat-card>
+    <div class="row">
+        <div class="col-md-3">
+            <mat-form-field class="example-full-width" appearance="fill">
+                <mat-label class="input-bold">Buscar</mat-label>
+                <input type="text" matInput >
+                <mat-icon matSuffix>search</mat-icon>
+            </mat-form-field>
+        </div>
+        <div class="col-md-3">
+
+            <button mat-button [matMenuTriggerFor]="animals" class="filter input-bold">Filtrar por</button>
+
+            <mat-menu #animals="matMenu" class="menu-filter">
+
+                <mat-tree [dataSource]="dataSource" [treeControl]="treeControl" class="mat-tree-cont">
+                    <mat-tree-node *matTreeNodeDef="let node" matTreeNodeToggle matTreeNodePadding class="child-tree">
+                      <button mat-icon-button disabled></button>
+                      <mat-checkbox class=""
+                                    [checked]="checklistSelection.isSelected(node)"
+                                    (change)="todoLeafItemSelectionToggle(node)">{{node.item}}</mat-checkbox>
+                    </mat-tree-node>
+                    <mat-tree-node *matTreeNodeDef="let node; when: hasChild" matTreeNodePadding class="child-tree">
+                      <mat-checkbox [checked]="descendantsAllSelected(node)"
+                                    [indeterminate]="descendantsPartiallySelected(node)"
+                                    (change)="todoItemSelectionToggle(node)">{{node.item}}</mat-checkbox>
+
+                      <button mat-icon-button matTreeNodeToggle
+                              [attr.aria-label]="'Toggle ' + node.item" style="float: right;">
+                        <mat-icon class="mat-icon-rtl-mirror" >
+                          {{treeControl.isExpanded(node) ? 'remove' : 'add'}}
+                        </mat-icon>
+                      </button>
+                    </mat-tree-node>
+                  </mat-tree>
+            </mat-menu>
+                
+        </div>
+        <div class="col-md-3">
+
+                
+            <mat-form-field appearance="fill" class="example-form-field">
+                <mat-label class="input-bold">Desde</mat-label>
+                <input matInput [matDatepicker]="datepicker">
+                <mat-datepicker-toggle matSuffix [for]="datepicker"></mat-datepicker-toggle>
+                <mat-datepicker #datepicker>
+                  <mat-datepicker-actions>
+                    <button mat-button matDatepickerCancel>Cancel</button>
+                    <button mat-raised-button color="primary" matDatepickerApply>Aceptar</button>
+                  </mat-datepicker-actions>
+                </mat-datepicker>
+              </mat-form-field>
+             
+            
+        </div>
+        <div class="col-md-3">
+
+                
+            <mat-form-field appearance="fill" class="example-form-field">
+                <mat-label class="input-bold">Hasta</mat-label>
+                <input matInput [matDatepicker]="datepicker2">
+                <mat-datepicker-toggle matSuffix [for]="datepicker2"></mat-datepicker-toggle>
+                <mat-datepicker #datepicker2>
+                  <mat-datepicker-actions>
+                    <button mat-button matDatepickerCancel>Cancel</button>
+                    <button mat-raised-button color="primary" matDatepickerApply>Aceptar</button>
+                  </mat-datepicker-actions>
+                </mat-datepicker>
+              </mat-form-field>
+             
+            
+        </div>
+
+    </div>
+</mat-card>
+
+<mat-card>
+  <div class="row text-center">
+      <div class="col-md-6" (click)="selectTab(1)" [ngClass]="{ 'tabs-open' : tab1, 'tabs-closed' : tab2 }">ACCIÓN LIDER</div>
+      <div class="col-md-6" (click)="selectTab(2)" [ngClass]="{ 'tabs-open' : tab2, 'tabs-closed' : tab1 }">ACCIÓN AUDITOR</div>
+  </div>
+  <div class="row">
+    <div class="col-md-12" >
+        <br>
+        <app-action-required *ngIf="tab1"></app-action-required>
+        <app-hold *ngIf="tab2"></app-hold>
+    </div>
+   
+</div>
+</mat-card>

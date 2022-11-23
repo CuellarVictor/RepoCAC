@@ -1,0 +1,23 @@
+import { Component, OnInit } from '@angular/core';
+import { FileUploader } from 'ng2-file-upload';
+
+const URL = 'http://localhost:3000/fileupload/';
+@Component({
+  selector: 'app-hallazgo-masiva',
+  templateUrl: './hallazgo-masiva.component.html',
+  styleUrls: ['./hallazgo-masiva.component.scss']
+})
+export class HallazgoMasivaComponent implements OnInit {
+
+  constructor() { }
+  public uploader: FileUploader = new FileUploader({ url: URL, itemAlias: 'photo' });
+  ngOnInit(): void {
+
+    this.uploader.onAfterAddingFile = (file) => { file.withCredentials = false; };
+    this.uploader.onCompleteItem = (item: any, response: any, status: any, headers: any) => {
+         console.log('ImageUpload:uploaded:', item, status, response);
+         alert('File uploaded successfully');
+    };
+
+}
+}

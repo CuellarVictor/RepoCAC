@@ -1,0 +1,16 @@
+.tamano{
+    max-width: 950px;
+    max-height: 700px;
+}
+.centrar{
+    display: flex;
+    justify-content: center;
+}
+.derecha{
+    display: flex;
+    justify-content: flex-end;
+}
+
+::ng-deep .mat-flat-button.mat-accent, .mat-raised-button.mat-accent, .mat-fab.mat-accent, .mat-mini-fab.mat-accent {
+    background-color: #f4f4f4;
+}

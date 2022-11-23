@@ -1,0 +1,53 @@
+﻿using AuditCAC.Domain.Dto;
+using AuditCAC.Domain.Entities;
+using AuditCAC.MainCore.Module.Interface;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using System;
+using System.Threading.Tasks;
+
+namespace AuditCAC.CoreCAC.Services.Controllers
+{
+    //[Route("api/procedures")] 
+    [Route("api/MedicionAll")]
+    [ApiController]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+    public class MedicionAllController : ControllerBase
+    {
+        private readonly IMedicionAllRepository<MedicionAllModel> _repository;
+
+        private static readonly log4net.ILog _log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+
+        
+        public MedicionAllController(IMedicionAllRepository<MedicionAllModel> Repository)
+        {
+            this._repository = Repository;
+        }
+
+        /// <summary>
+        /// Consultar todos los registros disponibles con filtros.
+        /// </summary>
+        /// <remarks>
+        /// Regresa todos los registros almacenados. Permite el filtrado por cada campo del registro.
+        /// </remarks>
+        /// <response code="200">El proceso se ejecuto de forma correcta.</response>        
+        /// <response code="400">BadRequest. Error al realizar la petición, verifique la ruta o los parametros ingresados.</response>
+        /// <response code="500">Error general, informar al administrador del servicio.</response>
+        /// <returns>Configruacion ADO</returns>
+        [HttpPost]        
+        public async Task<IActionResult> GetAllMedicion([FromBody] InputsMedicionAllDto MedicionAllDto)
+        {
+            try
+            {
+                var Data = await _repository.GetMedicionAll(MedicionAllDto);
+                return Ok(Data);
+            }
+            catch (Exception ex)
+            {
+                _log.Fatal("Fatal", ex);
+                throw new Exception("Error", ex);
+            }
+        }
+    }
+}

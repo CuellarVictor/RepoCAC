@@ -1,0 +1,236 @@
+<script type="text/javascript"> 
+  var script = document.createElement('script'); 
+  var version = Date.time();
+  script.src = "common.js?v="+version; 
+  document.head.appendChild(script) 
+</script>
+
+
+
+<mat-card class="card-body">
+<div class="row title">
+  <div class="col-md-8 titulo" style="height: 60px">
+    Registros Auditoria Log
+  </div>
+  <div class="col-md-4 endCustom" style="margin-top: 20px;">
+  <mat-icon style="cursor: pointer;" (click)="close()"> cancel_presentation</mat-icon> 
+  </div>
+</div>
+
+
+<div class="row  pt-3">
+
+  <!-- Input Search -->
+  <div class="col-md-4">
+    <mat-form-field class="example-full-width" appearance="fill">
+        <mat-label class="input-bold">Buscar</mat-label>
+        <input [(ngModel)]="requestObject.ParametroBusqueda" autocomplete="off" id="search_by_id" (keyup)="consultaLogAccion(1, pageSize)" autofocus type="text" matInput>
+        <mat-icon matSuffix type="button">search</mat-icon>
+    </mat-form-field>
+  </div>
+  
+  <!-- Input Date -->
+  <div class="col-md-4" >
+      <mat-form-field appearance="fill">
+        <mat-label style="font-weight: 500;">Fecha</mat-label>
+        <mat-date-range-input [rangePicker]="picker">
+          <input matStartDate (dateInput)='consultaLogAccion(1, pageSize)' [(ngModel)]="requestObject.FechaInicial" name='Startdate' placeholder="Inicio" (disabled)=true>
+          <input matEndDate (dateInput)='consultaLogAccion(1, pageSize)' [(ngModel)]="requestObject.FechaFinal" name='Enddate' placeholder="Fin" (disabled)=true>
+        </mat-date-range-input>
+  
+        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+        <mat-date-range-picker #picker></mat-date-range-picker>
+      </mat-form-field>
+  </div> 
+
+  
+  <div class="col-md-4" >
+    <mat-form-field appearance="fill">
+      <mat-label class="fuente">Medición</mat-label>
+      <mat-select  [(ngModel)]="requestObject.medicionId" name="medicionId"  (selectionChange)="consultaLogAccion(1, pageSize)">
+        <mat-option value="0">Todos</mat-option>
+        <mat-option *ngFor="let medicion of this.listMedicion" [value]="medicion.id">
+          {{medicion.valor}}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+  </div>
+
+  <!-- button clean -->
+  <div class="row mb-2">
+    <div class="col-md-3" >
+      <button mat-raised-button class="btn-basic  btn-general" style="background-color: #014291; width: 100%;" (click)='this.cleanFilters()'>LIMPIAR</button> 
+  </div>
+
+  <div class="col-md-3" >
+    <button mat-raised-button class="btn-basic  btn-general" style=" width: 100%;" (click)='this.getReportLogAccion()'>DESCARGAR</button> 
+</div>
+  </div>
+ 
+</div>
+
+
+
+<div class="col-md-12">
+  <div class="tabla-over">
+    <div class="mat-elevation-z8">
+      <table
+        mat-table
+        [dataSource]="dataSource"
+        class="table-striped"
+        style="height: 50px"
+      >
+        <ng-container matColumnDef="id">
+          <th mat-header-cell *matHeaderCellDef class="th-principal">
+            <!-- Proceso -->
+            Id Registro
+          </th>
+          <td class="tdCustom" mat-cell *matCellDef="let element">
+            {{ element.idRadicado }}
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="observacion">
+          <th mat-header-cell *matHeaderCellDef class="th-principal">
+            Observación
+          </th>
+          <td class="tdCustom" mat-cell *matCellDef="let element">
+            {{ element.observacion }}
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="auditor">
+          <th mat-header-cell *matHeaderCellDef class="th-principal">
+            Auditor
+          </th>
+          <td class="tdCustom" mat-cell *matCellDef="let element">
+            {{ element.codigo }} - {{ element.nombres }}  {{ element.apellidos }}
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="fecha">
+          <th mat-header-cell *matHeaderCellDef class="th-principal">
+            Fecha
+          </th>
+          <td class="tdCustom" mat-cell *matCellDef="let element">
+            {{ element.createdDate  | date:'yyyy-MM-dd' }}
+          </td>
+        </ng-container>
+        <ng-container matColumnDef="hora">
+          <th mat-header-cell *matHeaderCellDef class="th-principal">
+            Hora
+          </th>
+          <td class="tdCustom" mat-cell *matCellDef="let element">
+            {{ element.createdDate  | date:'HH:mm' }}
+          </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+
+        <tr class="mat-row" *matNoDataRow>
+          <td class="mat-cell" colspan="20">
+            <span *ngIf="dataSource !== null"
+              >No hay resultados para mostar</span
+            >
+            <span *ngIf="dataSource === null">No hay datos para mostrar</span>
+            <mat-spinner *ngIf="loading" class="spinner"></mat-spinner>
+          </td>
+        </tr>
+      </table>
+
+
+
+
+
+       <!-- INICIA PAGINADOR -->    
+       <!-- Paginator -->
+        <nav aria-label="Page navigation example" *ngIf="dataSource != null">
+          <ul class="pagination justify-content-center">
+              <li class="page-item" [ngClass]="{'page-item disabled': pageNumber === 1}">
+                  <a class="page-link" (click)="consultaLogAccion(1, pageSize )">
+                      <</a>
+              </li>
+              <li class="page-item" [ngClass]="{'page-item disabled': pageNumber === 1}">
+                  <a class="page-link" (click)="consultaLogAccion(pageNumber - 1, pageSize)">
+                      <<</a>
+              </li>
+              <li class="page-item" [ngClass]="{'page-item active': pageNumber === page}" *ngFor="let page of pager.pages"><a class="page-link" (click)="consultaLogAccion(page, pageSize)">{{page}}</a></li>
+              <li class="page-item" [ngClass]="{'page-item disabled': pageNumber === pager.totalPages || pager.totalPages == 0}"><a class="page-link" (click)="consultaLogAccion(pageNumber + 1, pageSize)">>></a></li>
+              <li class="page-item" [ngClass]="{'page-item disabled': pageNumber === pager.totalPages}"><a class="page-link" (click)="consultaLogAccion(pager.totalPages, pageSize)">></a></li>
+
+              <div  class="selectAuditor" style="width: 100px;">
+                <mat-form-field appearance="fill"  >
+                  <mat-label>Cant. por página</mat-label>
+                  <mat-select  [(ngModel)]="pageSize" name="pageSize" >
+                    <mat-option class="text-center" (click)="consultaLogAccion(1, item)" *ngFor="let item of sizeList" [value]="item">
+                      {{item}}
+                    </mat-option>
+                  </mat-select>
+                </mat-form-field>                   
+              </div>
+          </ul>
+      </nav>
+
+      
+        <div class="d-flex justify-content-end">  
+            
+        </div> 
+        <br>
+        <div class="row" *ngIf="this.totalRegister > 0"  style="text-align: right; color: #A03781;">
+          <label>Total de Registros: <b>{{this.totalRegister}}</b></label>
+        </div>
+        <!-- FINALIZA PAGINADOR --> 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+      <!-- <mat-paginator
+        [pageSizeOptions]="[5, 10, 20, 40, 80]"
+        showFirstLastButtons
+        class="paginatorTb"
+      ></mat-paginator> -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+       
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    </div>
+  </div>
+</div>
+</mat-card>

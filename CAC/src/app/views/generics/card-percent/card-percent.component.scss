@@ -1,0 +1,46 @@
+.title{
+    font-weight: 500;
+    color: #666666;
+    font-family: 'Roboto';
+    padding-top: 10px;
+    margin-bottom: 2px !important;
+
+}
+
+#titulo {
+  text-transform: lowercase;
+}
+
+#titulo:first-letter {
+  text-transform: uppercase;
+}
+
+
+
+.progeso{
+    font-family: 'Roboto';
+    text-align: end;
+    font-weight: 500;
+    color: #575757;
+}
+.progreso-indicador{
+    font-weight: 600;
+    font-size: 30px !important;
+}
+.subtitulo{
+    font-weight: 500;
+}
+.cuadroLateral{
+  display: flex;
+    justify-content: flex-end;
+}
+
+.container{
+  margin-left: 0px;
+  max-width: 100%;
+  margin-right: 0px;
+}
+.azul{
+  color:#014291;
+  font-weight: 500;
+}

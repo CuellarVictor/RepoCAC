@@ -1,0 +1,70 @@
+
+<mat-card class="card-body">
+    <div class="row title">
+      <div class="col-md-8 titulo" style="height: 60px">
+        Respuesta hallazgos
+      </div>
+      <div class="col-md-4 endCustom" style="margin-top: 20px;">
+      <mat-icon style="cursor: pointer;" (click)="close()"> cancel_presentation</mat-icon> 
+      </div>
+    </div>
+
+    <div class="col-md-12">
+      <div class="tabla-over">
+        <div class="mat-elevation-z8">
+        
+            <table
+        mat-table
+        [dataSource]="inputdata" 
+        class="table-striped"
+        style="height: 50px"
+      >
+        <ng-container matColumnDef="calificacion">
+          <th mat-header-cell *matHeaderCellDef class="th-principal">
+            <!-- Proceso -->
+            Calificación
+          </th>
+          <td  mat-cell *matCellDef="let element">
+            {{ element.dato_DC_NC_NDNombre }}
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="observacion">
+            <th mat-header-cell *matHeaderCellDef class="th-principal">
+              <!-- Proceso -->
+              Observación
+            </th>
+            <td  mat-cell *matCellDef="let element">
+              {{ element.hallazgoObservacion }}
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="estadohallazgo">
+            <th mat-header-cell *matHeaderCellDef class="th-principal">
+              <!-- Proceso -->
+              Respuesta Hallazgo
+            </th>
+            <td  mat-cell *matCellDef="let element">
+              {{ element.hallazgoEstadoNombre }}
+            </td>
+          </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+
+        <tr class="mat-row" *matNoDataRow>
+          <td class="mat-cell" colspan="20">
+
+            <span *ngIf="dataSource === null">No hay datos para mostrar</span>
+          </td>
+        </tr>
+      </table>
+    
+    
+
+
+        </div>
+      </div>
+    </div>
+    </mat-card>
+

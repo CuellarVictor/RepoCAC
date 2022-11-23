@@ -1,0 +1,66 @@
+<div class="row">
+  
+    <div class="col-md-12">
+        <div class="row">
+            <div class="container-principal mat-elevation-z8">
+                <table mat-table [dataSource]="dataSource" matSort class="table-striped">
+
+                <ng-container matColumnDef="select">
+                    <th mat-header-cell *matHeaderCellDef  class="th-principal">
+                        <mat-checkbox  
+                                    (change)="$event ? masterToggle() : null"
+                                    [checked]="selection.hasValue() && isAllSelected()"
+                                    [indeterminate]="selection.hasValue() && !isAllSelected()"
+                                    [aria-label]="checkboxLabel()">
+                        </mat-checkbox>
+                    </th>
+                    <td mat-cell *matCellDef="let row">
+                        <mat-checkbox                                     
+                                    (click)="$event.stopPropagation()"
+                                    (change)="$event ? selection.toggle(row) : null"
+                                    [checked]="selection.isSelected(row)"
+                                    [aria-label]="checkboxLabel(row)">
+                        </mat-checkbox>
+                    </td>
+                </ng-container>
+                <ng-container matColumnDef="luz"> 
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header class="th-principal">  </th>
+                    <td mat-cell *matCellDef="let element" class="row-cursor"> <div class="ready-point"></div></td>
+                  </ng-container>  
+                  <ng-container matColumnDef="etiqueta">
+                      <th mat-header-cell *matHeaderCellDef mat-sort-header class="th-principal"> Fecha </th>
+                      <td mat-cell *matCellDef="let element" class="row-cursor text-2"> {{element.etiqueta}} </td>
+                    </ng-container>                  
+                   
+                    <ng-container matColumnDef="registros"> 
+                      <th mat-header-cell *matHeaderCellDef mat-sort-header class="th-principal"> Estado </th>
+                      <td mat-cell *matCellDef="let element" class="row-cursor"> {{element.registros}} </td>
+                    </ng-container>                  
+             
+                    <ng-container matColumnDef="asignados">
+                      <th mat-header-cell *matHeaderCellDef mat-sort-header class="th-principal"> ID de registro  </th>
+                      <td mat-cell *matCellDef="let element" class="row-cursor"> {{element.asignados}} </td>
+                    </ng-container>                  
+                   
+                    <ng-container matColumnDef="variables">
+                      <th mat-header-cell *matHeaderCellDef mat-sort-header class="th-principal"> Medición </th>
+                      <td mat-cell *matCellDef="let element" class="row-cursor"> {{element.variables}} </td>
+                    </ng-container>
+                
+                     <ng-container matColumnDef="auditados">
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header class="th-principal"> Entidad </th>
+                        <td mat-cell *matCellDef="let element" class="row-cursor"> {{element.auditados}} </td>
+                      </ng-container>                    
+                      
+                      <ng-container matColumnDef="creado">
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header class="th-principal"> Ciudad </th>
+                        <td mat-cell *matCellDef="let element" class="row-cursor"> {{element.creado}} </td>
+                      </ng-container>                  
+                      <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
+                      <tr mat-row *matRowDef="let row; columns: displayedColumns;"  class="row-hover"></tr>                 
+                  </table>
+              </div>
+        </div>
+    </div>
+
+</div>

@@ -1,0 +1,61 @@
+<div *ngIf="estado==1">
+    <h2 mat-dialog-title class="titlem" style="text-align: center; margin-top: 5%; margin-bottom: 5%;"> Seleccione el archivo con los registros a <br> eliminar de la auditoria</h2><br>
+   
+    <div class="col-12 mb-3" style="text-align: center;" >
+        <span class="btn-abrir btn-general subrayado" style="padding-left: 0px;" (click)="generarTemplate()">DESCARGAR PLANTILLA</span>
+        <br>
+    </div>
+    <form [formGroup]="this.formObservation">
+        <div class="input-group">            
+            <textarea rows="3" maxlength='600' formControlName='observacion' class="form-control" 
+            placeholder="Escriba su observacion" required></textarea>
+        </div>
+    </form>
+    
+    <div mat-dialog-content style="margin-top: 5%;">
+        <br>
+        <div class="form-group">
+            <Input type="file" style="width: 100%;" accept=".csv" class="form-control-file"   [ngClass]="{'buttonfile-dis': allowLoadFile}"   (change)="fileSelected($event)">
+    </div> 
+    <br>
+    </div>
+    <div class="row" style="margin-top: 10%;">
+        <div class="col-6" >
+            <button [ngClass]="{
+                'button-dis': !allowLoadFile || !this.formObservation.valid}"  (click)="ConfirmacionCargueEliminacion()" cdkFocusInitial  mat-raised-button class="btn-basic  btn-general" style="width: 100%;">Cargar</button>
+        </div>
+    
+        <div class="col-6">
+            <span class="btn-abrir btn-general subrayado" [mat-dialog-close]="true">CANCELAR</span>   
+        </div>
+      
+    </div>
+    
+</div>
+
+<div *ngIf="estado==2">
+     <div class="row">
+        <div class="col-6" >
+            <button [ngClass]="{
+                'button-dis': !allowLoadFile || !this.formObservation.valid}"  (click)="downloadMyFile()" cdkFocusInitial  mat-raised-button class="btn-basic  btn-general" style="width: 100%;">RESULTADOS</button>
+        </div>
+    
+        <div class="col-6">
+            <span class="btn-abrir btn-general subrayado" [mat-dialog-close]="true">SALIR</span>   
+        </div>
+      
+    </div>
+</div>
+<div *ngIf="estado==3">
+    <div class="row">
+       <div class="col-6" >
+           <button [ngClass]="{
+               'button-dis': !allowLoadFile || !this.formObservation.valid}"  (click)="downloadMyFile()" cdkFocusInitial  mat-raised-button class="btn-basic  btn-general" style="width: 100%;">RESULTADOS</button>
+       </div>
+   
+       <div class="col-6">
+           <span class="btn-abrir btn-general subrayado" (click)="reintentar()" >REINTENTAR</span>   
+       </div>
+     
+   </div>
+</div>

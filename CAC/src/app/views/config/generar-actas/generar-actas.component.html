@@ -1,0 +1,83 @@
+<form autocomplete="off">
+    <div class="row">
+        <div class="col-md-3">
+            <mat-form-field appearance="fill">
+                <mat-label>Tipo de Acta</mat-label>
+                <mat-select [(ngModel)]="_idActa" name="_idActa" (ngModelChange)="checkForm()">
+                    <mat-option   #tipoActa (click)="consultaParametrosTemplate(tipoActa.value)" *ngFor="let acta of TipoActas" [value]="acta.id">{{acta.itemName}}</mat-option>
+                </mat-select>
+            </mat-form-field>
+        </div>
+        <div class="col-md-3">
+            <mat-form-field appearance="fill">
+                <mat-label>Cobertura</mat-label>
+                <mat-select [(ngModel)]="_idCobertura" name="_idCobertura" (ngModelChange)="checkForm()">
+                    <mat-option   *ngFor="let enfermedad of this.listCobertura" [value]="enfermedad.IdCobertura"
+                                (click)="selectCobertura(enfermedad.IdCobertura)">
+                        {{enfermedad.IdCobertura}} - {{enfermedad.Nombre}}
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
+        </div>
+        <div class="col-md-6">
+            <mat-form-field appearance="fill">
+                <mat-label>EPS</mat-label>
+                <mat-select  [(ngModel)]="_idEPS"  name="_idEPS"  [disabled]="!isCoberturaSelected"
+                            [ngClass]="{ 'elementdisabled': !isCoberturaSelected }" (ngModelChange)="checkForm()">
+                    <mat-option *ngFor="let eps of listEPS" [value]="eps.idEps">
+                         {{eps.idEps }}
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
+        </div>
+    </div>
+
+    <br/>
+     
+
+    <div class="row">
+        <span *ngIf="parameterTemplateTypeList.length > 0">
+            Ingrese los siguientes campos:
+        </span>
+        <div class="col-md-4"  *ngFor="let parameter of parameterTemplateTextType" >
+            <mat-form-field appearance="fill" class="t-variable"> 
+                <mat-label class="input-bold">
+                    {{parameter.descripcion}}
+                    <a class="err" *ngIf="parameter.obligatorio">*</a>
+                </mat-label>
+                <input [(ngModel)]="parameter.valor"  name="nombre" matInput (ngModelChange)="checkForm()">
+            </mat-form-field>
+       </div>
+   </div>
+
+    <div class="row">
+        <span *ngIf="parameterTemplateTypeList.length > 0">
+            Ingrese las siguientes listas (los items se separan con ';'):
+        </span>
+        <div class="col-md-4"  *ngFor="let parameter of parameterTemplateTypeList">
+            <mat-form-field appearance="fill" class="t-variable"> 
+            <mat-label class="input-bold">
+                {{parameter.descripcion}}
+                <a class="err" *ngIf="parameter.obligatorio">*</a>
+            </mat-label>
+            <input [(ngModel)]="parameter.valor" name="nombre" matInput (ngModelChange)="checkForm()">
+            </mat-form-field>
+        </div>
+    </div>
+
+    <span *ngIf="_idActa != null && _idActa != 0">
+        <a class="err">*</a>
+        Campos Obligatorios
+    </span>
+
+   <div class="col-md-12">
+    <button mat-raised-button class="btn-basic  btn-general float-right" (click)="generarActa()" [disabled]="!isGeneratePDFEnabled">GENERAR ACTA</button>
+   </div>
+
+
+</form>
+  
+   
+
+
+  <br/><br/><br/><br/><br/><br/>

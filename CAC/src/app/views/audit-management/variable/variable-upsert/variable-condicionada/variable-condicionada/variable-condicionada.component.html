@@ -1,0 +1,82 @@
+
+<div class="row pt-2 pl-2" style="background-color: white; height: 400px;">
+
+  <form autocomplete="off">
+
+    <div class="col-md-6">
+      <mat-form-field class="example-full-width" appearance="fill">
+        <mat-label  class="input-bold">Buscar Variables</mat-label>
+          <input type="text"                              
+               placeholder="Seleccione un motivo"
+               aria-label="motivo"
+               matInput
+               #filtro
+               [(ngModel)]="busqueda"
+               id="busquedacondicion"    
+               [matAutocomplete]="auto"
+               (ngModelChange)="getVariablesFiltrado(filtro.value)"
+               (focus)="getVariablesFiltrado(filtro.value)"
+               (keyup)="getVariablesFiltrado(filtro.value)"
+               [ngModelOptions]="{standalone: true}" >
+        <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete" >
+          <mat-option *ngFor="let option of resultCosultaList" [value]="option.nombre" (click)="AddOrRemoveVariable(option,true)" >
+           {{ option.nombre }}
+          </mat-option>
+        </mat-autocomplete>
+      </mat-form-field> 
+    </div> 
+<div class="col-12">
+  <div class="row">
+    <div class="col-md-6" *ngFor="let item of this.variableCondicionadaList; let pointIndex=index">
+      <div class="row" style="padding-top: 5px;"  [ngClass]="{'separador': pointIndex%2==0}">
+        <div class="col-md-6">
+          <mat-form-field appearance="fill" class="t-variable" floatLabel='never' >
+            <mat-label class="input-bold">Variable condicionada</mat-label>
+              <input matInput #variable   class="input-config" value={{item.nombre}}
+              value=''  [disabled]="true">
+          </mat-form-field>
+        </div>
+        <div class="col-md-6">
+          <mat-form-field appearance="fill" class="t-variable" floatLabel='never' >
+            <mat-label class="input-bold">Valor constante</mat-label>
+              <input  matInput #vconstante class="input-config" [ngModel]="valorConstanteList[pointIndex]" 
+              [ngModelOptions]="{standalone: true}"
+              (keyup)="agregarValorConstante(item,vconstante.value)" >
+              <mat-icon matSuffix class="fondo-icon" (click)="AddOrRemoveVariable(item,false)">clear</mat-icon>                 
+              
+            </mat-form-field> 
+        </div>  
+        <div class="col-md-12">
+          <mat-form-field appearance="fill" class="t-variable" floatLabel='never' >
+            <mat-label class="input-bold">Descripción</mat-label>
+              <input  matInput #descripcion class="input-config" value={{item.descripcion}} [disabled]="true" >         
+            </mat-form-field> 
+           
+        </div> 
+      </div> 
+      <hr>                      
+    </div>  
+  </div>
+ 
+</div>
+
+  <div class="row">
+    <div mat-dialog-actions class="btns col-6">    
+      <button mat-button (click)="setVariablesCondicional()" 
+      [ngClass]="{'elementdisabled': !activarContinuar}"
+      [mat-dialog-close]="true" style="width: 50%;" cdkFocusInitial class="btn-basic">Continuar</button>  
+    </div>
+  
+  <div mat-dialog-actions class="btns col-6">
+      <button mat-button [mat-dialog-close]="true" style="width: 50%;" class="btn-new">Cancelar</button>
+  </div>
+
+  </div>
+
+
+  </form>
+
+    
+
+
+</div>
